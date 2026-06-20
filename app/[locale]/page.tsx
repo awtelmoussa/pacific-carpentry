@@ -37,7 +37,7 @@ export default async function HomePage({ params }: PageProps) {
 
   const mappedProjects = dbProjects.map(mapDbProjectToProject);
 
-  const homeProjects = mappedProjects.map((p, i) => ({
+  const homeProjects = mappedProjects.map((p: { en: string; ar: string; cat: { en: string; ar: string }; year: string; images: string[] }, i: number) => ({
     name: p[locale as 'en' | 'ar'],
     cat: p.cat[locale as 'en' | 'ar'],
     year: p.year,
