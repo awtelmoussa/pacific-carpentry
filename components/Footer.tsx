@@ -15,7 +15,7 @@ export default function Footer({ locale }: FooterProps) {
 
   return (
     <footer
-      className="bg-[#100D0A] border-t border-line text-muted py-12 md:py-20 px-6 md:px-12 lg:px-[72px]"
+      className="bg-bg2 border-t border-line text-muted py-12 md:py-20 px-6 md:px-12 lg:px-[72px]"
     >
       <div className="max-w-[1200px] mx-auto grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 md:gap-12">
         {/* Brand Column */}

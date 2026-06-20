@@ -31,6 +31,11 @@
 - [x] Responsive breakpoints (mobile navigation menus, stack layouts)
 - [x] RTL verification (RTL layout switching automatically via lang="ar")
 - [x] Animation polish (Ken-Burns hero zoom, content rise up)
+- [x] Map CSS variables in globals.css for dark (default) and organic light themes
+- [x] Inject synchronous theme check script in root layout.tsx to prevent theme flashing
+- [x] Add theme switcher button (Sun/Moon SVG) and localStorage integration in Nav.tsx
+- [x] Update Nav logo styles to dynamically toggle blending and filters based on active theme
+- [x] Verify build and check for compile errors
 
 ## Phase 6 — Admin Panel (Companion Storefront System)
 - [x] Create lib/adminStore.ts (Zustand store for database state simulation)

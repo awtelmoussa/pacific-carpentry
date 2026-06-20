@@ -17,6 +17,27 @@ export default function Nav({ locale }: NavProps) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
+  const [theme, setTheme] = useState<'light' | 'dark'>('dark');
+
+  // Sync theme setting on mount
+  useEffect(() => {
+    const isLight = document.documentElement.classList.contains('light');
+    setTheme(isLight ? 'light' : 'dark');
+  }, []);
+
+  const toggleTheme = () => {
+    if (theme === 'light') {
+      document.documentElement.classList.remove('light');
+      document.documentElement.classList.add('dark');
+      localStorage.setItem('theme', 'dark');
+      setTheme('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+      document.documentElement.classList.add('light');
+      localStorage.setItem('theme', 'light');
+      setTheme('light');
+    }
+  };
 
   // Sync count and subscribe on client to avoid hydration mismatch
   useEffect(() => {
@@ -83,7 +104,7 @@ export default function Nav({ locale }: NavProps) {
           <img
             src="/logo.jpg"
             alt="Pacific Carpentry Logo"
-            className="w-[46px] h-[46px] object-contain transition-all duration-200 [filter:invert(1)_hue-rotate(180deg)] mix-blend-screen"
+            className="w-[46px] h-[46px] object-contain transition-all duration-200 logo-img-theme"
           />
           <span className="hidden sm:flex flex-col leading-none">
             <span className="text-cream font-semibold text-[15px] tracking-[0.16em]">
@@ -114,6 +135,33 @@ export default function Nav({ locale }: NavProps) {
 
         {/* Action Buttons: i18n & Cart & Mobile Menu */}
         <div className="flex items-center gap-2 sm:gap-4 shrink-0">
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            className="border border-line hover:border-wood/75 text-cream hover:text-wood p-1.5 sm:p-2 rounded-[2px] transition-all duration-200 cursor-pointer flex items-center justify-center"
+            aria-label="Toggle Theme"
+          >
+            {theme === 'light' ? (
+              /* Moon Icon */
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+              </svg>
+            ) : (
+              /* Sun Icon */
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="5" />
+                <line x1="12" y1="1" x2="12" y2="3" />
+                <line x1="12" y1="21" x2="12" y2="23" />
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64" />
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78" />
+                <line x1="1" y1="12" x2="3" y2="12" />
+                <line x1="21" y1="12" x2="23" y2="12" />
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36" />
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22" />
+              </svg>
+            )}
+          </button>
+
           {/* Language Toggle */}
           <button
             onClick={toggleLang}

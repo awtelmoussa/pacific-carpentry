@@ -8,25 +8,8 @@
   --font-body-latin: var(--font-manrope);
   --font-display-arabic: var(--font-amiri);
   --font-body-arabic: var(--font-tajawal);
-}
 
-html {
-  background-color: var(--background);
-  color: var(--foreground);
-}
-
-html[lang="en"] {
-  --font-display: var(--font-display-latin);
-  --font-body: var(--font-body-latin);
-}
-
-html[lang="ar"] {
-  --font-display: var(--font-display-arabic);
-  --font-body: var(--font-body-arabic);
-}
-
-@theme {
-  /* Colors */
+  /* Dark Theme Palette (Default) */
   --color-bg: #15110D;
   --color-bg2: #1A140F;
   --color-surface: #221C15;
@@ -42,6 +25,63 @@ html[lang="ar"] {
   --color-wood-soft: #D8B583;
   --color-wood-deep: #9A6E3A;
   --color-success: #8FB57A;
+}
+
+html.light {
+  --background: #F7F4EB;
+  --foreground: #1E1915;
+
+  /* Light Theme Palette (Organic Warm Cream) */
+  --color-bg: #F7F4EB;
+  --color-bg2: #EFEBE0;
+  --color-surface: #E8E2D4;
+  --color-surface2: #DFD7C7;
+  --color-line: rgba(21, 17, 13, 0.1);
+  --color-line-soft: rgba(21, 17, 13, 0.05);
+  --color-cream: #1E1915;
+  --color-cream-bright: #0F0C0A;
+  --color-muted: #695E4F;
+  --color-faint: #8F8271;
+  --color-faint-deep: #A69785;
+  --color-wood: #A6783C;
+  --color-wood-soft: #BF965F;
+  --color-wood-deep: #805724;
+  --color-success: #6E945A;
+}
+
+html {
+  background-color: var(--color-bg);
+  color: var(--color-cream);
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+html[lang="en"] {
+  --font-display: var(--font-display-latin);
+  --font-body: var(--font-body-latin);
+}
+
+html[lang="ar"] {
+  --font-display: var(--font-display-arabic);
+  --font-body: var(--font-body-arabic);
+}
+
+@theme {
+  /* Colors mapped to variables */
+  --color-bg: var(--color-bg);
+  --color-bg2: var(--color-bg2);
+  --color-surface: var(--color-surface);
+  --color-surface2: var(--color-surface2);
+  --color-line: var(--color-line);
+  --color-line-soft: var(--color-line-soft);
+  --color-cream: var(--color-cream);
+  --color-cream-bright: var(--color-cream-bright);
+  --color-muted: var(--color-muted);
+  --color-faint: var(--color-faint);
+  --color-faint-deep: var(--color-faint-deep);
+  --color-wood: var(--color-wood);
+  --color-wood-soft: var(--color-wood-soft);
+  --color-wood-deep: var(--color-wood-deep);
+  --color-success: var(--color-success);
 
   /* Fonts */
   --font-display: var(--font-display);
@@ -71,8 +111,9 @@ html[lang="ar"] {
 /* Base custom resets/styles */
 body {
   font-family: var(--font-body);
-  background-color: var(--background);
-  color: var(--foreground);
+  background-color: var(--color-bg);
+  color: var(--color-cream);
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 h1, h2, h3, h4, h5, h6, .font-serif {
@@ -80,22 +121,22 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 }
 
 ::selection {
-  background-color: #C2965B;
-  color: #15110D;
+  background-color: var(--color-wood);
+  color: var(--color-bg);
 }
 
 ::-webkit-scrollbar {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: #15110D;
+  background: var(--color-bg);
 }
 ::-webkit-scrollbar-thumb {
-  background: #221C15;
+  background: var(--color-bg2);
   border-radius: 2px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #C2965B;
+  background: var(--color-wood);
 }
 
 /* Custom utility styles */
@@ -104,4 +145,14 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 }
 .transition-image {
   transition: transform 0.6s cubic-bezier(.2,.7,.3,1);
+}
+
+/* Logo adaptation based on HTML theme class */
+html.light .logo-img-theme {
+  filter: none !important;
+  mix-blend-mode: multiply !important;
+}
+html.dark .logo-img-theme {
+  filter: invert(1) hue-rotate(180deg) !important;
+  mix-blend-mode: screen !important;
 }
