@@ -13,7 +13,7 @@ export default function Nav({ locale }: NavProps) {
   const t = useTranslations('nav');
   const pathname = usePathname();
   const router = useRouter();
-  
+
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
@@ -83,7 +83,7 @@ export default function Nav({ locale }: NavProps) {
           <img
             src="/logo.jpg"
             alt="Pacific Carpentry Logo"
-            className="w-[34px] h-[34px] object-contain rounded-[2px] border border-wood/20 group-hover:border-wood/65 transition-colors duration-200"
+            className="w-[46px] h-[46px] object-contain transition-all duration-200 [filter:invert(1)_hue-rotate(180deg)] mix-blend-screen"
           />
           <span className="hidden sm:flex flex-col leading-none">
             <span className="text-cream font-semibold text-[15px] tracking-[0.16em]">
@@ -103,9 +103,8 @@ export default function Nav({ locale }: NavProps) {
               <Link
                 key={link.href}
                 href={link.href}
-                className={`text-[13.5px] font-medium tracking-[0.03em] whitespace-nowrap transition-colors duration-200 font-body ${
-                  active ? 'text-cream font-semibold' : 'text-muted hover:text-cream'
-                }`}
+                className={`text-[13.5px] font-medium tracking-[0.03em] whitespace-nowrap transition-colors duration-200 font-body ${active ? 'text-cream font-semibold' : 'text-muted hover:text-cream'
+                  }`}
               >
                 {link.label}
               </Link>
@@ -157,9 +156,8 @@ export default function Nav({ locale }: NavProps) {
                 <Link
                   key={link.href}
                   href={link.href}
-                  className={`text-2xl font-light py-4 border-b border-line-soft transition-colors ${
-                    active ? 'text-wood border-wood/30' : 'text-cream hover:text-wood'
-                  }`}
+                  className={`text-2xl font-light py-4 border-b border-line-soft transition-colors ${active ? 'text-wood border-wood/30' : 'text-cream hover:text-wood'
+                    }`}
                 >
                   {link.label}
                 </Link>

@@ -1,6 +1,5 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
-import { CATEGORIES } from '@/lib/data';
 import SectionHeader from '@/components/SectionHeader';
 import { prisma, mapDbProjectToProject } from '@/lib/prisma';
 
@@ -22,12 +21,6 @@ export default async function HomePage({ params }: PageProps) {
   const arrow = locale === 'ar' ? '←' : '→';
   const woodHexes = ["#6B4226", "#3A2A1B", "#C99A63", "#4A3526", "#5A4030", "#2C2824"];
 
-  const homeCategories = CATEGORIES.map((c, i) => ({
-    id: c.id,
-    href: `/contact?cat=${c.id}`,
-    num: `0${i + 1}`,
-    name: c[locale as 'en' | 'ar'],
-  }));
 
   // Query database for projects
   const dbProjects = await prisma.project.findMany({
@@ -110,36 +103,6 @@ export default async function HomePage({ params }: PageProps) {
         </div>
       </section>
 
-      {/* CATEGORIES SECTION */}
-      <section className="max-w-[1280px] mx-auto px-6 md:px-12 lg:px-[72px] pt-[70px] md:pt-[130px]">
-        <SectionHeader
-          kicker={tNav('contact')}
-          title={tHome('catTitle')}
-          subtitle={tHome('catSub')}
-        />
-        
-        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-4">
-          {homeCategories.map((c) => (
-            <Link
-              key={c.id}
-              href={c.href}
-              className="flex flex-col justify-between min-h-[178px] p-5.5 bg-cream/[0.025] hover:bg-wood/[0.06] border border-cream/10 hover:border-wood/40 rounded-[3px] transition-all duration-300 group cursor-pointer"
-            >
-              <span className="font-serif text-[30px] text-wood/40 group-hover:text-wood/65 transition-colors font-semibold leading-none">
-                {c.num}
-              </span>
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-[15px] font-medium text-cream group-hover:text-cream-bright transition-colors leading-tight">
-                  {c.name}
-                </span>
-                <span className="text-wood opacity-50 group-hover:opacity-100 group-hover:translate-x-1.5 rtl:group-hover:-translate-x-1.5 transition-all duration-300 shrink-0">
-                  {arrow}
-                </span>
-              </div>
-            </Link>
-          ))}
-        </div>
-      </section>
 
       {/* RECENT WORK SECTION */}
       <section className="max-w-[1280px] mx-auto px-6 md:px-12 lg:px-[72px] pt-[70px] md:pt-[130px]">
