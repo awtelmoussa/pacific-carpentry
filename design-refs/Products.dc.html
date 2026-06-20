@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}html,body{margin:0;padding:0;background:#15110D;}body{-webkit-font-smoothing:antialiased;}
+::selection{background:#C2965B;color:#15110D;}
+.pc-pill:hover{border-color:rgba(194,150,91,0.55) !important;color:#EDE6D8 !important;}
+@media (max-width:900px){.pc-grid{grid-template-columns:repeat(2,1fr) !important;}}
+@media (max-width:560px){.pc-grid{grid-template-columns:1fr 1fr !important;gap:16px !important;}.pc-toolbar{flex-direction:column;align-items:flex-start !important;}}
+</style>
+</helmet>
+
+<div dir="{{ dir }}" style="background:#15110D;color:#EDE6D8;font-family:{{ bodyFont }};min-height:100vh;overflow-x:hidden">
+  <dc-import name="Nav" lang="{{ lang }}" active="products" hint-size="100%,74px"></dc-import>
+
+  <header style="padding:calc(74px + clamp(48px,7vw,90px)) clamp(20px,5vw,72px) clamp(34px,4vw,52px);max-width:1280px;margin:0 auto">
+    <span style="font-size:12px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:#C2965B">— {{ kicker }}</span>
+    <h1 style="margin:16px 0 12px;font-family:'Cormorant Garamond',{{ dispFallback }};font-weight:500;font-size:clamp(40px,6vw,76px);line-height:1;color:#F4EEE3">{{ title }}</h1>
+    <p style="margin:0;color:#8A7E6B;font-size:16px;max-width:520px;line-height:1.6">{{ sub }}</p>
+  </header>
+
+  <div class="pc-toolbar" style="max-width:1280px;margin:0 auto;padding:0 clamp(20px,5vw,72px);display:flex;justify-content:space-between;align-items:center;gap:20px;flex-wrap:wrap;border-bottom:1px solid rgba(237,230,216,0.1);padding-bottom:22px">
+    <div style="display:flex;gap:9px;flex-wrap:wrap">
+      <sc-for list="{{ filters }}" as="f" hint-placeholder-count="6">
+        <button onClick="{{ f.onClick }}" class="pc-pill" style="{{ f.style }}">{{ f.label }}</button>
+      </sc-for>
+    </div>
+    <div style="display:flex;align-items:center;gap:10px">
+      <span style="font-size:12.5px;color:#8A7E6B;letter-spacing:.04em">{{ sortLabel }}</span>
+      <select onChange="{{ onSort }}" value="{{ sortVal }}" style="background:#221C15;border:1px solid rgba(237,230,216,0.16);color:#EDE6D8;font-family:{{ bodyFont }};font-size:13px;padding:9px 12px;border-radius:2px;outline:none;cursor:pointer">
+        <option value="featured">{{ sortFeatured }}</option>
+        <option value="low">{{ sortLow }}</option>
+        <option value="high">{{ sortHigh }}</option>
+      </select>
+    </div>
+  </div>
+
+  <section style="max-width:1280px;margin:0 auto;padding:clamp(34px,4vw,52px) clamp(20px,5vw,72px) clamp(70px,9vw,120px)">
+    <sc-if value="{{ hasProducts }}" hint-placeholder-val="{{ true }}">
+      <div class="pc-grid" style="display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(20px,2.4vw,38px)">
+        <sc-for list="{{ products }}" as="p" hint-placeholder-count="6">
+          <dc-import name="ProductCard" product="{{ p }}" lang="{{ lang }}" hint-size="100%,420px"></dc-import>
+        </sc-for>
+      </div>
+    </sc-if>
+    <sc-if value="{{ empty }}" hint-placeholder-val="{{ false }}">
+      <p style="color:#8A7E6B;font-size:16px;padding:60px 0;text-align:center">{{ emptyMsg }}</p>
+    </sc-if>
+  </section>
+
+  <dc-import name="Footer" lang="{{ lang }}" hint-size="100%,360px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { ready: false, lang: "en", cat: "all", sort: "featured" };
+  async componentDidMount() {
+    this.m = await import("./shared.js");
+    const lang = this.m.getLang();
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    const params = new URLSearchParams(location.search);
+    const cat = params.get("cat") || "all";
+    this.setState({ ready: true, lang, cat });
+  }
+  renderVals() {
+    const lang = this.state.lang;
+    const bodyFont = lang === "ar" ? "'Tajawal',sans-serif" : "'Manrope',sans-serif";
+    const dispFallback = lang === "ar" ? "'Amiri',serif" : "serif";
+    const dir = lang === "ar" ? "rtl" : "ltr";
+    if (!this.state.ready) {
+      return { lang, bodyFont, dispFallback, dir, kicker: "", title: "", sub: "", filters: [], sortLabel: "", sortVal: "featured",
+        sortFeatured: "", sortLow: "", sortHigh: "", onSort: () => {}, products: [], hasProducts: false, empty: false, emptyMsg: "" };
+    }
+    const t = this.m.T[lang];
+    const pillBase = "background:none;border:1px solid rgba(237,230,216,0.16);font-family:" + bodyFont + ";font-size:12.5px;font-weight:500;letter-spacing:.06em;padding:9px 17px;border-radius:40px;cursor:pointer;transition:all .2s;color:#8A7E6B;white-space:nowrap";
+    const pillActive = "background:#C2965B;border:1px solid #C2965B;font-family:" + bodyFont + ";font-size:12.5px;font-weight:600;letter-spacing:.06em;padding:9px 17px;border-radius:40px;cursor:pointer;transition:all .2s;color:#15110D;white-space:nowrap";
+    const mk = (id, label) => ({ label, style: this.state.cat === id ? pillActive : pillBase, onClick: () => this.setState({ cat: id }) });
+    const filters = [mk("all", t.products.all), ...this.m.CATEGORIES.map((c) => mk(c.id, c[lang]))];
+    let products = this.m.PRODUCTS.filter((p) => this.state.cat === "all" || p.cat === this.state.cat);
+    if (this.state.sort === "low") products = [...products].sort((a, b) => this.m.minPrice(a) - this.m.minPrice(b));
+    if (this.state.sort === "high") products = [...products].sort((a, b) => this.m.minPrice(b) - this.m.minPrice(a));
+    return {
+      lang, bodyFont, dispFallback, dir,
+      kicker: t.nav.products, title: t.products.title, sub: t.products.sub,
+      filters, sortLabel: t.products.sort, sortVal: this.state.sort,
+      sortFeatured: t.products.sortFeatured, sortLow: t.products.sortLow, sortHigh: t.products.sortHigh,
+      onSort: (e) => this.setState({ sort: e.target.value }),
+      products, hasProducts: products.length > 0, empty: products.length === 0, emptyMsg: t.products.empty,
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+@media (max-width: 860px){ .pc-nav-links{ display:none !important; } .pc-burger{ display:flex !important; } }
+</style>
+</helmet>
+<nav dir="{{ dir }}" style="position:fixed;top:0;left:0;right:0;z-index:80;display:flex;align-items:center;justify-content:space-between;gap:24px;padding:0 clamp(20px,4vw,56px);height:74px;background:{{ navBg }};backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid rgba(237,230,216,0.10);font-family:{{ bodyFont }};transition:background .3s ease">
+  <a href="Home.dc.html" style="display:flex;align-items:center;gap:11px;text-decoration:none;flex-shrink:0">
+    <span style="display:flex;align-items:center;justify-content:center;width:34px;height:34px;border:1px solid rgba(194,150,91,0.6);color:#C2965B;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:16px;letter-spacing:.02em">PC</span>
+    <span style="display:flex;flex-direction:column;line-height:1">
+      <span style="color:#EDE6D8;font-weight:600;font-size:15px;letter-spacing:.16em">PACIFIC</span>
+      <span style="color:#A8997F;font-weight:500;font-size:9.5px;letter-spacing:.42em;margin-top:3px">CARPENTRY</span>
+    </span>
+  </a>
+
+  <div style="display:flex;align-items:center;gap:clamp(14px,2vw,34px)" class="pc-nav-links">
+    <a href="Home.dc.html" style="{{ linkHome }}">{{ tHome }}</a>
+    <a href="Products.dc.html" style="{{ linkProducts }}">{{ tProducts }}</a>
+    <a href="OurWork.dc.html" style="{{ linkWork }}">{{ tWork }}</a>
+    <a href="AboutUs.dc.html" style="{{ linkAbout }}">{{ tAbout }}</a>
+    <a href="ContactUs.dc.html" style="{{ linkContact }}">{{ tContact }}</a>
+  </div>
+
+  <div style="display:flex;align-items:center;gap:14px;flex-shrink:0">
+    <button onClick="{{ toggleLang }}" style="background:none;border:1px solid rgba(237,230,216,0.18);color:#EDE6D8;font-family:{{ bodyFont }};font-size:12px;font-weight:600;letter-spacing:.08em;padding:7px 12px;cursor:pointer;border-radius:2px;transition:all .2s" style-hover="border-color:rgba(194,150,91,0.7);color:#C2965B">{{ langLabel }}</button>
+    <a href="Cart.dc.html" style="position:relative;display:flex;align-items:center;justify-content:center;width:38px;height:38px;color:#EDE6D8;text-decoration:none" title="Cart">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 8h12l-1 12H7L6 8z"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/></svg>
+      <sc-if value="{{ hasItems }}" hint-placeholder-val="{{ true }}">
+        <span style="position:absolute;top:1px;right:0;min-width:17px;height:17px;padding:0 4px;background:#C2965B;color:#15110D;border-radius:9px;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center">{{ count }}</span>
+      </sc-if>
+    </a>
+    <button onClick="{{ toggleMenu }}" class="pc-burger" style="display:none;background:none;border:none;color:#EDE6D8;cursor:pointer;padding:6px">
+      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M3 6h18M3 12h18M3 18h18"/></svg>
+    </button>
+  </div>
+
+  <sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+    <div dir="{{ dir }}" style="position:fixed;inset:0;top:74px;background:#15110D;z-index:90;display:flex;flex-direction:column;padding:28px clamp(20px,5vw,40px);gap:6px;font-family:{{ bodyFont }}">
+      <a href="Home.dc.html" style="color:#EDE6D8;text-decoration:none;font-size:22px;font-weight:300;padding:16px 0;border-bottom:1px solid rgba(237,230,216,0.08)">{{ tHome }}</a>
+      <a href="Products.dc.html" style="color:#EDE6D8;text-decoration:none;font-size:22px;font-weight:300;padding:16px 0;border-bottom:1px solid rgba(237,230,216,0.08)">{{ tProducts }}</a>
+      <a href="OurWork.dc.html" style="color:#EDE6D8;text-decoration:none;font-size:22px;font-weight:300;padding:16px 0;border-bottom:1px solid rgba(237,230,216,0.08)">{{ tWork }}</a>
+      <a href="AboutUs.dc.html" style="color:#EDE6D8;text-decoration:none;font-size:22px;font-weight:300;padding:16px 0;border-bottom:1px solid rgba(237,230,216,0.08)">{{ tAbout }}</a>
+      <a href="ContactUs.dc.html" style="color:#EDE6D8;text-decoration:none;font-size:22px;font-weight:300;padding:16px 0;border-bottom:1px solid rgba(237,230,216,0.08)">{{ tContact }}</a>
+    </div>
+  </sc-if>
+</nav>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:74},&quot;lang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;ar&quot;],&quot;default&quot;:&quot;en&quot;,&quot;tsType&quot;:&quot;'en'|'ar'&quot;},&quot;active&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;home&quot;,&quot;products&quot;,&quot;work&quot;,&quot;about&quot;,&quot;contact&quot;],&quot;default&quot;:&quot;home&quot;,&quot;tsType&quot;:&quot;string&quot;}}">
+class Component extends DCLogic {
+  state = { t: null, lang: "en", count: 0, menuOpen: false, scrolled: false };
+
+  async componentDidMount() {
+    this.shared = await import("./shared.js");
+    const lang = this.props.lang || this.shared.getLang();
+    this.setState({ t: this.shared.T[lang], lang, count: this.shared.cartCount() });
+    this._onCart = () => this.setState({ count: this.shared.cartCount() });
+    window.addEventListener("pc-cart", this._onCart);
+    this._onScroll = () => this.setState({ scrolled: window.scrollY > 20 });
+    window.addEventListener("scroll", this._onScroll, { passive: true });
+  }
+  componentWillUnmount() {
+    window.removeEventListener("pc-cart", this._onCart);
+    window.removeEventListener("scroll", this._onScroll);
+  }
+
+  renderVals() {
+    const lang = this.state.lang;
+    const t = this.state.t;
+    const bodyFont = lang === "ar" ? "'Tajawal',sans-serif" : "'Manrope',sans-serif";
+    const dir = lang === "ar" ? "rtl" : "ltr";
+    const base = "color:#A8997F;text-decoration:none;font-size:13.5px;font-weight:500;letter-spacing:.03em;transition:color .2s;white-space:nowrap;font-family:" + bodyFont;
+    const activeStyle = base.replace("#A8997F", "#EDE6D8");
+    const active = this.props.active;
+    const ls = (id) => (active === id ? activeStyle : base);
+    if (!t) {
+      return { dir, bodyFont, navBg: "rgba(21,17,13,0.7)", langLabel: "العربية",
+        tHome: "Home", tProducts: "Products", tWork: "Our Work", tAbout: "About", tContact: "Contact",
+        linkHome: ls("home"), linkProducts: ls("products"), linkWork: ls("work"), linkAbout: ls("about"), linkContact: ls("contact"),
+        count: 0, hasItems: false, menuOpen: false,
+        toggleLang: () => {}, toggleMenu: () => {} };
+    }
+    return {
+      dir, bodyFont,
+      navBg: this.state.scrolled ? "rgba(21,17,13,0.92)" : "rgba(21,17,13,0.55)",
+      langLabel: lang === "ar" ? "English" : "العربية",
+      tHome: t.nav.home, tProducts: t.nav.products, tWork: t.nav.work, tAbout: t.nav.about, tContact: t.nav.contact,
+      linkHome: ls("home"), linkProducts: ls("products"), linkWork: ls("work"), linkAbout: ls("about"), linkContact: ls("contact"),
+      count: this.state.count, hasItems: this.state.count > 0,
+      menuOpen: this.state.menuOpen,
+      toggleLang: () => { const nl = lang === "ar" ? "en" : "ar"; this.shared.setLang(nl); location.reload(); },
+      toggleMenu: () => this.setState((s) => ({ menuOpen: !s.menuOpen })),
+    };
+  }
+}
+</script>
+</body>
+</html>

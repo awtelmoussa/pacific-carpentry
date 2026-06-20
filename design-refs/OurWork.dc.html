@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}html,body{margin:0;padding:0;background:#15110D;}body{-webkit-font-smoothing:antialiased;}
+::selection{background:#C2965B;color:#15110D;}
+.pc-pill:hover{border-color:rgba(194,150,91,0.55) !important;color:#EDE6D8 !important;}
+.pc-proj:hover .pc-proj-img{transform:scale(1.05);}
+.pc-proj:hover .pc-proj-cap{opacity:1;}
+.pc-work-grid{columns:3;column-gap:18px;}
+@media (max-width:900px){.pc-work-grid{columns:2;}}
+@media (max-width:560px){.pc-work-grid{columns:1;}}
+</style>
+</helmet>
+
+<div dir="{{ dir }}" style="background:#15110D;color:#EDE6D8;font-family:{{ bodyFont }};min-height:100vh;overflow-x:hidden">
+  <dc-import name="Nav" lang="{{ lang }}" active="work" hint-size="100%,74px"></dc-import>
+
+  <header style="padding:calc(74px + clamp(48px,7vw,90px)) clamp(20px,5vw,72px) clamp(30px,4vw,46px);max-width:1280px;margin:0 auto">
+    <span style="font-size:12px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:#C2965B">— {{ kicker }}</span>
+    <h1 style="margin:16px 0 12px;font-family:'Cormorant Garamond',{{ dispFallback }};font-weight:500;font-size:clamp(40px,6vw,76px);line-height:1;color:#F4EEE3">{{ title }}</h1>
+    <p style="margin:0;color:#8A7E6B;font-size:16px;max-width:540px;line-height:1.6">{{ sub }}</p>
+  </header>
+
+  <div style="max-width:1280px;margin:0 auto;padding:0 clamp(20px,5vw,72px) clamp(28px,3.5vw,42px);display:flex;gap:9px;flex-wrap:wrap;border-bottom:1px solid rgba(237,230,216,0.1)">
+    <sc-for list="{{ filters }}" as="f" hint-placeholder-count="4">
+      <button onClick="{{ f.onClick }}" class="pc-pill" style="{{ f.style }}">{{ f.label }}</button>
+    </sc-for>
+  </div>
+
+  <section style="max-width:1280px;margin:0 auto;padding:clamp(28px,3.5vw,44px) clamp(20px,5vw,72px) clamp(70px,9vw,120px)">
+    <div class="pc-work-grid">
+      <sc-for list="{{ projects }}" as="w" hint-placeholder-count="6">
+        <a href="ContactUs.dc.html" class="pc-proj" style="position:relative;display:block;break-inside:avoid;margin-bottom:18px;border-radius:4px;overflow:hidden;text-decoration:none;border:1px solid rgba(237,230,216,0.08)">
+          <div style="aspect-ratio:{{ w.ratio }};position:relative;overflow:hidden">
+            <div class="pc-proj-img" style="position:absolute;inset:0;background:{{ w.grad }};transition:transform .7s cubic-bezier(.2,.7,.3,1)"></div>
+            <div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(0,0,0,0.16) 0px,rgba(0,0,0,0.16) 1px,transparent 1px,transparent 8px);opacity:.45"></div>
+            <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(16,13,10,0.85),transparent 60%)"></div>
+            <span style="position:absolute;top:14px;right:16px;font-size:9.5px;letter-spacing:.12em;color:rgba(237,230,216,0.4)">{{ w.imgNote }}</span>
+            <div class="pc-proj-cap" style="position:absolute;bottom:0;left:0;right:0;padding:22px;opacity:.92;transition:opacity .3s">
+              <span style="font-size:10.5px;letter-spacing:.16em;text-transform:uppercase;color:#C2965B">{{ w.cat }} · {{ w.year }}</span>
+              <h3 style="margin:8px 0 0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:25px;color:#F4EEE3;line-height:1.08">{{ w.name }}</h3>
+            </div>
+          </div>
+        </a>
+      </sc-for>
+    </div>
+  </section>
+
+  <dc-import name="Footer" lang="{{ lang }}" hint-size="100%,360px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { ready: false, lang: "en", filter: "all" };
+  async componentDidMount() {
+    this.m = await import("./shared.js");
+    const lang = this.m.getLang();
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    this.setState({ ready: true, lang });
+  }
+  renderVals() {
+    const lang = this.state.lang;
+    const bodyFont = lang === "ar" ? "'Tajawal',sans-serif" : "'Manrope',sans-serif";
+    const dispFallback = lang === "ar" ? "'Amiri',serif" : "serif";
+    const dir = lang === "ar" ? "rtl" : "ltr";
+    if (!this.state.ready) {
+      return { lang, bodyFont, dispFallback, dir, kicker: "", title: "", sub: "", filters: [], projects: [] };
+    }
+    const t = this.m.T[lang];
+    const pillBase = "background:none;border:1px solid rgba(237,230,216,0.16);font-family:" + bodyFont + ";font-size:12.5px;font-weight:500;letter-spacing:.06em;padding:9px 17px;border-radius:40px;cursor:pointer;transition:all .2s;color:#8A7E6B;white-space:nowrap";
+    const pillActive = pillBase.replace("rgba(237,230,216,0.16)", "#C2965B").replace("none", "#C2965B").replace("#8A7E6B", "#15110D").replace("font-weight:500", "font-weight:600");
+    const cats = [
+      { id: "all", label: t.work.all },
+      { id: "Residential", label: t.work.filterRes },
+      { id: "Hospitality", label: t.work.filterHos },
+      { id: "Commercial", label: t.work.filterCom },
+    ];
+    const filters = cats.map((c) => ({
+      label: c.label, onClick: () => this.setState({ filter: c.id }),
+      style: this.state.filter === c.id ? pillActive : pillBase,
+    }));
+    const woodHexes = ["#6B4226", "#3A2A1B", "#5A4030", "#4A3526", "#2C2824", "#C99A63"];
+    const ratios = ["4/5", "4/3", "1/1", "4/5", "3/4", "4/3"];
+    let list = this.m.PROJECTS.filter((p) => this.state.filter === "all" || p.cat.en === this.state.filter);
+    return {
+      lang, bodyFont, dispFallback, dir,
+      kicker: t.nav.work, title: t.work.title, sub: t.work.sub, filters,
+      projects: list.map((p, i) => ({
+        name: p[lang], cat: p.cat[lang], year: p.year,
+        ratio: ratios[i % ratios.length],
+        imgNote: lang === "ar" ? "صورة" : "image",
+        grad: `radial-gradient(120% 100% at 35% 25%, ${woodHexes[i % woodHexes.length]}, #16110C 84%)`,
+      })),
+    };
+  }
+}
+</script>
+</body>
+</html>

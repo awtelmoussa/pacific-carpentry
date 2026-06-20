@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}
+html,body{margin:0;padding:0;background:#F4F1EB;}
+body{-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;}
+::selection{background:#C2965B;color:#fff;}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-thumb{background:#D8D0C2;border-radius:6px;border:2px solid #F4F1EB;}
+.adm-nav:hover{background:rgba(237,230,216,0.07) !important;color:#EDE6D8 !important;}
+.adm-row:hover{background:#FAF8F4 !important;}
+.adm-btn:hover{background:#85602F !important;}
+.adm-ghost:hover{border-color:#C2965B !important;color:#7A5826 !important;}
+.adm-in:focus{border-color:#C2965B !important;background:#fff !important;}
+.adm-card-act:hover{color:#9A6E3A !important;}
+.adm-x:hover{background:#F0E0DC !important;color:#C0573E !important;}
+@media (max-width:1020px){.adm-sidebar{width:72px !important;}.adm-sidebar .adm-label{display:none !important;}.adm-sidebar .adm-logo-text{display:none !important;}.adm-kpis{grid-template-columns:repeat(2,1fr) !important;}.adm-editor-split{grid-template-columns:1fr !important;}}
+@media (max-width:760px){.adm-login-brand{display:none !important;}}
+@media (max-width:720px){.adm-kpis{grid-template-columns:1fr !important;}.adm-hidecol{display:none !important;}}
+</style>
+</helmet>
+
+<!-- ============ LOGIN ============ -->
+<sc-if value="{{ notAuthed }}" hint-placeholder-val="{{ false }}">
+  <div style="display:flex;min-height:100vh;background:#F4F1EB;font-family:'Manrope',sans-serif">
+    <!-- brand panel -->
+    <div class="adm-login-brand" style="width:46%;position:relative;background:#181310;overflow:hidden;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(36px,4vw,56px)">
+      <div style="position:absolute;inset:0;background:radial-gradient(120% 90% at 30% 18%,#3A2A1B,#181310 70%)"></div>
+      <div style="position:absolute;inset:0;background:repeating-linear-gradient(94deg,rgba(0,0,0,0.18) 0,rgba(0,0,0,0.18) 2px,transparent 2px,transparent 9px);opacity:.5"></div>
+      <div style="position:relative;display:flex;align-items:center;gap:12px">
+        <span style="display:flex;align-items:center;justify-content:center;width:40px;height:40px;border:1px solid rgba(194,150,91,0.6);color:#C2965B;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:19px;flex-shrink:0">PC</span>
+        <span style="display:flex;flex-direction:column;line-height:1">
+          <span style="color:#EDE6D8;font-weight:700;font-size:14px;letter-spacing:.14em">PACIFIC</span>
+          <span style="font-weight:500;font-size:9px;letter-spacing:.36em;margin-top:3px;color:#9A8B73">CARPENTRY</span>
+        </span>
+      </div>
+      <div style="position:relative">
+        <h1 style="font-family:'Cormorant Garamond',serif;font-weight:500;font-size:clamp(30px,3.4vw,46px);color:#F4EEE3;line-height:1.06;margin:0 0 16px">Furniture worth<br>passing down.</h1>
+        <p style="color:#B6A88F;font-size:15px;line-height:1.65;max-width:340px;margin:0;font-weight:300">Manage your catalog, orders and projects — all from one quiet place.</p>
+      </div>
+      <div style="position:relative;color:#6E6353;font-size:12.5px">© 2026 Pacific Carpentry · Dubai, UAE</div>
+    </div>
+    <!-- form panel -->
+    <div style="flex:1;display:flex;align-items:center;justify-content:center;padding:40px">
+      <div style="width:100%;max-width:380px">
+        <span style="font-size:12px;font-weight:600;letter-spacing:.2em;text-transform:uppercase;color:#9A6E3A">Admin</span>
+        <h2 style="margin:13px 0 6px;font-size:28px;font-weight:800;letter-spacing:-0.01em;color:#241C13">Welcome back</h2>
+        <p style="margin:0 0 30px;font-size:14px;color:#8A7E6B">Sign in to the Pacific Carpentry dashboard.</p>
+        <div style="display:flex;flex-direction:column;gap:15px">
+          <label style="display:flex;flex-direction:column;gap:7px;font-size:12.5px;font-weight:600;color:#6A5F4E">Email
+            <input class="adm-in" type="email" value="owner@pacificcarpentry.ae" style="border:1px solid #E5DECF;background:#FBF9F5;color:#241C13;font-family:'Manrope',sans-serif;font-size:14.5px;padding:12px 14px;border-radius:9px;outline:none;transition:all .15s" />
+          </label>
+          <label style="display:flex;flex-direction:column;gap:7px;font-size:12.5px;font-weight:600;color:#6A5F4E">Password
+            <input class="adm-in" type="password" value="carpentry" style="border:1px solid #E5DECF;background:#FBF9F5;color:#241C13;font-family:'Manrope',sans-serif;font-size:14.5px;padding:12px 14px;border-radius:9px;outline:none;transition:all .15s" />
+          </label>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-top:2px">
+            <label style="display:flex;align-items:center;gap:8px;font-size:13px;color:#5A5043;cursor:pointer"><input type="checkbox" checked="checked" style="accent-color:#9A6E3A;width:15px;height:15px" />Remember me</label>
+            <span style="font-size:13px;color:#9A6E3A;font-weight:600;cursor:pointer">Forgot password?</span>
+          </div>
+          <button onClick="{{ doLogin }}" class="adm-btn" style="margin-top:8px;background:#9A6E3A;border:none;color:#fff;font-family:'Manrope',sans-serif;font-size:14.5px;font-weight:700;padding:14px;border-radius:9px;cursor:pointer;transition:background .2s;box-shadow:0 1px 2px rgba(122,88,38,0.3)">Sign in</button>
+          <p style="text-align:center;font-size:12.5px;color:#A89B85;margin:8px 0 0">Authorized staff only.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</sc-if>
+
+<sc-if value="{{ authed }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;min-height:100vh;background:#F4F1EB;font-family:'Manrope',sans-serif;color:#2A2017">
+
+  <!-- SIDEBAR -->
+  <aside class="adm-sidebar" style="width:248px;flex-shrink:0;background:#181310;display:flex;flex-direction:column;position:sticky;top:0;height:100vh;border-right:1px solid rgba(237,230,216,0.08)">
+    <div style="display:flex;align-items:center;gap:11px;padding:22px 22px 26px">
+      <span style="display:flex;align-items:center;justify-content:center;width:36px;height:36px;border:1px solid rgba(194,150,91,0.6);color:#C2965B;font-family:'Cormorant Garamond',serif;font-weight:700;font-size:17px;flex-shrink:0">PC</span>
+      <span class="adm-logo-text" style="display:flex;flex-direction:column;line-height:1">
+        <span style="color:#EDE6D8;font-weight:700;font-size:13px;letter-spacing:.14em">PACIFIC</span>
+        <span style="font-weight:500;font-size:8.5px;letter-spacing:.34em;margin-top:3px;color:#9A8B73">CARPENTRY</span>
+      </span>
+    </div>
+    <div style="padding:0 12px;flex:1;display:flex;flex-direction:column;gap:3px">
+      <button onClick="{{ nav.dashboard.onClick }}" class="adm-nav" style="{{ nav.dashboard.style }}">
+        <span style="flex-shrink:0;display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg></span>
+        <span class="adm-label" style="font-size:13.5px;font-weight:500;letter-spacing:.01em">Dashboard</span>
+      </button>
+      <button onClick="{{ nav.products.onClick }}" class="adm-nav" style="{{ nav.products.style }}">
+        <span style="flex-shrink:0;display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m21 16-9 5-9-5V8l9-5 9 5z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg></span>
+        <span class="adm-label" style="font-size:13.5px;font-weight:500;letter-spacing:.01em">Products</span>
+      </button>
+      <button onClick="{{ nav.orders.onClick }}" class="adm-nav" style="{{ nav.orders.style }}">
+        <span style="flex-shrink:0;display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg></span>
+        <span class="adm-label" style="font-size:13.5px;font-weight:500;letter-spacing:.01em">Orders</span>
+        <sc-if value="{{ nav.orders.badge }}" hint-placeholder-val="{{ false }}">
+          <span class="adm-label" style="margin-inline-start:auto;background:#C2965B;color:#181310;font-size:11px;font-weight:700;min-width:20px;height:20px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 6px">{{ nav.orders.badge }}</span>
+        </sc-if>
+      </button>
+      <button onClick="{{ nav.work.onClick }}" class="adm-nav" style="{{ nav.work.style }}">
+        <span style="flex-shrink:0;display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></span>
+        <span class="adm-label" style="font-size:13.5px;font-weight:500;letter-spacing:.01em">Our Work</span>
+      </button>
+      <button onClick="{{ nav.messages.onClick }}" class="adm-nav" style="{{ nav.messages.style }}">
+        <span style="flex-shrink:0;display:flex"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></span>
+        <span class="adm-label" style="font-size:13.5px;font-weight:500;letter-spacing:.01em">Messages</span>
+        <sc-if value="{{ nav.messages.badge }}" hint-placeholder-val="{{ false }}">
+          <span class="adm-label" style="margin-inline-start:auto;background:#C2965B;color:#181310;font-size:11px;font-weight:700;min-width:20px;height:20px;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0 6px">{{ nav.messages.badge }}</span>
+        </sc-if>
+      </button>
+    </div>
+    <div style="padding:14px 12px;border-top:1px solid rgba(237,230,216,0.08);margin:0 0 6px">
+      <div style="display:flex;align-items:center;gap:11px;padding:8px 12px">
+        <span style="width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#C2965B,#7A5826);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:13px;flex-shrink:0">YA</span>
+        <span class="adm-label" style="display:flex;flex-direction:column;line-height:1.3">
+          <span style="color:#EDE6D8;font-size:12.5px;font-weight:600">Yousef A.</span>
+          <span style="color:#8A7E6B;font-size:11px">Store owner</span>
+        </span>
+        <button onClick="{{ logout }}" class="adm-label" title="Sign out" style="margin-inline-start:auto;background:none;border:none;color:#8A7E6B;cursor:pointer;display:flex;padding:6px;border-radius:6px">
+          <svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="m16 17 5-5-5-5M21 12H9"/></svg>
+        </button>
+      </div>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main style="flex:1;min-width:0;display:flex;flex-direction:column">
+
+    <!-- TOPBAR -->
+    <header style="position:sticky;top:0;z-index:20;background:rgba(244,241,235,0.86);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid #E5DECF;padding:18px clamp(20px,3vw,40px);display:flex;align-items:center;justify-content:space-between;gap:20px">
+      <div style="display:flex;align-items:center;gap:14px;min-width:0">
+        <sc-if value="{{ showBack }}" hint-placeholder-val="{{ false }}">
+          <button onClick="{{ goBack }}" class="adm-ghost" style="display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #E0D8C8;color:#5A5043;font-size:13px;font-weight:600;padding:8px 13px;border-radius:7px;cursor:pointer;white-space:nowrap">← Back</button>
+        </sc-if>
+        <div style="min-width:0">
+          <h1 style="margin:0;font-size:clamp(19px,2.4vw,24px);font-weight:700;letter-spacing:-0.01em;color:#241C13;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ pageTitle }}</h1>
+          <p style="margin:2px 0 0;font-size:13px;color:#8A7E6B">{{ pageSub }}</p>
+        </div>
+      </div>
+      <div style="display:flex;align-items:center;gap:12px;flex-shrink:0">
+        <sc-if value="{{ hasAction }}" hint-placeholder-val="{{ true }}">
+          <button onClick="{{ actionFn }}" class="adm-btn" style="display:flex;align-items:center;gap:8px;background:#9A6E3A;border:none;color:#fff;font-family:'Manrope',sans-serif;font-size:13.5px;font-weight:600;padding:11px 18px;border-radius:8px;cursor:pointer;white-space:nowrap;box-shadow:0 1px 2px rgba(122,88,38,0.3)">{{ actionLabel }}</button>
+        </sc-if>
+      </div>
+    </header>
+
+    <div style="padding:clamp(20px,3vw,36px);flex:1">
+
+      <!-- ============ DASHBOARD ============ -->
+      <sc-if value="{{ isDashboard }}" hint-placeholder-val="{{ true }}">
+        <div>
+          <div class="adm-kpis" style="display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-bottom:26px">
+            <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+              <div style="background:#fff;border:1px solid #EAE3D5;border-radius:12px;padding:20px 22px">
+                <div style="display:flex;align-items:center;justify-content:space-between">
+                  <span style="font-size:12.5px;font-weight:600;color:#8A7E6B;letter-spacing:.02em">{{ k.label }}</span>
+                  <span style="color:#C2965B;display:flex">
+                    <sc-if value="{{ k.isMoney }}" hint-placeholder-val="{{ true }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></sc-if>
+                    <sc-if value="{{ k.isCart }}" hint-placeholder-val="{{ false }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 3h2l2.7 13.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L23 6H6"/></svg></sc-if>
+                    <sc-if value="{{ k.isClock }}" hint-placeholder-val="{{ false }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg></sc-if>
+                    <sc-if value="{{ k.isTag }}" hint-placeholder-val="{{ false }}"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 13.8 13.8 20a2 2 0 0 1-2.8 0l-7-7V4h9l7 7a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg></sc-if>
+                  </span>
+                </div>
+                <div style="font-size:30px;font-weight:800;letter-spacing:-0.02em;color:#241C13;margin-top:12px">{{ k.value }}</div>
+                <div style="display:flex;align-items:center;gap:5px;margin-top:6px">
+                  <span style="font-size:12px;font-weight:700;color:{{ k.deltaColor }}">{{ k.delta }}</span>
+                  <span style="font-size:12px;color:#A89B85">{{ k.deltaNote }}</span>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+
+          <div style="display:grid;grid-template-columns:1.6fr 1fr;gap:16px" class="adm-editor-split">
+            <!-- recent orders -->
+            <div style="background:#fff;border:1px solid #EAE3D5;border-radius:12px;overflow:hidden">
+              <div style="display:flex;align-items:center;justify-content:space-between;padding:18px 22px;border-bottom:1px solid #F0EADD">
+                <h2 style="margin:0;font-size:15px;font-weight:700;color:#241C13">Recent orders</h2>
+                <button onClick="{{ goOrders }}" class="adm-card-act" style="background:none;border:none;color:#9A6E3A;font-family:'Manrope',sans-serif;font-size:13px;font-weight:600;cursor:pointer">View all →</button>
+              </div>
+              <div>
+                <sc-for list="{{ recentOrders }}" as="o" hint-placeholder-count="5">
+                  <div onClick="{{ o.onClick }}" class="adm-row" style="display:flex;align-items:center;gap:14px;padding:14px 22px;border-bottom:1px solid #F4EEE2;cursor:pointer">
+                    <span style="font-family:'Manrope';font-size:13px;font-weight:700;color:#241C13;width:96px;flex-shrink:0">{{ o.number }}</span>
+                    <span style="font-size:13px;color:#5A5043;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ o.customer }}</span>
+                    <span class="adm-hidecol" style="font-size:12.5px;color:#A89B85;width:84px">{{ o.date }}</span>
+                    <span style="{{ o.badge }}">{{ o.status }}</span>
+                    <span style="font-size:13.5px;font-weight:700;color:#241C13;width:96px;text-align:end">{{ o.total }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+            <!-- side widgets -->
+            <div style="display:flex;flex-direction:column;gap:16px">
+              <div style="background:#fff;border:1px solid #EAE3D5;border-radius:12px;padding:20px 22px">
+                <h2 style="margin:0 0 16px;font-size:15px;font-weight:700;color:#241C13">Top pieces</h2>
+                <div style="display:flex;flex-direction:column;gap:14px">
+                  <sc-for list="{{ topProducts }}" as="p" hint-placeholder-count="4">
+                    <div style="display:flex;align-items:center;gap:12px">
+                      <span style="width:38px;height:46px;border-radius:5px;background:{{ p.grad }};flex-shrink:0;border:1px solid #EAE3D5"></span>
+                      <div style="flex:1;min-width:0">
+                        <div style="font-size:13px;font-weight:600;color:#241C13;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.name }}</div>
+                        <div style="font-size:12px;color:#A89B85">{{ p.sold }} sold</div>
+                      </div>
+                      <span style="font-size:13px;font-weight:700;color:#9A6E3A">{{ p.revenue }}</span>
+                    </div>
+                  </sc-for>
+                </div>
+              </div>
+              <div style="background:linear-gradient(140deg,#241C13,#3A2A1B);border-radius:12px;padding:22px;color:#EDE6D8">
+                <span style="font-size:12.5px;font-weight:600;color:#C2965B;letter-spacing:.04em">Inbox</span>
+                <p style="margin:8px 0 14px;font-size:14px;line-height:1.5;color:#D8CFBE">You have <strong style="color:#fff">{{ unreadMsgs }} new inquiries</strong> from the contact form.</p>
+                <button onClick="{{ goMessages }}" style="background:#C2965B;border:none;color:#181310;font-family:'Manrope';font-size:13px;font-weight:700;padding:10px 16px;border-radius:7px;cursor:pointer">Open inbox</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ PRODUCTS LIST ============ -->
+      <sc-if value="{{ isProducts }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#fff;border:1px solid #EAE3D5;border-radius:12px;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:10px;padding:14px 20px;border-bottom:1px solid #F0EADD;flex-wrap:wrap">
+            <div style="display:flex;align-items:center;gap:8px;background:#F7F4EE;border:1px solid #EAE3D5;border-radius:8px;padding:8px 12px;flex:1;min-width:200px;max-width:340px">
+              <span style="color:#A89B85;display:flex"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><path d="m21 21-4-4"/></svg></span>
+              <input class="adm-in" placeholder="Search pieces…" style="border:none;background:none;outline:none;font-family:'Manrope';font-size:13.5px;color:#241C13;width:100%" />
+            </div>
+            <div style="display:flex;gap:7px;margin-inline-start:auto;flex-wrap:wrap">
+              <sc-for list="{{ catFilters }}" as="c" hint-placeholder-count="6">
+                <button onClick="{{ c.onClick }}" style="{{ c.style }}">{{ c.label }}</button>
+              </sc-for>
+            </div>
+          </div>
+          <!-- table head -->
+          <div style="display:flex;align-items:center;gap:14px;padding:12px 22px;border-bottom:1px solid #F0EADD;background:#FBF9F5">
+            <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#A89B85;flex:1">Piece</span>
+            <span class="adm-hidecol" style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#A89B85;width:130px">Category</span>
+            <span class="adm-hidecol" style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#A89B85;width:120px">Finishes</span>
+            <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#A89B85;width:140px">Price range</span>
+            <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#A89B85;width:90px">Status</span>
+            <span style="width:30px"></span>
+          </div>
+          <sc-for list="{{ productRows }}" as="p" hint-placeholder-count="8">
+            <div onClick="{{ p.onClick }}" class="adm-row" style="display:flex;align-items:center;gap:14px;padding:13px 22px;border-bottom:1px solid #F4EEE2;cursor:pointer">
+              <div style="display:flex;align-items:center;gap:13px;flex:1;min-width:0">
+                <span style="width:44px;height:54px;border-radius:6px;background:{{ p.grad }};flex-shrink:0;border:1px solid #EAE3D5;position:relative;overflow:hidden"><span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:26px;color:rgba(255,255,255,0.25)">{{ p.letter }}</span></span>
+                <div style="min-width:0">
+                  <div style="font-size:14px;font-weight:600;color:#241C13;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.name }}</div>
+                  <div style="font-size:12px;color:#A89B85;direction:rtl;text-align:start">{{ p.nameAr }}</div>
+                </div>
+              </div>
+              <span class="adm-hidecol" style="font-size:13px;color:#5A5043;width:130px">{{ p.category }}</span>
+              <div class="adm-hidecol" style="display:flex;gap:5px;width:120px">
+                <sc-for list="{{ p.colors }}" as="c" hint-placeholder-count="3">
+                  <span title="{{ c.name }}" style="width:18px;height:18px;border-radius:50%;background:{{ c.hex }};border:1px solid rgba(0,0,0,0.12)"></span>
+                </sc-for>
+              </div>
+              <span style="font-size:13.5px;font-weight:600;color:#241C13;width:140px">{{ p.priceRange }}</span>
+              <span style="width:90px"><span style="{{ p.statusBadge }}">{{ p.statusLabel }}</span></span>
+              <span class="adm-card-act" style="width:30px;color:#C5BBA8;display:flex;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- ============ PRODUCT EDITOR ============ -->
+      <sc-if value="{{ isEditor }}" hint-placeholder-val="{{ false }}">
+        <div class="adm-editor-split" style="display:grid;grid-template-columns:1.55fr 1fr;gap:20px;align-items:start">
+          <!-- left: fields -->
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <!-- basics -->
+            <div style="background:#fff;border:1px solid #EAE3D5;border-radius:12px;padding:22px">
+              <h2 style="margin:0 0 4px;font-size:15px;font-weight:700;color:#241C13">Details</h2>
+              <p style="margin:0 0 18px;font-size:12.5px;color:#A89B85">Shown on the product page in both languages.</p>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                <label style="{{ labS }}">Name (English)<input class="adm-in" value="{{ ed.nameEn }}" style="{{ inpS }}" /></label>
+                <label style="{{ labS }}">Name (Arabic)<input class="adm-in" value="{{ ed.nameAr }}" dir="rtl" style="{{ inpS }}" /></label>
+                <label style="{{ labS }}">Tagline (English)<input class="adm-in" value="{{ ed.tagEn }}" style="{{ inpS }}" /></label>
+                <label style="{{ labS }}">Tagline (Arabic)<input class="adm-in" value="{{ ed.tagAr }}" dir="rtl" style="{{ inpS }}" /></label>
+                <label style="{{ labS }}">Category
+                  <select class="adm-in" value="{{ ed.cat }}" style="{{ inpS }};cursor:pointer">
+                    <sc-for list="{{ catOptions }}" as="c" hint-placeholder-count="5"><option value="{{ c.id }}">{{ c.label }}</option></sc-for>
+                  </select>
+                </label>
+                <label style="{{ labS }}">Status
+                  <select class="adm-in" value="{{ ed.status }}" style="{{ inpS }};cursor:pointer">
+                    <option value="active">Active</option><option value="draft">Draft</option>
+                  </select>
+                </label>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:14px">
+                <label style="{{ labS }}">Description (English)<div class="adm-in" style="{{ inpS }};min-height:92px;white-space:pre-wrap;line-height:1.55;font-weight:400;overflow:auto">{{ ed.descEn }}</div></label>
+                <label style="{{ labS }}">Description (Arabic)<div class="adm-in" dir="rtl" style="{{ inpS }};min-height:92px;white-space:pre-wrap;line-height:1.7;font-weight:400;overflow:auto">{{ ed.descAr }}</div></label>
+              </div>
+            </div>
+
+            <!-- finishes -->
+            <div style="background:#fff;border:1px solid #EAE3D5;border-radius:12px;padding:22px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+                <h2 style="margin:0;font-size:15px;font-weight:700;color:#241C13">Finishes</h2>
+                <button onClick="{{ addColor }}" class="adm-ghost" style="display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #E0D8C8;color:#7A5826;font-family:'Manrope';font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:7px;cursor:pointer">+ Add finish</button>
+              </div>
+              <p style="margin:0 0 16px;font-size:12.5px;color:#A89B85">Each finish shows as a swatch on the product page.</p>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <sc-for list="{{ ed.colors }}" as="c" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <span style="position:relative;width:38px;height:38px;border-radius:8px;background:{{ c.hex }};border:1px solid rgba(0,0,0,0.12);flex-shrink:0"></span>
+                    <input class="adm-in" value="{{ c.hex }}" style="{{ inpS }};width:104px;font-family:monospace;font-size:13px" />
+                    <input class="adm-in" value="{{ c.nameEn }}" placeholder="Name (EN)" style="{{ inpS }};flex:1" />
+                    <input class="adm-in" value="{{ c.nameAr }}" dir="rtl" placeholder="(AR)" style="{{ inpS }};flex:1" />
+                    <button onClick="{{ c.remove }}" class="adm-x" style="width:34px;height:34px;border-radius:7px;border:1px solid #EFE6DA;background:#FBF8F3;color:#C5BBA8;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+
+            <!-- sizes & pricing  ⭐ -->
+            <div style="background:#fff;border:1px solid #EAE3D5;border-radius:12px;padding:22px">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+                <h2 style="margin:0;font-size:15px;font-weight:700;color:#241C13">Sizes &amp; pricing</h2>
+                <button onClick="{{ addSize }}" class="adm-ghost" style="display:flex;align-items:center;gap:6px;background:#fff;border:1px solid #E0D8C8;color:#7A5826;font-family:'Manrope';font-size:12.5px;font-weight:600;padding:7px 13px;border-radius:7px;cursor:pointer">+ Add size</button>
+              </div>
+              <p style="margin:0 0 16px;font-size:12.5px;color:#A89B85">Every size carries its own price. The lowest becomes the “From” price on cards.</p>
+              <div style="display:flex;align-items:center;gap:10px;padding:0 2px 8px">
+                <span style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#A89B85;flex:1">Size label (EN)</span>
+                <span style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#A89B85;flex:1">Size label (AR)</span>
+                <span style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#A89B85;width:150px">Price (AED)</span>
+                <span style="width:34px"></span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <sc-for list="{{ ed.sizes }}" as="s" hint-placeholder-count="3">
+                  <div style="display:flex;align-items:center;gap:10px">
+                    <input class="adm-in" value="{{ s.labelEn }}" placeholder="e.g. 6-Seat · 220cm" style="{{ inpS }};flex:1" />
+                    <input class="adm-in" value="{{ s.labelAr }}" dir="rtl" style="{{ inpS }};flex:1" />
+                    <div style="display:flex;align-items:center;gap:0;width:150px;border:1px solid #E5DECF;border-radius:8px;overflow:hidden;background:#F7F4EE" class="adm-price-wrap">
+                      <span style="font-size:12px;font-weight:700;color:#9A6E3A;padding:0 10px;background:#F0E8DA;align-self:stretch;display:flex;align-items:center">AED</span>
+                      <input class="adm-in" value="{{ s.price }}" inputmode="numeric" style="border:none;background:#fff;outline:none;font-family:'Manrope';font-size:14px;font-weight:600;color:#241C13;padding:9px 11px;width:100%" />
+                    </div>
+                    <button onClick="{{ s.remove }}" class="adm-x" style="width:34px;height:34px;border-radius:7px;border:1px solid #EFE6DA;background:#FBF8F3;color:#C5BBA8;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6 6 18M6 6l12 12"/></svg></button>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+
+          <!-- right: media + summary -->
+          <div style="display:flex;flex-direction:column;gap:18px;position:sticky;top:96px">
+            <div style="background:#fff;border:1px solid #EAE3D5;border-radius:12px;padding:22px">
+              <h2 style="margin:0 0 16px;font-size:15px;font-weight:700;color:#241C13">Photos</h2>
+              <div style="aspect-ratio:4/5;border-radius:9px;background:{{ ed.heroGrad }};border:1px solid #EAE3D5;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center">
+                <span style="font-family:'Cormorant Garamond',serif;font-size:90px;color:rgba(255,255,255,0.18)">{{ ed.letter }}</span>
+              </div>
+              <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:8px">
+                <sc-for list="{{ ed.thumbs }}" as="t" hint-placeholder-count="4">
+                  <div style="aspect-ratio:1;border-radius:6px;background:{{ t.grad }};border:1px solid #EAE3D5"></div>
+                </sc-for>
+              </div>
+              <button class="adm-ghost" style="width:100%;margin-top:10px;background:#FBF8F3;border:1px dashed #D8CDB8;color:#7A5826;font-family:'Manrope';font-size:13px;font-weight:600;padding:11px;border-radius:8px;cursor:pointer">↑ Upload photos</button>
+            </div>
+            <div style="background:#fff;border:1px solid #EAE3D5;border-radius:12px;padding:22px">
+              <h2 style="margin:0 0 14px;font-size:15px;font-weight:700;color:#241C13">Summary</h2>
+              <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:13.5px"><span style="color:#8A7E6B">Finishes</span><span style="font-weight:600;color:#241C13">{{ ed.colorCount }}</span></div>
+              <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:13.5px"><span style="color:#8A7E6B">Sizes</span><span style="font-weight:600;color:#241C13">{{ ed.sizeCount }}</span></div>
+              <div style="display:flex;justify-content:space-between;padding:7px 0;font-size:13.5px;border-top:1px solid #F0EADD;margin-top:5px"><span style="color:#8A7E6B">Price range</span><span style="font-weight:700;color:#9A6E3A">{{ ed.priceRange }}</span></div>
+              <button onClick="{{ saveProduct }}" class="adm-btn" style="width:100%;margin-top:16px;background:#9A6E3A;border:none;color:#fff;font-family:'Manrope';font-size:14px;font-weight:700;padding:13px;border-radius:8px;cursor:pointer">{{ saveLabel }}</button>
+              <button onClick="{{ goBack }}" style="width:100%;margin-top:8px;background:none;border:none;color:#8A7E6B;font-family:'Manrope';font-size:13px;font-weight:600;padding:8px;cursor:pointer">Cancel</button>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ ORDERS LIST ============ -->
+      <sc-if value="{{ isOrders }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#fff;border:1px solid #EAE3D5;border-radius:12px;overflow:hidden">
+          <div style="display:flex;align-items:center;gap:7px;padding:14px 20px;border-bottom:1px solid #F0EADD;flex-wrap:wrap">
+            <sc-for list="{{ orderFilters }}" as="f" hint-placeholder-count="5">
+              <button onClick="{{ f.onClick }}" style="{{ f.style }}">{{ f.label }}</button>
+            </sc-for>
+          </div>
+          <div style="display:flex;align-items:center;gap:14px;padding:12px 22px;border-bottom:1px solid #F0EADD;background:#FBF9F5">
+            <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#A89B85;width:104px">Order</span>
+            <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#A89B85;flex:1">Customer</span>
+            <span class="adm-hidecol" style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#A89B85;width:96px">Date</span>
+            <span class="adm-hidecol" style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#A89B85;width:60px">Items</span>
+            <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#A89B85;width:120px">Status</span>
+            <span style="font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:#A89B85;width:104px;text-align:end">Total</span>
+            <span style="width:24px"></span>
+          </div>
+          <sc-for list="{{ orderRows }}" as="o" hint-placeholder-count="8">
+            <div onClick="{{ o.onClick }}" class="adm-row" style="display:flex;align-items:center;gap:14px;padding:15px 22px;border-bottom:1px solid #F4EEE2;cursor:pointer">
+              <span style="font-size:13px;font-weight:700;color:#241C13;width:104px">{{ o.number }}</span>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:13.5px;font-weight:600;color:#241C13;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ o.customer }}</div>
+                <div style="font-size:12px;color:#A89B85;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ o.email }}</div>
+              </div>
+              <span class="adm-hidecol" style="font-size:12.5px;color:#8A7E6B;width:96px">{{ o.date }}</span>
+              <span class="adm-hidecol" style="font-size:13px;color:#5A5043;width:60px">{{ o.itemCount }}</span>
+              <span style="width:120px"><span style="{{ o.badge }}">{{ o.status }}</span></span>
+              <span style="font-size:14px;font-weight:700;color:#241C13;width:104px;text-align:end">{{ o.total }}</span>
+              <span class="adm-card-act" style="width:24px;color:#C5BBA8;display:flex;justify-content:center"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m9 18 6-6-6-6"/></svg></span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <!-- ============ ORDER DETAIL ============ -->
+      <sc-if value="{{ isOrderDetail }}" hint-placeholder-val="{{ false }}">
+        <div class="adm-editor-split" style="display:grid;grid-template-columns:1.5fr 1fr;gap:20px;align-items:start">
+          <div style="background:#fff;border:1px solid #EAE3D5;border-radius:12px;overflow:hidden">
+            <div style="padding:20px 24px;border-bottom:1px solid #F0EADD;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px">
+              <div>
+                <h2 style="margin:0;font-size:18px;font-weight:700;color:#241C13">{{ od.number }}</h2>
+                <p style="margin:3px 0 0;font-size:13px;color:#8A7E6B">{{ od.date }} · {{ od.itemCount }} items</p>
+              </div>
+              <span style="{{ od.badge }}">{{ od.status }}</span>
+            </div>
+            <div style="padding:8px 24px">
+              <sc-for list="{{ od.items }}" as="it" hint-placeholder-count="2">
+                <div style="display:flex;align-items:center;gap:14px;padding:16px 0;border-bottom:1px solid #F4EEE2">
+                  <span style="width:50px;height:62px;border-radius:6px;background:{{ it.grad }};border:1px solid #EAE3D5;flex-shrink:0;position:relative;overflow:hidden"><span style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-family:'Cormorant Garamond',serif;font-size:28px;color:rgba(255,255,255,0.25)">{{ it.letter }}</span></span>
+                  <div style="flex:1;min-width:0">
+                    <div style="font-size:14.5px;font-weight:600;color:#241C13">{{ it.name }}</div>
+                    <div style="font-size:12.5px;color:#8A7E6B;margin-top:2px">Finish: {{ it.color }} · Size: {{ it.size }}</div>
+                  </div>
+                  <span style="font-size:13px;color:#8A7E6B;width:54px;text-align:center">× {{ it.qty }}</span>
+                  <span style="font-size:14px;font-weight:700;color:#241C13;width:100px;text-align:end">{{ it.lineTotal }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <div style="padding:16px 24px;background:#FBF9F5">
+              <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13.5px"><span style="color:#8A7E6B">Subtotal</span><span style="color:#241C13;font-weight:600">{{ od.subtotal }}</span></div>
+              <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:13.5px"><span style="color:#8A7E6B">Shipping</span><span style="color:#241C13;font-weight:600">{{ od.shipping }}</span></div>
+              <div style="display:flex;justify-content:space-between;padding:10px 0 2px;font-size:16px;border-top:1px solid #EFE6DA;margin-top:6px"><span style="font-weight:700;color:#241C13">Total</span><span style="font-weight:800;color:#9A6E3A">{{ od.total }}</span></div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:18px">
+            <div style="background:#fff;border:1px solid #EAE3D5;border-radius:12px;padding:22px">
+              <h2 style="margin:0 0 14px;font-size:15px;font-weight:700;color:#241C13">Update status</h2>
+              <div style="display:flex;flex-direction:column;gap:8px">
+                <sc-for list="{{ statusSteps }}" as="s" hint-placeholder-count="5">
+                  <button onClick="{{ s.onClick }}" style="{{ s.style }}">
+                    <span style="display:flex;align-items:center;gap:10px"><span style="{{ s.dot }}"></span>{{ s.label }}</span>
+                    <sc-if value="{{ s.current }}" hint-placeholder-val="{{ false }}"><span style="font-size:11px;font-weight:700;color:#9A6E3A">CURRENT</span></sc-if>
+                  </button>
+                </sc-for>
+              </div>
+            </div>
+            <div style="background:#fff;border:1px solid #EAE3D5;border-radius:12px;padding:22px">
+              <h2 style="margin:0 0 14px;font-size:15px;font-weight:700;color:#241C13">Customer</h2>
+              <div style="display:flex;flex-direction:column;gap:11px">
+                <div><div style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#A89B85;margin-bottom:3px">Name</div><div style="font-size:14px;color:#241C13">{{ od.customer }}</div></div>
+                <div><div style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#A89B85;margin-bottom:3px">Email</div><div style="font-size:14px;color:#241C13">{{ od.email }}</div></div>
+                <div><div style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#A89B85;margin-bottom:3px">Phone</div><div style="font-size:14px;color:#241C13">{{ od.phone }}</div></div>
+                <div><div style="font-size:11px;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:#A89B85;margin-bottom:3px">Delivery</div><div style="font-size:14px;color:#241C13;line-height:1.5">{{ od.address }}</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <!-- ============ OUR WORK ============ -->
+      <sc-if value="{{ isWork }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:16px">
+          <sc-for list="{{ projectCards }}" as="p" hint-placeholder-count="6">
+            <div style="background:#fff;border:1px solid #EAE3D5;border-radius:12px;overflow:hidden">
+              <div style="aspect-ratio:4/3;background:{{ p.grad }};position:relative">
+                <span style="position:absolute;top:10px;right:12px;font-size:10px;letter-spacing:.1em;color:rgba(255,255,255,0.6)">image</span>
+              </div>
+              <div style="padding:15px 16px">
+                <span style="font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#9A6E3A">{{ p.cat }} · {{ p.year }}</span>
+                <h3 style="margin:7px 0 2px;font-size:15.5px;font-weight:700;color:#241C13">{{ p.name }}</h3>
+                <div style="font-size:12.5px;color:#A89B85;direction:rtl">{{ p.nameAr }}</div>
+                <div style="display:flex;gap:8px;margin-top:13px">
+                  <button class="adm-ghost" style="flex:1;background:#FBF8F3;border:1px solid #EAE3D5;color:#5A5043;font-family:'Manrope';font-size:12.5px;font-weight:600;padding:8px;border-radius:7px;cursor:pointer">Edit</button>
+                  <button class="adm-x" style="width:34px;border-radius:7px;border:1px solid #EFE6DA;background:#FBF8F3;color:#C5BBA8;cursor:pointer;display:flex;align-items:center;justify-content:center"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 6h18M19 6l-1 14H6L5 6M10 11v6M14 11v6M8 6V4h8v2"/></svg></button>
+                </div>
+              </div>
+            </div>
+          </sc-for>
+          <button class="adm-ghost" style="aspect-ratio:1;min-height:200px;background:#FBF8F3;border:1px dashed #D8CDB8;color:#7A5826;font-family:'Manrope';font-size:14px;font-weight:600;border-radius:12px;cursor:pointer;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px"><span style="font-size:30px;font-weight:300;line-height:1">+</span>Add project</button>
+        </div>
+      </sc-if>
+
+      <!-- ============ MESSAGES ============ -->
+      <sc-if value="{{ isMessages }}" hint-placeholder-val="{{ false }}">
+        <div style="background:#fff;border:1px solid #EAE3D5;border-radius:12px;overflow:hidden">
+          <sc-for list="{{ messages }}" as="m" hint-placeholder-count="5">
+            <div class="adm-row" style="display:flex;gap:16px;padding:18px 24px;border-bottom:1px solid #F4EEE2;cursor:pointer;background:{{ m.bg }}">
+              <span style="width:40px;height:40px;border-radius:50%;background:{{ m.avatarBg }};display:flex;align-items:center;justify-content:center;color:#fff;font-weight:700;font-size:14px;flex-shrink:0">{{ m.initials }}</span>
+              <div style="flex:1;min-width:0">
+                <div style="display:flex;align-items:center;gap:9px">
+                  <sc-if value="{{ m.unread }}" hint-placeholder-val="{{ false }}"><span style="width:8px;height:8px;border-radius:50%;background:#C2965B;flex-shrink:0"></span></sc-if>
+                  <span style="font-size:14px;font-weight:{{ m.weight }};color:#241C13">{{ m.name }}</span>
+                  <span style="font-size:12.5px;color:#A89B85">· {{ m.subject }}</span>
+                </div>
+                <p style="margin:5px 0 0;font-size:13px;color:#8A7E6B;line-height:1.5;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:560px">{{ m.preview }}</p>
+              </div>
+              <span style="font-size:12px;color:#A89B85;white-space:nowrap;flex-shrink:0">{{ m.time }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+    </div>
+  </main>
+</div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { ready: false, authed: false, view: "dashboard", selProduct: null, selOrder: null, cat: "all", orderFilter: "all", editorDraft: null, saved: false };
+
+  async componentDidMount() {
+    this.m = await import("./shared.js");
+    document.documentElement.dir = "ltr";
+    this.orders = this.buildOrders();
+    this.setState({ ready: true });
+  }
+
+  fmt(n) { return "AED " + Number(n).toLocaleString("en-US"); }
+  grad(hex) { return `radial-gradient(120% 100% at 35% 25%, ${hex}, #1C1712 84%)`; }
+
+  buildOrders() {
+    const P = this.m.PRODUCTS;
+    const pick = (i) => P[i % P.length];
+    const mk = (num, name, email, phone, days, status, lines, addr) => {
+      const items = lines.map(([pi, ci, si, qty]) => {
+        const p = pick(pi); const c = p.colors[ci % p.colors.length]; const s = p.sizes[si % p.sizes.length];
+        return { p, name: p.name.en, letter: p.name.en[0], grad: this.grad(c.hex), color: c.en, size: s.en, price: s.price, qty, lineTotal: this.fmt(s.price * qty) };
+      });
+      const subtotal = items.reduce((n, it) => n + it.price * it.qty, 0);
+      const d = new Date(2026, 5, 18 - days);
+      return { number: num, customer: name, email, phone, status, items, itemCount: items.reduce((n, i) => n + i.qty, 0),
+        subtotal, shipping: 0, total: subtotal, address: addr,
+        date: d.toLocaleDateString("en-GB", { day: "2-digit", month: "short" }) };
+    };
+    return [
+      mk("PC-482193", "Layla Haddad", "layla.h@gmail.com", "+971 50 221 0098", 0, "pending", [[0,1,1,1],[1,0,0,4]], "Villa 12, Al Barari, Dubai"),
+      mk("PC-482190", "Omar Khan", "omar.khan@outlook.com", "+971 55 882 1144", 1, "paid", [[3,0,1,1]], "Marina Gate 2, Apt 1804, Dubai"),
+      mk("PC-482188", "Sara Meyer", "s.meyer@studio-co.ae", "+971 52 770 6621", 2, "in_production", [[2,1,2,1],[6,0,0,1]], "DIFC, Gate Building 4, Dubai"),
+      mk("PC-482184", "Hassan Ali", "hassan@blueoak.ae", "+971 50 119 0042", 4, "shipped", [[4,0,1,2]], "Jumeirah 1, Villa 7, Dubai"),
+      mk("PC-482181", "Nadia Rashed", "nadia.r@gmail.com", "+971 56 440 2231", 6, "completed", [[5,1,0,1],[7,0,1,2]], "Saadiyat Island, Abu Dhabi"),
+      mk("PC-482179", "James Carter", "jcarter@hospitality.co", "+971 54 902 7781", 7, "completed", [[1,2,1,6]], "Palm Jumeirah, Frond K, Dubai"),
+      mk("PC-482175", "Mariam Suhail", "mariam.s@gmail.com", "+971 50 663 1190", 9, "completed", [[6,2,0,1]], "Mirdif, Street 23, Dubai"),
+    ];
+  }
+
+  statusMeta(s) {
+    const map = {
+      pending: { label: "Pending", c: "#B7791F", bg: "#FBF0DA" },
+      paid: { label: "Paid", c: "#2F7D52", bg: "#E2F1E7" },
+      in_production: { label: "In production", c: "#9A6E3A", bg: "#F3E8D6" },
+      shipped: { label: "Shipped", c: "#2B6CB0", bg: "#E1ECF7" },
+      completed: { label: "Completed", c: "#5A5043", bg: "#EFEADF" },
+      cancelled: { label: "Cancelled", c: "#C0573E", bg: "#F7E4DE" },
+    };
+    return map[s] || map.pending;
+  }
+  badge(s) {
+    const m = this.statusMeta(s);
+    return `display:inline-flex;align-items:center;font-size:11.5px;font-weight:700;letter-spacing:.01em;padding:4px 11px;border-radius:20px;color:${m.c};background:${m.bg};white-space:nowrap`;
+  }
+
+  icon(name) {
+    const I = {
+      grid: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>',
+      box: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="m21 16-9 5-9-5V8l9-5 9 5z"/><path d="m3.3 7 8.7 5 8.7-5"/><path d="M12 22V12"/></svg>',
+      bag: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/></svg>',
+      image: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg>',
+      mail: '<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg>',
+      money: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><line x1="12" y1="2" x2="12" y2="22"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>',
+      cart: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="21" r="1"/><circle cx="19" cy="21" r="1"/><path d="M2.5 3h2l2.7 13.4a2 2 0 0 0 2 1.6h7.7a2 2 0 0 0 2-1.6L23 6H6"/></svg>',
+      clock: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg>',
+      tag: '<svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M20 13.8 13.8 20a2 2 0 0 1-2.8 0l-7-7V4h9l7 7a2 2 0 0 1 0 2.8z"/><circle cx="7.5" cy="7.5" r="1.2"/></svg>',
+    };
+    const svg = I[name] || "";
+    return React.createElement("span", { style: { display: "flex", alignItems: "center" }, dangerouslySetInnerHTML: { __html: svg } });
+  }
+
+  startEdit(p) {
+    const draft = {
+      id: p.id, nameEn: p.name.en, nameAr: p.name.ar, tagEn: p.tagline.en, tagAr: p.tagline.ar,
+      descEn: p.desc.en, descAr: p.desc.ar, cat: p.cat, status: "active",
+      colors: p.colors.map((c) => ({ ...c })), sizes: p.sizes.map((s) => ({ labelEn: s.en, labelAr: s.ar, price: s.price })),
+    };
+    this.setState({ view: "editor", selProduct: p, editorDraft: draft, saved: false });
+  }
+  newProduct() {
+    this.setState({ view: "editor", selProduct: null, saved: false, editorDraft: {
+      id: null, nameEn: "", nameAr: "", tagEn: "", tagAr: "", descEn: "", descAr: "", cat: "dining-tables", status: "draft",
+      colors: [{ en: "Natural Oak", ar: "بلوط طبيعي", hex: "#C99A63" }],
+      sizes: [{ labelEn: "", labelAr: "", price: 0 }],
+    } });
+  }
+
+  renderVals() {
+    const v = this.state.view;
+    if (!this.state.ready) {
+      return { authed: this.state.authed, notAuthed: !this.state.authed, doLogin: () => this.setState({ authed: true }), logout: () => this.setState({ authed: false }),
+        nav: { dashboard: {}, products: {}, orders: {}, work: {}, messages: {} }, pageTitle: "Dashboard", pageSub: "", showBack: false, goBack: () => {}, hasAction: false, actionLabel: "", actionFn: () => {},
+        isDashboard: true, isProducts: false, isEditor: false, isOrders: false, isOrderDetail: false, isWork: false, isMessages: false,
+        kpis: [], recentOrders: [], topProducts: [], unreadMsgs: 0, goOrders: () => {}, goMessages: () => {},
+        catFilters: [], productRows: [], orderFilters: [], orderRows: [], projectCards: [], messages: [], statusSteps: [],
+        catOptions: [], labS: "", inpS: "", ed: {}, od: {} };
+    }
+    const m = this.m;
+    const labS = "display:flex;flex-direction:column;gap:6px;font-size:12px;font-weight:600;letter-spacing:.02em;color:#6A5F4E";
+    const inpS = "border:1px solid #E5DECF;background:#FBF9F5;color:#241C13;font-family:'Manrope',sans-serif;font-size:14px;padding:10px 12px;border-radius:8px;outline:none;transition:all .15s;font-weight:400";
+
+    // sidebar
+    const navActive = (id) => (id === v || (id === "products" && v === "editor") || (id === "orders" && v === "orderDetail"));
+    const navStyle = (id) => `display:flex;align-items:center;gap:13px;width:100%;border:none;cursor:pointer;padding:11px 14px;border-radius:9px;font-family:'Manrope',sans-serif;text-align:start;transition:all .15s;background:${navActive(id) ? "rgba(194,150,91,0.16)" : "transparent"};color:${navActive(id) ? "#EDE6D8" : "#9A8B73"}`;
+    const navGo = (id) => () => this.setState({ view: id, selProduct: null, selOrder: null });
+    const pendingCount = this.orders.filter((o) => o.status === "pending").length;
+    const nav = {
+      dashboard: { style: navStyle("dashboard"), onClick: navGo("dashboard") },
+      products: { style: navStyle("products"), onClick: navGo("products") },
+      orders: { style: navStyle("orders"), onClick: navGo("orders"), badge: pendingCount || false },
+      work: { style: navStyle("work"), onClick: navGo("work") },
+      messages: { style: navStyle("messages"), onClick: navGo("messages"), badge: "3" },
+    };
+
+    // page header
+    const titles = {
+      dashboard: ["Dashboard", "Welcome back, Yousef"],
+      products: ["Products", `${m.PRODUCTS.length} pieces in your catalog`],
+      editor: [this.state.selProduct ? "Edit piece" : "New piece", "Configure finishes, sizes and pricing"],
+      orders: ["Orders", `${this.orders.length} orders`],
+      orderDetail: ["Order", "Review and update this order"],
+      work: ["Our Work", "Portfolio projects shown on the site"],
+      messages: ["Messages", "Inquiries from the contact form"],
+    };
+    const actionMap = {
+      products: { label: "+ New piece", fn: () => this.newProduct() },
+      work: { label: "+ Add project", fn: () => {} },
+    };
+    const act = actionMap[v];
+
+    const base = {
+      authed: this.state.authed, notAuthed: !this.state.authed,
+      doLogin: () => this.setState({ authed: true }),
+      logout: () => this.setState({ authed: false, view: "dashboard" }),
+      nav,
+      pageTitle: titles[v][0], pageSub: titles[v][1],
+      showBack: v === "editor" || v === "orderDetail",
+      goBack: () => this.setState({ view: v === "editor" ? "products" : "orders", selProduct: null, selOrder: null }),
+      hasAction: !!act, actionLabel: act ? act.label : "", actionFn: act ? act.fn : () => {},
+      isDashboard: v === "dashboard", isProducts: v === "products", isEditor: v === "editor",
+      isOrders: v === "orders", isOrderDetail: v === "orderDetail", isWork: v === "work", isMessages: v === "messages",
+      labS, inpS,
+      catOptions: m.CATEGORIES.map((c) => ({ id: c.id, label: c.en })),
+      goOrders: () => this.setState({ view: "orders" }),
+      goMessages: () => this.setState({ view: "messages" }),
+      kpis: [], recentOrders: [], topProducts: [], unreadMsgs: 3,
+      catFilters: [], productRows: [], orderFilters: [], orderRows: [], projectCards: [], messages: [], statusSteps: [],
+      ed: {}, od: {},
+    };
+
+    // DASHBOARD
+    if (v === "dashboard") {
+      const revenue = this.orders.reduce((n, o) => n + o.total, 0);
+      base.kpis = [
+        { label: "Revenue (30d)", value: this.fmt(revenue), isMoney: true, delta: "+18%", deltaColor: "#2F7D52", deltaNote: "vs last month" },
+        { label: "Orders", value: String(this.orders.length), isCart: true, delta: "+4", deltaColor: "#2F7D52", deltaNote: "this week" },
+        { label: "Pending", value: String(this.orders.filter((o) => o.status === "pending").length), isClock: true, delta: "Action", deltaColor: "#B7791F", deltaNote: "needs review" },
+        { label: "Avg. order", value: this.fmt(Math.round(revenue / this.orders.length)), isTag: true, delta: "+6%", deltaColor: "#2F7D52", deltaNote: "vs last month" },
+      ];
+      base.recentOrders = this.orders.slice(0, 5).map((o) => ({
+        number: o.number, customer: o.customer, date: o.date, status: this.statusMeta(o.status).label,
+        badge: this.badge(o.status), total: this.fmt(o.total),
+        onClick: () => this.setState({ view: "orderDetail", selOrder: o }),
+      }));
+      base.topProducts = m.PRODUCTS.slice(0, 4).map((p, i) => ({
+        name: p.name.en, grad: this.grad(p.colors[0].hex), sold: [24, 18, 15, 11][i],
+        revenue: this.fmt(m.minPrice(p) * [24, 18, 15, 11][i]),
+      }));
+    }
+
+    // PRODUCTS LIST
+    if (v === "products") {
+      const pillBase = "background:#F7F4EE;border:1px solid #EAE3D5;color:#8A7E6B;font-family:'Manrope';font-size:12px;font-weight:600;padding:7px 13px;border-radius:20px;cursor:pointer;white-space:nowrap;transition:all .15s";
+      const pillActive = "background:#241C13;border:1px solid #241C13;color:#EDE6D8;font-family:'Manrope';font-size:12px;font-weight:600;padding:7px 13px;border-radius:20px;cursor:pointer;white-space:nowrap";
+      const mkF = (id, label) => ({ label, onClick: () => this.setState({ cat: id }), style: this.state.cat === id ? pillActive : pillBase });
+      base.catFilters = [mkF("all", "All"), ...m.CATEGORIES.map((c) => mkF(c.id, c.en))];
+      const list = m.PRODUCTS.filter((p) => this.state.cat === "all" || p.cat === this.state.cat);
+      base.productRows = list.map((p) => {
+        const prices = p.sizes.map((s) => s.price);
+        return {
+          name: p.name.en, nameAr: p.name.ar, letter: p.name.en[0], grad: this.grad(p.colors[0].hex),
+          category: m.catName(p.cat, "en"),
+          colors: p.colors.map((c) => ({ hex: c.hex, name: c.en })),
+          priceRange: `${this.fmt(Math.min(...prices))} – ${this.fmt(Math.max(...prices))}`,
+          statusLabel: "Active", statusBadge: this.badge("paid").replace("Paid", "Active"),
+          onClick: () => this.startEdit(p),
+        };
+      });
+    }
+
+    // EDITOR
+    if (v === "editor") {
+      const d = this.state.editorDraft;
+      const upd = (fn) => { const nd = JSON.parse(JSON.stringify(this.state.editorDraft)); fn(nd); this.setState({ editorDraft: nd, saved: false }); };
+      const prices = d.sizes.map((s) => Number(s.price) || 0);
+      const heroHex = d.colors[0] ? d.colors[0].hex : "#6B4226";
+      base.ed = {
+        nameEn: d.nameEn, nameAr: d.nameAr, tagEn: d.tagEn, tagAr: d.tagAr, descEn: String(d.descEn || ""), descAr: String(d.descAr || ""),
+        cat: d.cat, status: d.status, letter: (d.nameEn || "P")[0], heroGrad: this.grad(heroHex),
+        thumbs: d.colors.slice(0, 4).map((c) => ({ grad: this.grad(c.hex) })),
+        colors: d.colors.map((c, i) => ({ hex: c.hex, nameEn: c.en, nameAr: c.ar, remove: () => upd((nd) => nd.colors.splice(i, 1)) })),
+        sizes: d.sizes.map((s, i) => ({ labelEn: s.labelEn, labelAr: s.labelAr, price: s.price, remove: () => upd((nd) => nd.sizes.splice(i, 1)) })),
+        colorCount: d.colors.length, sizeCount: d.sizes.length,
+        priceRange: prices.length ? `${this.fmt(Math.min(...prices))} – ${this.fmt(Math.max(...prices))}` : "—",
+      };
+      base.addColor = () => upd((nd) => nd.colors.push({ en: "New finish", ar: "تشطيب", hex: "#8A6240" }));
+      base.addSize = () => upd((nd) => nd.sizes.push({ labelEn: "", labelAr: "", price: 0 }));
+      base.saveProduct = () => this.setState({ saved: true });
+      base.saveLabel = this.state.saved ? "✓ Saved" : "Save piece";
+    }
+
+    // ORDERS LIST
+    if (v === "orders") {
+      const pillBase = "background:#F7F4EE;border:1px solid #EAE3D5;color:#8A7E6B;font-family:'Manrope';font-size:12px;font-weight:600;padding:7px 14px;border-radius:20px;cursor:pointer;white-space:nowrap;transition:all .15s";
+      const pillActive = "background:#241C13;border:1px solid #241C13;color:#EDE6D8;font-family:'Manrope';font-size:12px;font-weight:600;padding:7px 14px;border-radius:20px;cursor:pointer;white-space:nowrap";
+      const mkF = (id, label) => ({ label, onClick: () => this.setState({ orderFilter: id }), style: this.state.orderFilter === id ? pillActive : pillBase });
+      base.orderFilters = [mkF("all", "All"), mkF("pending", "Pending"), mkF("paid", "Paid"), mkF("in_production", "In production"), mkF("shipped", "Shipped"), mkF("completed", "Completed")];
+      const list = this.orders.filter((o) => this.state.orderFilter === "all" || o.status === this.state.orderFilter);
+      base.orderRows = list.map((o) => ({
+        number: o.number, customer: o.customer, email: o.email, date: o.date, itemCount: o.itemCount,
+        status: this.statusMeta(o.status).label, badge: this.badge(o.status), total: this.fmt(o.total),
+        onClick: () => this.setState({ view: "orderDetail", selOrder: o }),
+      }));
+    }
+
+    // ORDER DETAIL
+    if (v === "orderDetail" && this.state.selOrder) {
+      const o = this.state.selOrder;
+      base.od = {
+        number: o.number, date: o.date, itemCount: o.itemCount, customer: o.customer, email: o.email, phone: o.phone, address: o.address,
+        status: this.statusMeta(o.status).label, badge: this.badge(o.status),
+        items: o.items.map((it) => ({ name: it.name, letter: it.letter, grad: it.grad, color: it.color, size: it.size, qty: it.qty, lineTotal: it.lineTotal })),
+        subtotal: this.fmt(o.subtotal), shipping: o.shipping ? this.fmt(o.shipping) : "Free", total: this.fmt(o.total),
+      };
+      const steps = ["pending", "paid", "in_production", "shipped", "completed"];
+      base.statusSteps = steps.map((s) => {
+        const cur = s === o.status; const mt = this.statusMeta(s);
+        return {
+          label: mt.label, current: cur,
+          dot: `width:9px;height:9px;border-radius:50%;background:${cur ? mt.c : "#D8CFBE"};flex-shrink:0`,
+          onClick: () => { const no = { ...o, status: s }; const idx = this.orders.findIndex((x) => x.number === o.number); if (idx >= 0) this.orders[idx] = no; this.setState({ selOrder: no }); },
+          style: `display:flex;align-items:center;justify-content:space-between;width:100%;border:1px solid ${cur ? "#C2965B" : "#EAE3D5"};background:${cur ? "#FBF4E8" : "#fff"};color:#241C13;font-family:'Manrope';font-size:13.5px;font-weight:${cur ? 700 : 500};padding:12px 14px;border-radius:9px;cursor:pointer;transition:all .15s`,
+        };
+      });
+    }
+
+    // OUR WORK
+    if (v === "work") {
+      const woods = ["#6B4226", "#3A2A1B", "#5A4030", "#4A3526", "#2C2824", "#C99A63"];
+      base.projectCards = m.PROJECTS.map((p, i) => ({
+        name: p.en, nameAr: p.ar, cat: p.cat.en, year: p.year, grad: this.grad(woods[i % woods.length]),
+      }));
+    }
+
+    // MESSAGES
+    if (v === "messages") {
+      const msgs = [
+        { name: "Reem Saleh", initials: "RS", subject: "Custom dining table", preview: "Hi, we're furnishing a new villa and love the Oakline. Could you do a 10-seat version in walnut?", time: "2h", unread: true, avatar: "#C2965B" },
+        { name: "Daniel Wright", initials: "DW", subject: "Lead time", preview: "What's the current lead time for the Harbor Pivot Door? We're targeting a September handover.", time: "5h", unread: true, avatar: "#7A5826" },
+        { name: "Aisha Noor", initials: "AN", subject: "Showroom visit", preview: "Is it possible to visit the workshop this Saturday to see finishes in person?", time: "1d", unread: true, avatar: "#9A6E3A" },
+        { name: "Tariq Mansour", initials: "TM", subject: "Bulk order — restaurant", preview: "We need 40 Lattice chairs for a new restaurant in DIFC. Can you share trade pricing?", time: "2d", unread: false, avatar: "#5A4030" },
+        { name: "Elena Costa", initials: "EC", subject: "Thank you", preview: "The bookcase arrived and it's stunning. Sharing photos with friends — expect referrals!", time: "3d", unread: false, avatar: "#3A2A1B" },
+      ];
+      base.messages = msgs.map((x) => ({
+        name: x.name, initials: x.initials, subject: x.subject, preview: x.preview, time: x.time, unread: x.unread,
+        avatarBg: x.avatar, bg: x.unread ? "#FDFBF7" : "#fff", weight: x.unread ? 700 : 500,
+      }));
+    }
+
+    return base;
+  }
+}
+</script>
+</body>
+</html>

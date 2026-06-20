@@ -1,0 +1,162 @@
+// Pacific Carpentry — Prisma schema (PostgreSQL / Supabase)
+// Core requirement: price lives on the SIZE row (each size has its own price).
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum Category {
+  DINING_TABLES
+  CHAIRS
+  CABINETS
+  DOORS
+  SHELVING
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  IN_PRODUCTION
+  SHIPPED
+  COMPLETED
+  CANCELLED
+}
+
+model Product {
+  id         String         @id @default(cuid())
+  slug       String         @unique
+  category   Category
+  nameEn     String
+  nameAr     String
+  taglineEn  String
+  taglineAr  String
+  descEn     String
+  descAr     String
+  images     String[]       // storage URLs; empty = use placeholder
+  featured   Boolean        @default(false)
+  sortOrder  Int            @default(0)
+  colors     ProductColor[]
+  sizes      ProductSize[]
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  @@index([category])
+}
+
+model ProductColor {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  nameEn    String
+  nameAr    String
+  hex       String  // swatch color, e.g. "#C99A63"
+  sortOrder Int     @default(0)
+
+  @@index([productId])
+}
+
+model ProductSize {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  labelEn   String  // e.g. "6-Seat · 220cm"
+  labelAr   String
+  price     Int     // AED, whole dirhams
+  sortOrder Int     @default(0)
+
+  @@index([productId])
+}
+
+model Project {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  titleEn   String
+  titleAr   String
+  catEn     String   // "Residential" | "Hospitality" | "Commercial"
+  catAr     String
+  year      String
+  images    String[]
+  sortOrder Int      @default(0)
+}
+
+model Order {
+  id         String      @id @default(cuid())
+  number     String      @unique   // e.g. "PC-482193"
+  status     OrderStatus @default(PENDING)
+  fullName   String
+  email      String
+  phone      String
+  address    String
+  locale     String      @default("en")
+  subtotal   Int
+  shipping   Int         @default(0)
+  total      Int
+  items      OrderItem[]
+  createdAt  DateTime    @default(now())
+
+  @@index([email])
+}
+
+model OrderItem {
+  id         String  @id @default(cuid())
+  orderId    String
+  order      Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId  String
+  nameEn     String
+  nameAr     String
+  color      String
+  size       String
+  price      Int     // unit price at purchase time
+  qty        Int
+
+  @@index([orderId])
+}
+
+model ContactMessage {
+  id        String   @id @default(cuid())
+  name      String
+  email     String
+  phone     String?
+  subject   String
+  body      String
+  read      Boolean  @default(false)
+  createdAt DateTime @default(now())
+}
+
+model Admin {
+  id           String   @id @default(cuid())
+  email        String   @unique
+  name         String
+  passwordHash String
+  createdAt    DateTime @default(now())
+}
+
+enum RequestStatus {
+  PENDING
+  UNDER_REVIEW
+  QUOTED
+  APPROVED
+  IN_PRODUCTION
+  COMPLETED
+  CANCELLED
+}
+
+model BespokeRequest {
+  id          String        @id @default(cuid())
+  referenceNo String        @unique
+  status      RequestStatus @default(PENDING)
+  fullName    String
+  email       String
+  phone       String
+  category    String
+  timber      String
+  dimensions  String
+  notes       String?
+  images      String[]
+  createdAt   DateTime      @default(now())
+}
+

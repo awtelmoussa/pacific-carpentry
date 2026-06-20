@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}html,body{margin:0;padding:0;background:#15110D;}body{-webkit-font-smoothing:antialiased;}
+::selection{background:#C2965B;color:#15110D;}
+.pc-btn-fill:hover{background:#D8B583 !important;}
+@media (max-width:900px){.pc-about-hero{grid-template-columns:1fr !important;}.pc-vals{grid-template-columns:1fr !important;}}
+</style>
+</helmet>
+
+<div dir="{{ dir }}" style="background:#15110D;color:#EDE6D8;font-family:{{ bodyFont }};min-height:100vh;overflow-x:hidden">
+  <dc-import name="Nav" lang="{{ lang }}" active="about" hint-size="100%,74px"></dc-import>
+
+  <section class="pc-about-hero" style="max-width:1280px;margin:0 auto;padding:calc(74px + clamp(48px,7vw,96px)) clamp(20px,5vw,72px) clamp(50px,6vw,80px);display:grid;grid-template-columns:1.1fr 0.9fr;gap:clamp(36px,5vw,80px);align-items:center">
+    <div>
+      <span style="font-size:12px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:#C2965B">— {{ kicker }}</span>
+      <h1 style="margin:18px 0 24px;font-family:'Cormorant Garamond',{{ dispFallback }};font-weight:500;font-size:clamp(38px,5.4vw,72px);line-height:1.02;white-space:pre-line;color:#F4EEE3">{{ title }}</h1>
+      <p style="margin:0;color:#B6A88F;font-size:clamp(16px,1.7vw,19px);line-height:1.7;max-width:520px;font-weight:300">{{ lead }}</p>
+    </div>
+    <div style="position:relative;aspect-ratio:4/5;border-radius:4px;overflow:hidden;border:1px solid rgba(237,230,216,0.1);background:radial-gradient(120% 100% at 30% 20%,#3A2A1B,#1A140F 82%)">
+      <div style="position:absolute;inset:0;background:repeating-linear-gradient(88deg,rgba(255,255,255,0.04) 0px,rgba(255,255,255,0.04) 1px,transparent 1px,transparent 9px);opacity:.6"></div>
+      <span style="position:absolute;bottom:16px;right:18px;font-size:10px;letter-spacing:.12em;color:rgba(237,230,216,0.35)">{{ imgNote }}</span>
+    </div>
+  </section>
+
+  <section style="background:#1A140F;border-top:1px solid rgba(237,230,216,0.07);border-bottom:1px solid rgba(237,230,216,0.07)">
+    <div style="max-width:1280px;margin:0 auto;padding:clamp(56px,7vw,96px) clamp(20px,5vw,72px)">
+      <span style="font-size:12px;font-weight:600;letter-spacing:.22em;text-transform:uppercase;color:#C2965B">— {{ valuesTitle }}</span>
+      <div class="pc-vals" style="display:grid;grid-template-columns:repeat(3,1fr);gap:clamp(28px,3.5vw,56px);margin-top:clamp(30px,4vw,48px)">
+        <sc-for list="{{ values }}" as="v" hint-placeholder-count="3">
+          <div>
+            <span style="font-family:'Cormorant Garamond',serif;font-size:40px;font-weight:600;color:rgba(194,150,91,0.5)">{{ v.num }}</span>
+            <h3 style="margin:14px 0 12px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:27px;color:#F4EEE3">{{ v.title }}</h3>
+            <p style="margin:0;color:#B6A88F;font-size:15px;line-height:1.75;font-weight:300">{{ v.body }}</p>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <section style="max-width:1280px;margin:0 auto;padding:clamp(70px,9vw,130px) clamp(20px,5vw,72px);text-align:center">
+    <h2 style="margin:0 auto 18px;font-family:'Cormorant Garamond',{{ dispFallback }};font-weight:500;font-size:clamp(32px,4.6vw,58px);line-height:1.05;color:#F4EEE3;max-width:680px">{{ ctaTitle }}</h2>
+    <p style="margin:0 auto 34px;color:#B6A88F;font-size:16px;line-height:1.6;max-width:460px;font-weight:300">{{ ctaSub }}</p>
+    <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap">
+      <a href="Products.dc.html" class="pc-btn-fill" style="display:inline-block;background:#C2965B;color:#15110D;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:16px 34px;border-radius:2px;transition:background .25s">{{ shopBtn }}</a>
+      <a href="ContactUs.dc.html" style="display:inline-block;border:1px solid rgba(237,230,216,0.4);color:#EDE6D8;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:16px 34px;border-radius:2px">{{ contactBtn }}</a>
+    </div>
+  </section>
+
+  <dc-import name="Footer" lang="{{ lang }}" hint-size="100%,360px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { ready: false, lang: "en" };
+  async componentDidMount() {
+    this.m = await import("./shared.js");
+    const lang = this.m.getLang();
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    this.setState({ ready: true, lang });
+  }
+  renderVals() {
+    const lang = this.state.lang;
+    const bodyFont = lang === "ar" ? "'Tajawal',sans-serif" : "'Manrope',sans-serif";
+    const dispFallback = lang === "ar" ? "'Amiri',serif" : "serif";
+    const dir = lang === "ar" ? "rtl" : "ltr";
+    if (!this.state.ready) return { lang, bodyFont, dispFallback, dir, kicker: "", title: "", lead: "", imgNote: "", valuesTitle: "", values: [], ctaTitle: "", ctaSub: "", shopBtn: "", contactBtn: "" };
+    const t = this.m.T[lang];
+    return {
+      lang, bodyFont, dispFallback, dir,
+      kicker: t.about.kicker, title: t.about.title, lead: t.about.lead, imgNote: lang === "ar" ? "صورة" : "image",
+      valuesTitle: t.about.valuesTitle,
+      values: [
+        { num: "01", title: t.about.b1Title, body: t.about.b1 },
+        { num: "02", title: t.about.b2Title, body: t.about.b2 },
+        { num: "03", title: t.about.b3Title, body: t.about.b3 },
+      ],
+      ctaTitle: t.home.ctaTitle, ctaSub: t.home.ctaSub, shopBtn: t.cta.shop, contactBtn: t.nav.contact,
+    };
+  }
+}
+</script>
+</body>
+</html>

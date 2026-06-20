@@ -1,0 +1,188 @@
+{
+  "$comment": "Pacific Carpentry admin API + data contract. REST-style endpoints (implement as Next.js Route Handlers under app/api/admin/* or as Server Actions). All admin routes require authentication. Money is AED, stored as whole-dirham integers. All product/project records are bilingual (en/ar).",
+  "version": "1.0",
+  "currency": { "code": "AED", "minorUnits": false, "note": "Prices are whole dirhams stored as Int. Switch to fils (Int cents) if you need decimals." },
+  "auth": {
+    "required": true,
+    "scope": "All /admin pages and /api/admin/* endpoints",
+    "suggestion": "NextAuth (Auth.js) credential or email provider, or Supabase Auth. Single 'owner'/'staff' role to start."
+  },
+
+  "entities": {
+    "Product": {
+      "id": "string (cuid)",
+      "slug": "string (unique, url-safe)",
+      "category": "enum: dining-tables | chairs | cabinets | doors | shelving",
+      "nameEn": "string", "nameAr": "string",
+      "taglineEn": "string", "taglineAr": "string",
+      "descEn": "string", "descAr": "string",
+      "images": "string[] (storage URLs; empty => placeholder)",
+      "status": "enum: active | draft",
+      "featured": "boolean",
+      "colors": "ProductColor[] (>=1)",
+      "sizes": "ProductSize[] (>=1)",
+      "createdAt": "ISO datetime", "updatedAt": "ISO datetime"
+    },
+    "ProductColor": {
+      "id": "string",
+      "nameEn": "string", "nameAr": "string",
+      "hex": "string (#RRGGBB)",
+      "sortOrder": "int"
+    },
+    "ProductSize": {
+      "id": "string",
+      "labelEn": "string (e.g. '6-Seat · 220cm')", "labelAr": "string",
+      "price": "int (AED, > 0)",
+      "sortOrder": "int"
+    },
+    "Project": {
+      "id": "string", "slug": "string (unique)",
+      "titleEn": "string", "titleAr": "string",
+      "catEn": "string (Residential | Hospitality | Commercial)", "catAr": "string",
+      "year": "string",
+      "images": "string[]",
+      "sortOrder": "int"
+    },
+    "Order": {
+      "id": "string",
+      "number": "string (e.g. 'PC-482193')",
+      "status": "enum: pending | paid | in_production | shipped | completed | cancelled",
+      "fullName": "string", "email": "string", "phone": "string", "address": "string",
+      "locale": "enum: en | ar",
+      "subtotal": "int", "shipping": "int", "total": "int",
+      "items": "OrderItem[]",
+      "createdAt": "ISO datetime"
+    },
+    "OrderItem": {
+      "id": "string", "productId": "string",
+      "nameEn": "string", "nameAr": "string",
+      "color": "string (chosen finish label, snapshot)",
+      "size": "string (chosen size label, snapshot)",
+      "price": "int (unit price at purchase, snapshot)",
+      "qty": "int"
+    },
+    "Message": {
+      "id": "string",
+      "name": "string", "email": "string", "phone": "string|null",
+      "subject": "string", "body": "string",
+      "read": "boolean",
+      "createdAt": "ISO datetime"
+    }
+  },
+
+  "endpoints": {
+    "auth": {
+      "$note": "Prefer NextAuth (Auth.js) or Supabase Auth over hand-rolling. The endpoints below describe the behavior the login screen needs; a library will provide equivalents.",
+      "POST /api/auth/login": {
+        "desc": "Authenticate a staff user and start a session.",
+        "body": { "email": "string", "password": "string", "remember": "boolean (extends session lifetime)" },
+        "response": { "ok": "boolean", "user": "{ id, name, email, role }" },
+        "onSuccess": "Set an httpOnly session cookie, then redirect to /admin (Dashboard).",
+        "onError": "401 with { error: 'Invalid credentials' } shown inline on the form."
+      },
+      "POST /api/auth/logout": {
+        "desc": "End the session (triggered by the sidebar Sign out button).",
+        "response": { "ok": true },
+        "onSuccess": "Clear the session cookie, redirect to /admin/login."
+      },
+      "guard": {
+        "desc": "Every /admin page and /api/admin/* handler must verify the session.",
+        "suggestion": "Next.js middleware matching '/admin/:path*' (excluding /admin/login) + a server-side session check in the admin layout; redirect unauthenticated users to /admin/login.",
+        "roles": "Single 'owner'/'staff' role is enough to start; model a role field for future granularity."
+      }
+    },
+    "dashboard": {
+      "GET /api/admin/dashboard": {
+        "desc": "Aggregated KPIs + recent activity for the dashboard.",
+        "response": {
+          "kpis": {
+            "revenue30d": "int (sum of order.total in last 30 days)",
+            "ordersCount": "int",
+            "pendingCount": "int (status == pending)",
+            "avgOrder": "int (revenue / ordersCount)"
+          },
+          "recentOrders": "Order[] (latest 5, minimal fields: number, fullName, createdAt, status, total)",
+          "topProducts": "[{ productId, nameEn, unitsSold, revenue }] (computed from OrderItem)",
+          "unreadMessages": "int"
+        }
+      }
+    },
+
+    "products": {
+      "GET /api/admin/products": {
+        "desc": "List products for the table.",
+        "query": { "category": "all | <categoryId> (optional)", "q": "search string (optional, matches nameEn/nameAr)" },
+        "response": "Product[] (include colors + sizes so the table can show swatches and price range)"
+      },
+      "GET /api/admin/products/:id": { "desc": "Single product with colors + sizes for the editor.", "response": "Product" },
+      "POST /api/admin/products": {
+        "desc": "Create a product with its finishes and sizes.",
+        "body": {
+          "slug": "string", "category": "enum", "status": "active | draft",
+          "nameEn": "string", "nameAr": "string", "taglineEn": "string", "taglineAr": "string", "descEn": "string", "descAr": "string",
+          "images": "string[]",
+          "colors": "[{ nameEn, nameAr, hex }]  (>=1)",
+          "sizes": "[{ labelEn, labelAr, price }]  (>=1, price int > 0)"
+        },
+        "validation": "Zod: >=1 color, >=1 size, every price is a positive integer, hex matches /^#[0-9A-Fa-f]{6}$/, slug unique.",
+        "response": "Product (created)"
+      },
+      "PUT /api/admin/products/:id": {
+        "desc": "Update a product. Replace colors/sizes arrays wholesale (diff by id; create new rows without id, delete removed ones).",
+        "body": "same shape as POST, with colors[].id / sizes[].id present for existing rows",
+        "response": "Product (updated)"
+      },
+      "DELETE /api/admin/products/:id": { "desc": "Delete product (cascade colors + sizes).", "response": "{ ok: true }" },
+      "derived": {
+        "priceRange": "min..max of sizes[].price — shown in list and editor summary",
+        "fromPrice": "min(sizes[].price) — the storefront 'From' price"
+      }
+    },
+
+    "orders": {
+      "GET /api/admin/orders": {
+        "desc": "List orders for the table.",
+        "query": { "status": "all | pending | paid | in_production | shipped | completed (optional)" },
+        "response": "Order[] (number, fullName, email, createdAt, itemCount, status, total)"
+      },
+      "GET /api/admin/orders/:id": { "desc": "Order detail with items + customer.", "response": "Order (full, with items[])" },
+      "PATCH /api/admin/orders/:id/status": {
+        "desc": "Update order status from the detail stepper.",
+        "body": { "status": "enum (one of the 6)" },
+        "response": "Order (updated)",
+        "note": "Bump updatedAt; optionally write a status-history row for audit."
+      }
+    },
+
+    "projects": {
+      "GET /api/admin/projects": { "desc": "List Our Work projects.", "response": "Project[]" },
+      "POST /api/admin/projects": { "desc": "Create project.", "body": "{ slug, titleEn, titleAr, catEn, catAr, year, images }", "response": "Project" },
+      "PUT /api/admin/projects/:id": { "desc": "Update project.", "body": "same as POST", "response": "Project" },
+      "DELETE /api/admin/projects/:id": { "desc": "Delete project.", "response": "{ ok: true }" }
+    },
+
+    "messages": {
+      "GET /api/admin/messages": { "desc": "List contact-form inquiries, newest first.", "response": "Message[]" },
+      "PATCH /api/admin/messages/:id": { "desc": "Mark read/unread.", "body": "{ read: boolean }", "response": "Message" },
+      "$note": "The storefront contact form POSTs to a public endpoint (e.g. POST /api/contact) that creates a Message with read=false."
+    },
+
+    "uploads": {
+      "POST /api/admin/upload": {
+        "desc": "Upload an image, return its public URL to append to a product/project images[].",
+        "body": "multipart/form-data (file)",
+        "response": "{ url: string }",
+        "suggestion": "Supabase Storage bucket 'product-images' / 'project-images', or UploadThing."
+      }
+    }
+  },
+
+  "seed": {
+    "source": "shared.js in this bundle",
+    "mapping": {
+      "PRODUCTS[] -> Product + ProductColor + ProductSize": "product.name.{en,ar} -> nameEn/nameAr; product.tagline -> taglineEn/Ar; product.desc -> descEn/Ar; product.cat -> category; product.colors[].{en,ar,hex} -> ProductColor; product.sizes[].{en,ar,price} -> ProductSize.{labelEn,labelAr,price}",
+      "PROJECTS[] -> Project": "project.{en,ar} -> titleEn/titleAr; project.cat.{en,ar} -> catEn/catAr; project.year -> year",
+      "T -> messages/en.json + ar.json": "storefront i18n strings (not needed for admin chrome, which is English-only)"
+    }
+  }
+}

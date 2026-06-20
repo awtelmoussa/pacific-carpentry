@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}html,body{margin:0;padding:0;background:#15110D;}body{-webkit-font-smoothing:antialiased;}
+::selection{background:#C2965B;color:#15110D;}
+.pc-in:focus{border-color:rgba(194,150,91,0.7) !important;}
+.pc-btn-fill:hover{background:#D8B583 !important;}
+@media (max-width:900px){.pc-contact-split{grid-template-columns:1fr !important;}}
+</style>
+</helmet>
+
+<div dir="{{ dir }}" style="background:#15110D;color:#EDE6D8;font-family:{{ bodyFont }};min-height:100vh;overflow-x:hidden">
+  <dc-import name="Nav" lang="{{ lang }}" active="contact" hint-size="100%,74px"></dc-import>
+
+  <header style="padding:calc(74px + clamp(48px,7vw,90px)) clamp(20px,5vw,72px) clamp(30px,4vw,46px);max-width:1280px;margin:0 auto">
+    <span style="font-size:12px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;color:#C2965B">— {{ kicker }}</span>
+    <h1 style="margin:16px 0 12px;font-family:'Cormorant Garamond',{{ dispFallback }};font-weight:500;font-size:clamp(40px,6vw,76px);line-height:1;white-space:pre-line;color:#F4EEE3">{{ title }}</h1>
+    <p style="margin:0;color:#8A7E6B;font-size:16px;max-width:480px;line-height:1.6">{{ sub }}</p>
+  </header>
+
+  <section class="pc-contact-split" style="max-width:1280px;margin:0 auto;padding:clamp(20px,3vw,40px) clamp(20px,5vw,72px) clamp(70px,9vw,120px);display:grid;grid-template-columns:1.2fr 0.8fr;gap:clamp(36px,5vw,72px);align-items:start">
+    <!-- form -->
+    <div>
+      <sc-if value="{{ notSent }}" hint-placeholder-val="{{ true }}">
+        <div style="display:flex;flex-direction:column;gap:18px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+            <label style="display:flex;flex-direction:column;gap:8px"><span style="{{ lab }}">{{ nameL }}</span><input class="pc-in" style="{{ inp }}" /></label>
+            <label style="display:flex;flex-direction:column;gap:8px"><span style="{{ lab }}">{{ emailL }}</span><input class="pc-in" type="email" style="{{ inp }}" /></label>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px">
+            <label style="display:flex;flex-direction:column;gap:8px"><span style="{{ lab }}">{{ phoneL }}</span><input class="pc-in" style="{{ inp }}" /></label>
+            <label style="display:flex;flex-direction:column;gap:8px"><span style="{{ lab }}">{{ subjectL }}</span><input class="pc-in" style="{{ inp }}" /></label>
+          </div>
+          <label style="display:flex;flex-direction:column;gap:8px"><span style="{{ lab }}">{{ messageL }}</span><textarea class="pc-in" rows="6" style="{{ inp }};resize:vertical;min-height:130px"></textarea></label>
+          <button onClick="{{ send }}" class="pc-btn-fill" style="align-self:flex-start;background:#C2965B;border:none;color:#15110D;font-family:{{ bodyFont }};font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:16px 38px;border-radius:2px;cursor:pointer;transition:background .25s">{{ sendBtn }}</button>
+        </div>
+      </sc-if>
+      <sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+        <div style="border:1px solid rgba(143,181,122,0.4);background:rgba(143,181,122,0.07);border-radius:4px;padding:40px;display:flex;flex-direction:column;align-items:flex-start;gap:14px">
+          <span style="display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:50%;background:#8FB57A;color:#15110D;font-size:24px">✓</span>
+          <p style="margin:0;font-family:'Cormorant Garamond',serif;font-size:26px;color:#F4EEE3;line-height:1.3">{{ sentMsg }}</p>
+        </div>
+      </sc-if>
+    </div>
+
+    <!-- info -->
+    <div style="display:flex;flex-direction:column;gap:14px">
+      <sc-for list="{{ cards }}" as="c" hint-placeholder-count="3">
+        <div style="border:1px solid rgba(237,230,216,0.1);background:rgba(237,230,216,0.025);border-radius:4px;padding:24px">
+          <span style="display:block;font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:#C2965B;margin-bottom:10px">{{ c.label }}</span>
+          <span style="display:block;font-size:16px;color:#EDE6D8;line-height:1.5">{{ c.line1 }}</span>
+          <span style="display:block;font-size:13.5px;color:#8A7E6B;margin-top:5px">{{ c.line2 }}</span>
+        </div>
+      </sc-for>
+      <div style="position:relative;aspect-ratio:3/2;border-radius:4px;overflow:hidden;border:1px solid rgba(237,230,216,0.1);background:linear-gradient(135deg,#241D16,#1A140F)">
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(237,230,216,0.05) 0px,rgba(237,230,216,0.05) 1px,transparent 1px,transparent 26px),repeating-linear-gradient(90deg,rgba(237,230,216,0.05) 0px,rgba(237,230,216,0.05) 1px,transparent 1px,transparent 26px)"></div>
+        <span style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);color:#C2965B">✦</span>
+        <span style="position:absolute;bottom:12px;right:14px;font-size:10px;letter-spacing:.12em;color:rgba(237,230,216,0.4)">{{ mapNote }}</span>
+      </div>
+    </div>
+  </section>
+
+  <dc-import name="Footer" lang="{{ lang }}" hint-size="100%,360px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { ready: false, lang: "en", sent: false };
+  async componentDidMount() {
+    this.m = await import("./shared.js");
+    const lang = this.m.getLang();
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    this.setState({ ready: true, lang });
+  }
+  renderVals() {
+    const lang = this.state.lang;
+    const bodyFont = lang === "ar" ? "'Tajawal',sans-serif" : "'Manrope',sans-serif";
+    const dispFallback = lang === "ar" ? "'Amiri',serif" : "serif";
+    const dir = lang === "ar" ? "rtl" : "ltr";
+    const lab = "font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:#A8997F";
+    const inp = "background:rgba(237,230,216,0.04);border:1px solid rgba(237,230,216,0.16);color:#EDE6D8;font-family:" + bodyFont + ";font-size:15px;padding:13px 15px;border-radius:3px;outline:none;transition:border-color .2s;width:100%";
+    if (!this.state.ready) return { lang, bodyFont, dispFallback, dir, lab, inp, kicker: "", title: "", sub: "", notSent: true, sent: false, nameL: "", emailL: "", phoneL: "", subjectL: "", messageL: "", sendBtn: "", send: () => {}, sentMsg: "", cards: [], mapNote: "" };
+    const t = this.m.T[lang];
+    return {
+      lang, bodyFont, dispFallback, dir, lab, inp,
+      kicker: t.contact.kicker, title: t.contact.title, sub: t.contact.sub,
+      notSent: !this.state.sent, sent: this.state.sent,
+      nameL: t.contact.name, emailL: t.contact.email, phoneL: t.contact.phone, subjectL: t.contact.subject, messageL: t.contact.message,
+      sendBtn: t.cta.sendMessage, send: () => this.setState({ sent: true }), sentMsg: t.contact.sent,
+      mapNote: lang === "ar" ? "خريطة" : "map",
+      cards: [
+        { label: t.contact.visit, line1: lang === "ar" ? "ورشة باسيفيك، الخليج التجاري" : "Pacific Workshop, Al Quoz", line2: lang === "ar" ? "دبي، الإمارات" : "Dubai, UAE" },
+        { label: t.contact.call, line1: "+971 4 000 0000", line2: t.contact.hours },
+        { label: t.contact.write, line1: "hello@pacificcarpentry.ae", line2: lang === "ar" ? "نرد خلال يوم عمل" : "We reply within a day" },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

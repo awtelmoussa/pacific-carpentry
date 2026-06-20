@@ -1,0 +1,107 @@
+@import "tailwindcss";
+
+:root {
+  --background: #15110D;
+  --foreground: #EDE6D8;
+  
+  --font-display-latin: var(--font-cormorant);
+  --font-body-latin: var(--font-manrope);
+  --font-display-arabic: var(--font-amiri);
+  --font-body-arabic: var(--font-tajawal);
+}
+
+html {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+html[lang="en"] {
+  --font-display: var(--font-display-latin);
+  --font-body: var(--font-body-latin);
+}
+
+html[lang="ar"] {
+  --font-display: var(--font-display-arabic);
+  --font-body: var(--font-body-arabic);
+}
+
+@theme {
+  /* Colors */
+  --color-bg: #15110D;
+  --color-bg2: #1A140F;
+  --color-surface: #221C15;
+  --color-surface2: #2A2219;
+  --color-line: rgba(237, 230, 216, 0.12);
+  --color-line-soft: rgba(237, 230, 216, 0.07);
+  --color-cream: #EDE6D8;
+  --color-cream-bright: #F4EEE3;
+  --color-muted: #A8997F;
+  --color-faint: #8A7E6B;
+  --color-faint-deep: #6E6353;
+  --color-wood: #C2965B;
+  --color-wood-soft: #D8B583;
+  --color-wood-deep: #9A6E3A;
+  --color-success: #8FB57A;
+
+  /* Fonts */
+  --font-display: var(--font-display);
+  --font-body: var(--font-body);
+
+  /* Animations */
+  --animate-pc-ken: pcKen 18s ease-in-out infinite alternate;
+  --animate-pc-fade: pcFade 0.9s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  --animate-pc-scroll: pcScroll 2s ease-in-out infinite;
+}
+
+@keyframes pcKen {
+  0% { transform: scale(1); }
+  100% { transform: scale(1.08); }
+}
+
+@keyframes pcFade {
+  0% { opacity: 0; transform: translateY(16px); }
+  100% { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pcScroll {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(8px); }
+}
+
+/* Base custom resets/styles */
+body {
+  font-family: var(--font-body);
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+h1, h2, h3, h4, h5, h6, .font-serif {
+  font-family: var(--font-display);
+}
+
+::selection {
+  background-color: #C2965B;
+  color: #15110D;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: #15110D;
+}
+::-webkit-scrollbar-thumb {
+  background: #221C15;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #C2965B;
+}
+
+/* Custom utility styles */
+.transition-card {
+  transition: transform 0.4s cubic-bezier(.2,.7,.3,1), border-color 0.3s ease;
+}
+.transition-image {
+  transition: transform 0.6s cubic-bezier(.2,.7,.3,1);
+}

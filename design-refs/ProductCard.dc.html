@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<style>
+.pc-card{ transition: transform .4s cubic-bezier(.2,.7,.3,1); }
+.pc-card:hover{ transform: translateY(-6px); }
+.pc-card:hover .pc-card-view{ opacity:1 !important; }
+.pc-card:hover h3{ color:#D8B583 !important; }
+</style>
+</helmet>
+<a href="{{ href }}" dir="{{ dir }}" style="display:flex;flex-direction:column;text-decoration:none;font-family:{{ bodyFont }}" class="pc-card">
+  <div style="position:relative;aspect-ratio:4/5;overflow:hidden;background:{{ grad }};border:1px solid rgba(237,230,216,0.08)">
+    <div style="position:absolute;inset:0;background:{{ grain }};opacity:.5"></div>
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center">
+      <span style="font-family:'Cormorant Garamond',serif;font-size:120px;font-weight:600;color:rgba(255,255,255,0.06);line-height:1">{{ letter }}</span>
+    </div>
+    <span style="position:absolute;top:14px;left:14px;font-size:10.5px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:rgba(237,230,216,0.7)">{{ cat }}</span>
+    <span style="position:absolute;bottom:12px;right:14px;font-size:10px;letter-spacing:.1em;color:rgba(237,230,216,0.32)">{{ imgNote }}</span>
+    <div class="pc-card-view" style="position:absolute;inset:0;display:flex;align-items:flex-end;justify-content:center;padding-bottom:22px;background:linear-gradient(to top,rgba(16,13,10,0.55),transparent 55%);opacity:0;transition:opacity .35s">
+      <span style="border:1px solid rgba(237,230,216,0.6);color:#EDE6D8;font-size:11px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;padding:9px 20px">{{ viewLabel }}</span>
+    </div>
+  </div>
+  <div style="padding:16px 2px 0;display:flex;flex-direction:column;gap:5px">
+    <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px">
+      <h3 style="margin:0;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:22px;color:#EDE6D8;line-height:1.15">{{ name }}</h3>
+    </div>
+    <span style="font-size:13px;color:#8A7E6B;line-height:1.4">{{ tagline }}</span>
+    <span style="font-size:13.5px;color:#C2965B;font-weight:600;letter-spacing:.02em;margin-top:3px">{{ priceLabel }}</span>
+  </div>
+</a>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:300,&quot;height&quot;:420},&quot;product&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;object&quot;},&quot;lang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;ar&quot;],&quot;default&quot;:&quot;en&quot;,&quot;tsType&quot;:&quot;'en'|'ar'&quot;}}">
+class Component extends DCLogic {
+  state = { t: null };
+  async componentDidMount() {
+    this._m = await import("./shared.js");
+    const lang = this.props.lang || this._m.getLang();
+    this.setState({ t: this._m.T[lang], lang });
+  }
+  renderVals() {
+    const p = this.props.product;
+    const lang = this.state.lang || this.props.lang || "en";
+    const bodyFont = lang === "ar" ? "'Tajawal',sans-serif" : "'Manrope',sans-serif";
+    const dir = lang === "ar" ? "rtl" : "ltr";
+    if (!p || !this._m) {
+      return { dir, bodyFont, href: "#", grad: "linear-gradient(145deg,#2A2219,#1C1712)", grain: "none", letter: "", cat: "", imgNote: "", viewLabel: "", name: "", tagline: "", priceLabel: "" };
+    }
+    const hex = p.colors[0].hex;
+    const grad = `linear-gradient(150deg, ${hex}3d, #1C1712 78%)`;
+    const grain = "repeating-linear-gradient(92deg, rgba(255,255,255,0.035) 0px, rgba(255,255,255,0.035) 1px, transparent 1px, transparent 7px)";
+    return {
+      dir, bodyFont,
+      href: "ProductDetail.dc.html?id=" + p.id,
+      grad, grain,
+      letter: p.name.en.charAt(0),
+      cat: this._m.catName(p.cat, lang),
+      imgNote: lang === "ar" ? "صورة" : "image",
+      viewLabel: this._m.T[lang].cta.explore,
+      name: p.name[lang],
+      tagline: p.tagline[lang],
+      priceLabel: this._m.T[lang].products.from + " " + this._m.fmt(this._m.minPrice(p), lang),
+    };
+  }
+}
+</script>
+</body>
+</html>

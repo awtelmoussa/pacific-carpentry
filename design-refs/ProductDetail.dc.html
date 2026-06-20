@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}html,body{margin:0;padding:0;background:#15110D;}body{-webkit-font-smoothing:antialiased;}
+::selection{background:#C2965B;color:#15110D;}
+.pc-add:hover{background:#D8B583 !important;}
+.pc-thumb:hover{border-color:rgba(194,150,91,0.6) !important;}
+.pc-rel-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:clamp(18px,2vw,30px);}
+@media (max-width:920px){.pc-detail-split{grid-template-columns:1fr !important;}.pc-rel-grid{grid-template-columns:repeat(2,1fr) !important;}}
+</style>
+</helmet>
+
+<div dir="{{ dir }}" style="background:#15110D;color:#EDE6D8;font-family:{{ bodyFont }};min-height:100vh;overflow-x:hidden">
+  <dc-import name="Nav" lang="{{ lang }}" active="products" hint-size="100%,74px"></dc-import>
+
+  <div style="max-width:1280px;margin:0 auto;padding:calc(74px + clamp(24px,4vw,44px)) clamp(20px,5vw,72px) 0">
+    <a href="Products.dc.html" style="display:inline-flex;align-items:center;gap:7px;color:#8A7E6B;text-decoration:none;font-size:13px;letter-spacing:.04em;transition:color .2s">{{ backArrow }} {{ back }}</a>
+  </div>
+
+  <section class="pc-detail-split" style="max-width:1280px;margin:0 auto;padding:clamp(22px,3vw,38px) clamp(20px,5vw,72px) clamp(56px,7vw,90px);display:grid;grid-template-columns:1.05fr 0.95fr;gap:clamp(30px,4.5vw,72px);align-items:start">
+    <!-- gallery -->
+    <div>
+      <div style="position:relative;aspect-ratio:1/1;border-radius:4px;overflow:hidden;border:1px solid rgba(237,230,216,0.1);background:{{ heroGrad }}">
+        <div style="position:absolute;inset:0;background:repeating-linear-gradient(90deg,rgba(255,255,255,0.04) 0px,rgba(255,255,255,0.04) 1px,transparent 1px,transparent 9px);opacity:.6"></div>
+        <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><span style="font-family:'Cormorant Garamond',serif;font-size:180px;font-weight:600;color:rgba(255,255,255,0.06)">{{ letter }}</span></div>
+        <span style="position:absolute;bottom:16px;right:18px;font-size:10.5px;letter-spacing:.12em;color:rgba(237,230,216,0.35)">{{ imgNote }}</span>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-top:12px">
+        <sc-for list="{{ thumbs }}" as="th" hint-placeholder-count="4">
+          <div class="pc-thumb" style="aspect-ratio:1/1;border-radius:3px;border:1px solid rgba(237,230,216,0.12);background:{{ th.grad }};cursor:pointer;transition:border-color .2s"></div>
+        </sc-for>
+      </div>
+    </div>
+
+    <!-- info -->
+    <div>
+      <span style="font-size:11.5px;font-weight:600;letter-spacing:.18em;text-transform:uppercase;color:#C2965B">{{ cat }}</span>
+      <h1 style="margin:12px 0 8px;font-family:'Cormorant Garamond',{{ dispFallback }};font-weight:500;font-size:clamp(34px,4.6vw,56px);line-height:1.02;color:#F4EEE3">{{ name }}</h1>
+      <p style="margin:0 0 18px;color:#8A7E6B;font-size:15.5px">{{ tagline }}</p>
+      <div style="font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;color:#C2965B;letter-spacing:.01em;padding-bottom:22px;border-bottom:1px solid rgba(237,230,216,0.1)">{{ priceLabel }}</div>
+
+      <!-- finish -->
+      <div style="margin-top:26px">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <span style="font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#A8997F">{{ colorTitle }}</span>
+          <span style="font-size:13px;color:#EDE6D8">{{ colorName }}</span>
+        </div>
+        <div style="display:flex;gap:12px">
+          <sc-for list="{{ swatches }}" as="s" hint-placeholder-count="3">
+            <button onClick="{{ s.onClick }}" title="{{ s.name }}" style="{{ s.wrap }}"><span style="{{ s.dot }}"></span></button>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- size -->
+      <div style="margin-top:26px">
+        <span style="display:block;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#A8997F;margin-bottom:12px">{{ sizeTitle }}</span>
+        <div style="display:flex;flex-direction:column;gap:9px">
+          <sc-for list="{{ sizeOpts }}" as="sz" hint-placeholder-count="3">
+            <button onClick="{{ sz.onClick }}" style="{{ sz.style }}">
+              <span style="font-size:14.5px;font-weight:500">{{ sz.label }}</span>
+              <span style="font-size:14.5px;font-weight:600;color:{{ sz.priceColor }}">{{ sz.price }}</span>
+            </button>
+          </sc-for>
+        </div>
+      </div>
+
+      <!-- qty + add -->
+      <div style="display:flex;gap:12px;margin-top:28px;align-items:stretch">
+        <div style="display:flex;align-items:center;border:1px solid rgba(237,230,216,0.2);border-radius:2px;overflow:hidden">
+          <button onClick="{{ dec }}" style="background:none;border:none;color:#EDE6D8;font-size:20px;width:44px;height:52px;cursor:pointer">−</button>
+          <span style="min-width:34px;text-align:center;font-size:15px;font-weight:600;color:#EDE6D8">{{ qty }}</span>
+          <button onClick="{{ inc }}" style="background:none;border:none;color:#EDE6D8;font-size:20px;width:44px;height:52px;cursor:pointer">+</button>
+        </div>
+        <button onClick="{{ add }}" class="pc-add" style="flex:1;background:{{ addBg }};border:none;color:#15110D;font-family:{{ bodyFont }};font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;height:52px;border-radius:2px;cursor:pointer;transition:background .25s;display:flex;align-items:center;justify-content:center;gap:9px">{{ addLabel }}</button>
+      </div>
+
+      <!-- assurances -->
+      <div style="margin-top:30px;display:flex;flex-direction:column;gap:13px;padding-top:24px;border-top:1px solid rgba(237,230,216,0.1)">
+        <sc-for list="{{ assurances }}" as="a" hint-placeholder-count="3">
+          <div style="display:flex;align-items:center;gap:11px;color:#B6A88F;font-size:13.5px"><span style="color:#C2965B;flex-shrink:0">{{ a.icon }}</span>{{ a.text }}</div>
+        </sc-for>
+      </div>
+
+      <!-- description -->
+      <div style="margin-top:26px;padding-top:24px;border-top:1px solid rgba(237,230,216,0.1)">
+        <span style="display:block;font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#A8997F;margin-bottom:12px">{{ descTitle }}</span>
+        <p style="margin:0;color:#B6A88F;font-size:15px;line-height:1.75;font-weight:300">{{ desc }}</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- related -->
+  <section style="max-width:1280px;margin:0 auto;padding:0 clamp(20px,5vw,72px) clamp(70px,9vw,120px)">
+    <h2 style="margin:0 0 clamp(24px,3vw,40px);font-family:'Cormorant Garamond',{{ dispFallback }};font-weight:500;font-size:clamp(28px,3.6vw,42px);color:#F4EEE3">{{ relatedTitle }}</h2>
+    <div class="pc-rel-grid">
+      <sc-for list="{{ related }}" as="p" hint-placeholder-count="4">
+        <dc-import name="ProductCard" product="{{ p }}" lang="{{ lang }}" hint-size="100%,420px"></dc-import>
+      </sc-for>
+    </div>
+  </section>
+
+  <dc-import name="Footer" lang="{{ lang }}" hint-size="100%,360px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { ready: false, lang: "en", color: 0, size: 0, qty: 1, added: false };
+  async componentDidMount() {
+    this.m = await import("./shared.js");
+    const lang = this.m.getLang();
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    const id = new URLSearchParams(location.search).get("id");
+    this.product = this.m.productById(id) || this.m.PRODUCTS[0];
+    this.setState({ ready: true, lang });
+  }
+  renderVals() {
+    const lang = this.state.lang;
+    const bodyFont = lang === "ar" ? "'Tajawal',sans-serif" : "'Manrope',sans-serif";
+    const dispFallback = lang === "ar" ? "'Amiri',serif" : "serif";
+    const dir = lang === "ar" ? "rtl" : "ltr";
+    const backArrow = lang === "ar" ? "→" : "←";
+    if (!this.state.ready) {
+      return { lang, bodyFont, dispFallback, dir, backArrow, back: "", heroGrad: "linear-gradient(150deg,#2A2219,#1C1712)", letter: "", imgNote: "", thumbs: [],
+        cat: "", name: "", tagline: "", priceLabel: "", colorTitle: "", colorName: "", swatches: [], sizeTitle: "", sizeOpts: [],
+        qty: 1, inc: () => {}, dec: () => {}, add: () => {}, addLabel: "", addBg: "#C2965B", assurances: [], descTitle: "", desc: "", relatedTitle: "", related: [] };
+    }
+    const t = this.m.T[lang];
+    const p = this.product;
+    const hex = p.colors[this.state.color].hex;
+    const heroGrad = `radial-gradient(120% 100% at 32% 24%, ${hex}66, #18120D 82%)`;
+    const sizePrice = p.sizes[this.state.size].price;
+    const swatches = p.colors.map((c, i) => {
+      const sel = i === this.state.color;
+      return {
+        name: c[lang],
+        onClick: () => this.setState({ color: i, added: false }),
+        wrap: `background:none;border:1px solid ${sel ? "#C2965B" : "rgba(237,230,216,0.2)"};border-radius:50%;padding:3px;cursor:pointer;width:40px;height:40px;display:flex;align-items:center;justify-content:center;transition:border-color .2s`,
+        dot: `display:block;width:100%;height:100%;border-radius:50%;background:${c.hex}`,
+      };
+    });
+    const sizeOpts = p.sizes.map((s, i) => {
+      const sel = i === this.state.size;
+      return {
+        label: s[lang],
+        price: this.m.fmt(s.price, lang),
+        priceColor: sel ? "#C2965B" : "#8A7E6B",
+        onClick: () => this.setState({ size: i, added: false }),
+        style: `display:flex;justify-content:space-between;align-items:center;gap:16px;padding:14px 18px;border:1px solid ${sel ? "#C2965B" : "rgba(237,230,216,0.16)"};background:${sel ? "rgba(194,150,91,0.08)" : "transparent"};border-radius:3px;cursor:pointer;transition:all .2s;color:#EDE6D8;font-family:${bodyFont};text-align:start`,
+      };
+    });
+    const woodHexes = ["#6B4226", "#3A2A1B", "#5A4030", "#2C2824"];
+    return {
+      lang, bodyFont, dispFallback, dir, backArrow, back: t.detail.back,
+      heroGrad, letter: p.name.en.charAt(0), imgNote: lang === "ar" ? "صورة" : "image",
+      thumbs: woodHexes.map((h) => ({ grad: `radial-gradient(120% 100% at 35% 25%, ${h}, #18120D 85%)` })),
+      cat: this.m.catName(p.cat, lang), name: p.name[lang], tagline: p.tagline[lang],
+      priceLabel: this.m.fmt(sizePrice, lang),
+      colorTitle: t.detail.color, colorName: p.colors[this.state.color][lang], swatches,
+      sizeTitle: t.detail.size, sizeOpts,
+      qty: this.state.qty,
+      inc: () => this.setState((s) => ({ qty: s.qty + 1, added: false })),
+      dec: () => this.setState((s) => ({ qty: Math.max(1, s.qty - 1), added: false })),
+      add: () => {
+        this.m.addToCart({ id: p.id, name: p.name, color: p.colors[this.state.color][lang], colorHex: hex,
+          size: p.sizes[this.state.size][lang], price: sizePrice, qty: this.state.qty });
+        this.setState({ added: true });
+      },
+      addLabel: this.state.added ? "✓ " + t.cta.added : t.cta.addToCart,
+      addBg: this.state.added ? "#8FB57A" : "#C2965B",
+      assurances: [
+        { icon: "✦", text: t.detail.made },
+        { icon: "✦", text: t.detail.ships },
+        { icon: "✦", text: t.detail.crafted },
+      ],
+      descTitle: t.detail.desc, desc: p.desc[lang],
+      relatedTitle: t.detail.related,
+      related: this.m.PRODUCTS.filter((x) => x.id !== p.id).slice(0, 4),
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@500;600;700&family=Manrope:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+@media (max-width: 760px){ .pc-foot-grid{ grid-template-columns:1fr 1fr !important; } }
+@media (max-width: 460px){ .pc-foot-grid{ grid-template-columns:1fr !important; } }
+</style>
+</helmet>
+<footer dir="{{ dir }}" style="background:#100D0A;border-top:1px solid rgba(237,230,216,0.10);font-family:{{ bodyFont }};color:#A8997F;padding:clamp(48px,7vw,84px) clamp(20px,5vw,72px) 36px">
+  <div style="max-width:1200px;margin:0 auto;display:grid;grid-template-columns:1.5fr 1fr 1fr 1.4fr;gap:clamp(28px,4vw,60px)" class="pc-foot-grid">
+    <div>
+      <div style="display:flex;flex-direction:column;line-height:1;margin-bottom:18px">
+        <span style="color:#EDE6D8;font-weight:600;font-size:17px;letter-spacing:.16em">PACIFIC</span>
+        <span style="color:#A8997F;font-weight:500;font-size:10px;letter-spacing:.42em;margin-top:4px">CARPENTRY</span>
+      </div>
+      <p style="font-size:14px;line-height:1.7;max-width:280px;margin:0;color:#8A7E6B">{{ tagline }}</p>
+    </div>
+    <div>
+      <h4 style="color:#EDE6D8;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin:0 0 18px">{{ shopTitle }}</h4>
+      <div style="display:flex;flex-direction:column;gap:11px">
+        <a href="Products.dc.html" style="{{ fl }}">{{ tProducts }}</a>
+        <a href="OurWork.dc.html" style="{{ fl }}">{{ tWork }}</a>
+        <a href="Cart.dc.html" style="{{ fl }}">{{ tCart }}</a>
+      </div>
+    </div>
+    <div>
+      <h4 style="color:#EDE6D8;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin:0 0 18px">{{ companyTitle }}</h4>
+      <div style="display:flex;flex-direction:column;gap:11px">
+        <a href="AboutUs.dc.html" style="{{ fl }}">{{ tAbout }}</a>
+        <a href="ContactUs.dc.html" style="{{ fl }}">{{ tContact }}</a>
+        <a href="OurWork.dc.html" style="{{ fl }}">{{ tWork }}</a>
+      </div>
+    </div>
+    <div>
+      <h4 style="color:#EDE6D8;font-size:12px;font-weight:600;letter-spacing:.14em;text-transform:uppercase;margin:0 0 12px">{{ newsletter }}</h4>
+      <p style="font-size:13px;line-height:1.6;margin:0 0 16px;color:#8A7E6B">{{ newsletterSub }}</p>
+      <div style="display:flex;gap:8px">
+        <input type="email" placeholder="{{ emailPh }}" style="flex:1;min-width:0;background:rgba(237,230,216,0.04);border:1px solid rgba(237,230,216,0.16);color:#EDE6D8;font-family:{{ bodyFont }};font-size:13px;padding:11px 13px;border-radius:2px;outline:none" />
+        <button style="background:#C2965B;border:none;color:#15110D;font-family:{{ bodyFont }};font-size:12px;font-weight:600;letter-spacing:.04em;padding:0 16px;border-radius:2px;cursor:pointer;white-space:nowrap" style-hover="background:#D8B583">{{ subscribe }}</button>
+      </div>
+    </div>
+  </div>
+  <div style="max-width:1200px;margin:clamp(36px,5vw,60px) auto 0;padding-top:26px;border-top:1px solid rgba(237,230,216,0.08);display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap">
+    <span style="font-size:12.5px;color:#6E6353">© 2026 Pacific Carpentry. {{ rights }}</span>
+    <span style="font-size:12.5px;color:#6E6353">{{ made }}</span>
+  </div>
+</footer>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:&quot;100%&quot;,&quot;height&quot;:340},&quot;lang&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;en&quot;,&quot;ar&quot;],&quot;default&quot;:&quot;en&quot;,&quot;tsType&quot;:&quot;'en'|'ar'&quot;}}">
+class Component extends DCLogic {
+  state = { t: null, lang: "en" };
+  async componentDidMount() {
+    const m = await import("./shared.js");
+    const lang = this.props.lang || m.getLang();
+    this.setState({ t: m.T[lang], lang });
+  }
+  renderVals() {
+    const lang = this.state.lang;
+    const t = this.state.t;
+    const bodyFont = lang === "ar" ? "'Tajawal',sans-serif" : "'Manrope',sans-serif";
+    const dir = lang === "ar" ? "rtl" : "ltr";
+    const fl = "color:#8A7E6B;text-decoration:none;font-size:14px;transition:color .2s;font-family:" + bodyFont;
+    if (!t) return { dir, bodyFont, fl, tagline: "", shopTitle: "", companyTitle: "", newsletter: "", newsletterSub: "", subscribe: "", emailPh: "", rights: "", made: "", tProducts: "", tWork: "", tCart: "", tAbout: "", tContact: "" };
+    return {
+      dir, bodyFont, fl,
+      tagline: t.footer.tagline, shopTitle: t.footer.shop, companyTitle: t.footer.company,
+      newsletter: t.footer.newsletter, newsletterSub: t.footer.newsletterSub, subscribe: t.footer.subscribe,
+      emailPh: t.contact.email, rights: t.footer.rights, made: t.footer.made,
+      tProducts: t.nav.products, tWork: t.nav.work, tCart: t.cart.title, tAbout: t.nav.about, tContact: t.nav.contact,
+    };
+  }
+}
+</script>
+</body>
+</html>

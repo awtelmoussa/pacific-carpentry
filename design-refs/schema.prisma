@@ -1,0 +1,126 @@
+// Pacific Carpentry — Prisma schema (PostgreSQL / Supabase)
+// Core requirement: price lives on the SIZE row (each size has its own price).
+// Run: npx prisma migrate dev --name init  &&  npx prisma db seed
+//
+// datasource uses Supabase connection strings:
+//   DATABASE_URL       = pooled (pgbouncer) connection  -> for the app
+//   DIRECT_URL         = direct connection              -> for migrations
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+enum Category {
+  DINING_TABLES
+  CHAIRS
+  CABINETS
+  DOORS
+  SHELVING
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  IN_PRODUCTION
+  SHIPPED
+  COMPLETED
+  CANCELLED
+}
+
+model Product {
+  id         String         @id @default(cuid())
+  slug       String         @unique
+  category   Category
+  nameEn     String
+  nameAr     String
+  taglineEn  String
+  taglineAr  String
+  descEn     String
+  descAr     String
+  images     String[]       // storage URLs; empty = use placeholder
+  featured   Boolean        @default(false)
+  sortOrder  Int            @default(0)
+  colors     ProductColor[]
+  sizes      ProductSize[]
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @updatedAt
+
+  @@index([category])
+}
+
+model ProductColor {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  nameEn    String
+  nameAr    String
+  hex       String  // swatch color, e.g. "#C99A63"
+  sortOrder Int     @default(0)
+
+  @@index([productId])
+}
+
+model ProductSize {
+  id        String  @id @default(cuid())
+  productId String
+  product   Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+  labelEn   String  // e.g. "6-Seat · 220cm"
+  labelAr   String
+  price     Int     // AED, whole dirhams (store minor units if you need fils: use Int cents)
+  sortOrder Int     @default(0)
+
+  @@index([productId])
+}
+
+model Project {
+  id        String   @id @default(cuid())
+  slug      String   @unique
+  titleEn   String
+  titleAr   String
+  catEn     String   // "Residential" | "Hospitality" | "Commercial"
+  catAr     String
+  year      String
+  images    String[]
+  sortOrder Int      @default(0)
+}
+
+model Order {
+  id         String      @id @default(cuid())
+  number     String      @unique   // e.g. "PC-482193"
+  status     OrderStatus @default(PENDING)
+  // customer / delivery snapshot
+  fullName   String
+  email      String
+  phone      String
+  address    String
+  locale     String      @default("en")
+  subtotal   Int
+  shipping   Int         @default(0)
+  total      Int
+  items      OrderItem[]
+  createdAt  DateTime    @default(now())
+
+  @@index([email])
+}
+
+model OrderItem {
+  id         String  @id @default(cuid())
+  orderId    String
+  order      Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  productId  String
+  // snapshot the chosen variant so price history is immutable
+  nameEn     String
+  nameAr     String
+  color      String
+  size       String
+  price      Int     // unit price at purchase time
+  qty        Int
+
+  @@index([orderId])
+}

@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Manrope:wght@300;400;500;600;700&family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;}html,body{margin:0;padding:0;background:#15110D;}body{-webkit-font-smoothing:antialiased;}
+::selection{background:#C2965B;color:#15110D;}
+.pc-in:focus{border-color:rgba(194,150,91,0.7) !important;}
+.pc-btn-fill:hover{background:#D8B583 !important;}
+@media (max-width:900px){.pc-cart-split{grid-template-columns:1fr !important;}}
+</style>
+</helmet>
+
+<div dir="{{ dir }}" style="background:#15110D;color:#EDE6D8;font-family:{{ bodyFont }};min-height:100vh;overflow-x:hidden">
+  <dc-import name="Nav" lang="{{ lang }}" hint-size="100%,74px"></dc-import>
+
+  <div style="max-width:1180px;margin:0 auto;padding:calc(74px + clamp(40px,6vw,72px)) clamp(20px,5vw,64px) clamp(70px,9vw,110px)">
+
+    <!-- EMPTY -->
+    <sc-if value="{{ isEmpty }}" hint-placeholder-val="{{ false }}">
+      <div style="text-align:center;padding:clamp(50px,9vw,110px) 0">
+        <h1 style="margin:0 0 14px;font-family:'Cormorant Garamond',{{ dispFallback }};font-weight:500;font-size:clamp(34px,5vw,56px);color:#F4EEE3">{{ emptyTitle }}</h1>
+        <p style="margin:0 0 30px;color:#8A7E6B;font-size:16px">{{ emptySub }}</p>
+        <a href="Products.dc.html" class="pc-btn-fill" style="display:inline-block;background:#C2965B;color:#15110D;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:16px 36px;border-radius:2px;transition:background .25s">{{ continueBtn }}</a>
+      </div>
+    </sc-if>
+
+    <!-- DONE -->
+    <sc-if value="{{ isDone }}" hint-placeholder-val="{{ false }}">
+      <div style="text-align:center;padding:clamp(50px,9vw,100px) 0;max-width:540px;margin:0 auto">
+        <span style="display:inline-flex;align-items:center;justify-content:center;width:64px;height:64px;border-radius:50%;background:#8FB57A;color:#15110D;font-size:32px;margin-bottom:24px">✓</span>
+        <h1 style="margin:0 0 12px;font-family:'Cormorant Garamond',{{ dispFallback }};font-weight:500;font-size:clamp(34px,5vw,54px);color:#F4EEE3">{{ placedTitle }}</h1>
+        <p style="margin:0 0 8px;color:#B6A88F;font-size:16px;line-height:1.6">{{ placedSub }}</p>
+        <p style="margin:0 0 30px;color:#C2965B;font-size:15px;letter-spacing:.06em">{{ orderNoLabel }}: <strong>{{ orderNo }}</strong></p>
+        <a href="Products.dc.html" class="pc-btn-fill" style="display:inline-block;background:#C2965B;color:#15110D;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:16px 36px;border-radius:2px;transition:background .25s">{{ continueBtn }}</a>
+      </div>
+    </sc-if>
+
+    <!-- CART / CHECKOUT -->
+    <sc-if value="{{ showMain }}" hint-placeholder-val="{{ true }}">
+      <h1 style="margin:0 0 clamp(26px,3.5vw,44px);font-family:'Cormorant Garamond',{{ dispFallback }};font-weight:500;font-size:clamp(36px,5vw,64px);line-height:1;color:#F4EEE3">{{ heading }}</h1>
+      <div class="pc-cart-split" style="display:grid;grid-template-columns:1.5fr 1fr;gap:clamp(28px,4vw,56px);align-items:start">
+
+        <!-- LEFT -->
+        <div>
+          <!-- cart items -->
+          <sc-if value="{{ isCart }}" hint-placeholder-val="{{ true }}">
+            <div style="display:flex;flex-direction:column">
+              <sc-for list="{{ items }}" as="it" hint-placeholder-count="2">
+                <div style="display:flex;gap:18px;padding:22px 0;border-bottom:1px solid rgba(237,230,216,0.1);align-items:center">
+                  <div style="width:90px;height:108px;flex-shrink:0;border-radius:3px;border:1px solid rgba(237,230,216,0.1);background:{{ it.grad }};position:relative;overflow:hidden">
+                    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center"><span style="font-family:'Cormorant Garamond',serif;font-size:48px;color:rgba(255,255,255,0.08)">{{ it.letter }}</span></div>
+                  </div>
+                  <div style="flex:1;min-width:0">
+                    <h3 style="margin:0 0 5px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:21px;color:#EDE6D8;line-height:1.15">{{ it.name }}</h3>
+                    <span style="font-size:13px;color:#8A7E6B">{{ it.colorLabel }}: {{ it.color }} · {{ it.sizeLabel }}: {{ it.size }}</span>
+                    <div style="margin-top:11px;display:flex;align-items:center;gap:16px">
+                      <div style="display:flex;align-items:center;border:1px solid rgba(237,230,216,0.18);border-radius:2px">
+                        <button onClick="{{ it.dec }}" style="background:none;border:none;color:#EDE6D8;font-size:16px;width:32px;height:34px;cursor:pointer">−</button>
+                        <span style="min-width:26px;text-align:center;font-size:13.5px;font-weight:600">{{ it.qty }}</span>
+                        <button onClick="{{ it.inc }}" style="background:none;border:none;color:#EDE6D8;font-size:16px;width:32px;height:34px;cursor:pointer">+</button>
+                      </div>
+                      <button onClick="{{ it.remove }}" style="background:none;border:none;color:#8A7E6B;font-size:12.5px;letter-spacing:.04em;cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-family:{{ bodyFont }}">{{ removeLabel }}</button>
+                    </div>
+                  </div>
+                  <span style="font-family:'Cormorant Garamond',serif;font-size:21px;font-weight:600;color:#C2965B;white-space:nowrap">{{ it.lineTotal }}</span>
+                </div>
+              </sc-for>
+            </div>
+            <a href="Products.dc.html" style="display:inline-flex;align-items:center;gap:8px;margin-top:24px;color:#C2965B;text-decoration:none;font-size:13px;font-weight:600;letter-spacing:.06em">{{ backArrow }} {{ continueBtn }}</a>
+          </sc-if>
+
+          <!-- checkout forms -->
+          <sc-if value="{{ isCheckout }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;gap:30px">
+              <div>
+                <h2 style="margin:0 0 18px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:24px;color:#F4EEE3">{{ contactInfo }}</h2>
+                <div style="display:flex;flex-direction:column;gap:14px">
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                    <input class="pc-in" placeholder="{{ nameL }}" style="{{ inp }}" />
+                    <input class="pc-in" placeholder="{{ emailL }}" style="{{ inp }}" />
+                  </div>
+                  <input class="pc-in" placeholder="{{ phoneL }}" style="{{ inp }}" />
+                  <input class="pc-in" placeholder="{{ addressL }}" style="{{ inp }}" />
+                </div>
+              </div>
+              <div>
+                <h2 style="margin:0 0 18px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:24px;color:#F4EEE3">{{ payment }}</h2>
+                <div style="display:flex;flex-direction:column;gap:14px">
+                  <input class="pc-in" placeholder="{{ cardL }}" style="{{ inp }}" />
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:14px">
+                    <input class="pc-in" placeholder="{{ expiryL }}" style="{{ inp }}" />
+                    <input class="pc-in" placeholder="{{ cvcL }}" style="{{ inp }}" />
+                  </div>
+                </div>
+              </div>
+              <button onClick="{{ backToCart }}" style="align-self:flex-start;background:none;border:none;color:#8A7E6B;font-size:13px;cursor:pointer;text-decoration:underline;text-underline-offset:3px;font-family:{{ bodyFont }}">{{ backArrow }} {{ cartTitle }}</button>
+            </div>
+          </sc-if>
+        </div>
+
+        <!-- SUMMARY -->
+        <div style="border:1px solid rgba(237,230,216,0.12);background:rgba(237,230,216,0.025);border-radius:4px;padding:clamp(24px,3vw,34px)">
+          <h2 style="margin:0 0 20px;font-family:'Cormorant Garamond',serif;font-weight:600;font-size:24px;color:#F4EEE3">{{ summaryTitle }}</h2>
+          <div style="display:flex;justify-content:space-between;padding:11px 0;font-size:14.5px;color:#B6A88F"><span>{{ subtotalL }}</span><span style="color:#EDE6D8">{{ subtotal }}</span></div>
+          <div style="display:flex;justify-content:space-between;padding:11px 0;font-size:14.5px;color:#B6A88F;border-bottom:1px solid rgba(237,230,216,0.1)"><span>{{ shippingL }}</span><span style="color:#8A7E6B;font-size:13px">{{ shippingVal }}</span></div>
+          <div style="display:flex;justify-content:space-between;align-items:baseline;padding:18px 0 22px"><span style="font-size:15px;font-weight:600;color:#EDE6D8;letter-spacing:.04em">{{ totalL }}</span><span style="font-family:'Cormorant Garamond',serif;font-size:30px;font-weight:600;color:#C2965B">{{ total }}</span></div>
+          <button onClick="{{ primaryAction }}" class="pc-btn-fill" style="width:100%;background:#C2965B;border:none;color:#15110D;font-family:{{ bodyFont }};font-size:13px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;padding:17px;border-radius:2px;cursor:pointer;transition:background .25s">{{ primaryLabel }}</button>
+          <div style="display:flex;align-items:center;justify-content:center;gap:8px;margin-top:16px;color:#6E6353;font-size:12px"><span style="color:#C2965B">⛨</span>{{ secure }}</div>
+        </div>
+      </div>
+    </sc-if>
+  </div>
+
+  <dc-import name="Footer" lang="{{ lang }}" hint-size="100%,360px"></dc-import>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{}">
+class Component extends DCLogic {
+  state = { ready: false, lang: "en", items: [], step: "cart", orderNo: "" };
+  async componentDidMount() {
+    this.m = await import("./shared.js");
+    const lang = this.m.getLang();
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === "ar" ? "rtl" : "ltr";
+    this.setState({ ready: true, lang, items: this.m.getCart() });
+  }
+  sync(items) { this.m.setCart(items); this.setState({ items }); }
+  renderVals() {
+    const lang = this.state.lang;
+    const bodyFont = lang === "ar" ? "'Tajawal',sans-serif" : "'Manrope',sans-serif";
+    const dispFallback = lang === "ar" ? "'Amiri',serif" : "serif";
+    const dir = lang === "ar" ? "rtl" : "ltr";
+    const backArrow = lang === "ar" ? "→" : "←";
+    const inp = "background:rgba(237,230,216,0.04);border:1px solid rgba(237,230,216,0.16);color:#EDE6D8;font-family:" + bodyFont + ";font-size:15px;padding:14px 15px;border-radius:3px;outline:none;transition:border-color .2s;width:100%";
+    if (!this.state.ready) return { lang, bodyFont, dispFallback, dir, backArrow, inp, isEmpty: false, isDone: false, showMain: true, isCart: true, isCheckout: false, items: [], heading: "", emptyTitle: "", emptySub: "", continueBtn: "", placedTitle: "", placedSub: "", orderNoLabel: "", orderNo: "", summaryTitle: "", subtotalL: "", subtotal: "", shippingL: "", shippingVal: "", totalL: "", total: "", primaryAction: () => {}, primaryLabel: "", secure: "", removeLabel: "", contactInfo: "", payment: "", nameL: "", emailL: "", phoneL: "", addressL: "", cardL: "", expiryL: "", cvcL: "", cartTitle: "" };
+    const t = this.m.T[lang];
+    const woodHexes = { "#C99A63": "#C99A63" };
+    const items = this.state.items.map((it, idx) => {
+      const hex = it.colorHex || "#6B4226";
+      return {
+        ...it, name: it.name[lang] || it.name.en,
+        grad: `radial-gradient(120% 100% at 35% 25%, ${hex}, #18120D 84%)`,
+        letter: (it.name.en || "P").charAt(0),
+        colorLabel: t.detail.color, sizeLabel: t.detail.size,
+        lineTotal: this.m.fmt(it.price * it.qty, lang),
+        inc: () => { const a = [...this.state.items]; a[idx] = { ...a[idx], qty: a[idx].qty + 1 }; this.sync(a); },
+        dec: () => { const a = [...this.state.items]; a[idx] = { ...a[idx], qty: Math.max(1, a[idx].qty - 1) }; this.sync(a); },
+        remove: () => { const a = this.state.items.filter((_, i) => i !== idx); this.sync(a); },
+      };
+    });
+    const subtotal = this.state.items.reduce((n, i) => n + i.price * i.qty, 0);
+    const empty = this.state.items.length === 0 && this.state.step !== "done";
+    const placeOrder = () => {
+      const no = "PC-" + Math.floor(100000 + Math.random() * 900000);
+      this.m.setCart([]);
+      this.setState({ step: "done", orderNo: no, items: [] });
+    };
+    return {
+      lang, bodyFont, dispFallback, dir, backArrow, inp,
+      isEmpty: empty,
+      isDone: this.state.step === "done",
+      showMain: !empty && this.state.step !== "done",
+      isCart: this.state.step === "cart",
+      isCheckout: this.state.step === "checkout",
+      items,
+      heading: this.state.step === "checkout" ? t.cta.checkout : t.cart.title,
+      cartTitle: t.cart.title,
+      emptyTitle: t.cart.empty, emptySub: t.cart.emptySub, continueBtn: t.cta.continue,
+      placedTitle: t.cart.placed, placedSub: t.cart.placedSub, orderNoLabel: t.cart.orderNo, orderNo: this.state.orderNo,
+      removeLabel: t.cart.remove,
+      summaryTitle: t.cart.summary,
+      subtotalL: t.cart.subtotal, subtotal: this.m.fmt(subtotal, lang),
+      shippingL: t.cart.shipping, shippingVal: this.state.step === "checkout" ? this.m.fmt(0, lang) : t.cart.calc,
+      totalL: t.cart.total, total: this.m.fmt(subtotal, lang),
+      secure: t.cart.secure,
+      contactInfo: t.cart.contactInfo, payment: t.cart.payment,
+      nameL: t.contact.name, emailL: t.contact.email, phoneL: t.contact.phone,
+      addressL: lang === "ar" ? "عنوان التوصيل" : "Delivery address",
+      cardL: t.cart.card, expiryL: t.cart.expiry, cvcL: t.cart.cvc,
+      primaryAction: this.state.step === "cart" ? () => this.setState({ step: "checkout" }) : placeOrder,
+      primaryLabel: this.state.step === "cart" ? t.cta.checkout : t.cta.placeOrder,
+      backToCart: () => this.setState({ step: "cart" }),
+    };
+  }
+}
+</script>
+</body>
+</html>
