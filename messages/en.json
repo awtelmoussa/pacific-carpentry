@@ -201,5 +201,12 @@
     "subscribe": "Subscribe",
     "rights": "All rights reserved.",
     "made": "Made to order in Dubai, UAE."
+  },
+  "contactWidget": {
+    "title": "Pacific Carpentry Workshop",
+    "status": "Online · Sat–Thu, 9am–6pm",
+    "chat": "Chat on WhatsApp",
+    "call": "Call the Workshop",
+    "inquiry": "Hi Pacific Carpentry, I'm interested in a custom commission request."
   }
 }
