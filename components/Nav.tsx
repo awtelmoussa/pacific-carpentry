@@ -76,6 +76,7 @@ export default function Nav({ locale }: NavProps) {
   const navLinks = [
     { href: '/', label: t('home'), activeKey: '/' },
     { href: '/materials', label: t('materials'), activeKey: '/materials' },
+    { href: '/visualize', label: t('showroom'), activeKey: '/visualize' },
     { href: '/contact', label: t('contact'), activeKey: '/contact' },
     { href: '/work', label: t('work'), activeKey: '/work' },
     { href: '/about', label: t('about'), activeKey: '/about' },

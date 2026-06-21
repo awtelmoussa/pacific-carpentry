@@ -1,10 +1,12 @@
 {
   "nav": {
     "home": "Home",
-    "materials": "Timber Guide",
+    "products": "Products",
     "work": "Our Work",
     "about": "About",
-    "contact": "Bespoke Build"
+    "contact": "Bespoke Build",
+    "materials": "Timber Guide",
+    "showroom": "3D Showroom"
   },
   "cta": {
     "shop": "Shop the collection",
@@ -208,5 +210,44 @@
     "chat": "Chat on WhatsApp",
     "call": "Call the Workshop",
     "inquiry": "Hi Pacific Carpentry, I'm interested in a custom commission request."
+  },
+  "visualizer": {
+    "tabShowroom": "3D Showroom",
+    "tabVisualize": "Visualize in My Room",
+    "kicker": "Interactive Design Studio",
+    "title": "Room Planner",
+    "sub": "Choose a sample space or upload your own room photo, add custom furniture overlays, and adjust scale, orientation, lighting, and shadow details to preview the piece in your space.",
+    "selectRoom": "Select Background Room",
+    "uploadRoom": "Upload Your Room Photo",
+    "uploadRoomHelp": "Drag and drop or click to upload a JPG/PNG of your room.",
+    "roomLiving": "Elegant Living Room",
+    "roomBedroom": "Cozy Bedroom",
+    "roomOffice": "Executive Office",
+    "roomDining": "Minimalist Dining Area",
+    "selectFurniture": "Choose Carpentry Pieces",
+    "timberColor": "Timber Finish",
+    "addToRoom": "Add to Room",
+    "workspaceTitle": "Interactive Room Workspace",
+    "noItems": "Select a carpentry piece from the left panel and click 'Add to Room' to visualize it here.",
+    "reset": "Reset Canvas",
+    "download": "Save Visualisation",
+    "requestQuote": "Request Quote for this Room",
+    "settingsTitle": "Selected Item Controls",
+    "settingsHelp": "Drag the furniture in the room. Use the controls below to scale, rotate, flip, and blend the item to match room lighting.",
+    "scale": "Scale",
+    "rotate": "Rotation",
+    "brightness": "Brightness",
+    "contrast": "Contrast",
+    "shadow": "Drop Shadow Opacity",
+    "flip": "Flip Horizontally",
+    "remove": "Delete Item",
+    "quoteModalTitle": "Bespoke Quote Request",
+    "quoteModalSub": "Send your custom layout and configurations to our workshop team. We will review the design and reply with pricing.",
+    "placedItems": "Visualized Items List",
+    "notesLabel": "Additional project requirements & sizing notes",
+    "notesPlaceholder": "Describe any wall cutouts, custom sizes, baseboard considerations, or special details...",
+    "submitQuote": "Send Visualisation to Workshop",
+    "quoteSent": "Your visual design has been successfully submitted! Our workshop team will contact you within 24 hours.",
+    "dragHelp": "Drag items to position · Tap an item to adjust dimensions and lighting"
   }
 }
