@@ -25,7 +25,7 @@ export default function ContactWidget({ locale }: ContactWidgetProps) {
     };
   }, []);
 
-  const phoneNumber = '971508269785'; // Placeholder UAE phone number
+  const phoneNumber = '96171671858'; // Placeholder UAE phone number
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(t('inquiry'))}`;
   const callUrl = `tel:+${phoneNumber}`;
 
@@ -39,11 +39,10 @@ export default function ContactWidget({ locale }: ContactWidgetProps) {
     >
       {/* Contact Options Card */}
       <div
-        className={`mb-4 w-72 bg-bg2/95 backdrop-blur-md border border-line rounded-[3px] shadow-[0_12px_36px_rgba(0,0,0,0.35)] transition-all duration-400 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${
-          isOpen
+        className={`mb-4 w-72 bg-bg2/95 backdrop-blur-md border border-line rounded-[3px] shadow-[0_12px_36px_rgba(0,0,0,0.35)] transition-all duration-400 ease-[cubic-bezier(0.2,0.8,0.2,1)] ${isOpen
             ? 'opacity-100 translate-y-0 scale-100 pointer-events-auto'
             : 'opacity-0 translate-y-4 scale-95 pointer-events-none'
-        }`}
+          }`}
       >
         {/* Header Block */}
         <div className="p-4 border-b border-line/70 text-start">
