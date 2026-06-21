@@ -25,6 +25,8 @@
   --color-wood-soft: #D8B583;
   --color-wood-deep: #9A6E3A;
   --color-success: #8FB57A;
+  --color-nav-bg-scrolled: rgba(21, 17, 13, 0.92);
+  --color-nav-bg-normal: rgba(21, 17, 13, 0.55);
 }
 
 html.light {
@@ -47,6 +49,8 @@ html.light {
   --color-wood-soft: #BF965F;
   --color-wood-deep: #805724;
   --color-success: #6E945A;
+  --color-nav-bg-scrolled: rgba(247, 244, 235, 0.92);
+  --color-nav-bg-normal: rgba(247, 244, 235, 0.55);
 }
 
 html {
@@ -149,10 +153,10 @@ h1, h2, h3, h4, h5, h6, .font-serif {
 
 /* Logo adaptation based on HTML theme class */
 html.light .logo-img-theme {
-  filter: none !important;
+  filter: hue-rotate(40deg) saturate(0.8) brightness(0.9) !important;
   mix-blend-mode: multiply !important;
 }
 html.dark .logo-img-theme {
-  filter: invert(1) hue-rotate(180deg) !important;
+  filter: invert(1) hue-rotate(220deg) saturate(0.8) brightness(0.9) !important;
   mix-blend-mode: screen !important;
 }

@@ -94,8 +94,8 @@ export default function Nav({ locale }: NavProps) {
       <nav
         style={{
           backgroundColor: scrolled
-            ? 'rgba(21, 17, 13, 0.92)'
-            : 'rgba(21, 17, 13, 0.55)',
+            ? 'var(--color-nav-bg-scrolled)'
+            : 'var(--color-nav-bg-normal)',
         }}
         className="fixed top-0 left-0 right-0 z-50 flex items-center justify-between gap-4 px-3 md:px-12 h-[74px] backdrop-blur-md border-b border-line transition-colors duration-300"
       >
