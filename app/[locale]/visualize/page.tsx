@@ -101,6 +101,14 @@ export default function VisualizePage() {
       modelUrl: '/models/wardrobe.glb', // Points to public/models/wardrobe.glb
     },
     {
+      id: 'untitled-design',
+      nameEn: 'My Custom Design',
+      nameAr: 'تصميمي المخصص',
+      descEn: 'Imported model loaded from Untitled.glb.',
+      descAr: 'نموذج مخصص تم تحميله من ملف Untitled.glb.',
+      modelUrl: '/models/Untitled.glb',
+    },
+    {
       id: 'pivot-door',
       nameEn: 'Harbor Pivot Door',
       nameAr: 'باب هاربور المحوري',
