@@ -93,6 +93,14 @@ export default function VisualizePage() {
       modelUrl: '/models/chair.glb', // Reusing chair.glb for 3D demo
     },
     {
+      id: 'wardrobe',
+      nameEn: 'Bespoke Wardrobe',
+      nameAr: 'خزانة ملابس مخصصة',
+      descEn: 'Handcrafted solid wood wardrobe with sliding panels.',
+      descAr: 'خزانة ملابس من الخشب الصلب مصنوعة يدوياً بألواح منزلقة.',
+      modelUrl: '/models/wardrobe.glb', // Points to public/models/wardrobe.glb
+    },
+    {
       id: 'pivot-door',
       nameEn: 'Harbor Pivot Door',
       nameAr: 'باب هاربور المحوري',
@@ -125,7 +133,7 @@ export default function VisualizePage() {
   // 2D ROOM PLANNER STATE & DATA
   // -------------------------------------------------------------
   const canvasRef = useRef<HTMLDivElement>(null);
-  
+
   // Placed items in the room
   const [placedItems, setPlacedItems] = useState<PlacedItem[]>([]);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
@@ -431,7 +439,7 @@ export default function VisualizePage() {
 
       const detailedNotes = `[Visualize in My Room Design Submission]
 Items Placed:
-${placedItems.map((item, i) => `- ${i+1}. ${item.nameEn} (${timbers.find(t => t.id === item.timberId)?.nameEn}) at x:${item.x.toFixed(0)}%, y:${item.y.toFixed(0)}% (Scale: ${item.scale}, Rotation: ${item.rotation}°)`).join('\n')}
+${placedItems.map((item, i) => `- ${i + 1}. ${item.nameEn} (${timbers.find(t => t.id === item.timberId)?.nameEn}) at x:${item.x.toFixed(0)}%, y:${item.y.toFixed(0)}% (Scale: ${item.scale}, Rotation: ${item.rotation}°)`).join('\n')}
 
 Customer Sizing & Project Notes:
 ${quoteNotes}`;
@@ -514,26 +522,24 @@ ${quoteNotes}`;
         <span className="text-[12px] font-semibold tracking-[0.24em] text-wood uppercase">
           — {tNav('showroom')}
         </span>
-        
+
         {/* Toggle Slider Tabs */}
         <div className="flex items-center gap-1 mt-6 border border-cream/10 bg-cream/[0.01] p-1 rounded-[3px] max-w-[420px]">
           <button
             onClick={() => setActiveTab('showroom')}
-            className={`flex-1 text-center py-2.5 text-xs font-bold tracking-wider uppercase cursor-pointer rounded-[2px] transition-all duration-300 ${
-              activeTab === 'showroom'
-                ? 'bg-wood text-bg font-black shadow-md'
-                : 'text-cream/60 hover:text-cream'
-            }`}
+            className={`flex-1 text-center py-2.5 text-xs font-bold tracking-wider uppercase cursor-pointer rounded-[2px] transition-all duration-300 ${activeTab === 'showroom'
+              ? 'bg-wood text-bg font-black shadow-md'
+              : 'text-cream/60 hover:text-cream'
+              }`}
           >
             {tVis('tabShowroom')}
           </button>
           <button
             onClick={() => setActiveTab('visualizer')}
-            className={`flex-1 text-center py-2.5 text-xs font-bold tracking-wider uppercase cursor-pointer rounded-[2px] transition-all duration-300 ${
-              activeTab === 'visualizer'
-                ? 'bg-wood text-bg font-black shadow-md'
-                : 'text-cream/60 hover:text-cream'
-            }`}
+            className={`flex-1 text-center py-2.5 text-xs font-bold tracking-wider uppercase cursor-pointer rounded-[2px] transition-all duration-300 ${activeTab === 'visualizer'
+              ? 'bg-wood text-bg font-black shadow-md'
+              : 'text-cream/60 hover:text-cream'
+              }`}
           >
             {tVis('tabVisualize')}
           </button>
@@ -559,11 +565,10 @@ ${quoteNotes}`;
                       <button
                         key={item.id}
                         onClick={() => setActiveItem3D(item.id)}
-                        className={`p-4 text-start border rounded-[3px] transition-all duration-300 cursor-pointer ${
-                          item.id === activeItem3D
-                            ? 'bg-cream/[0.035] border-wood text-cream-bright shadow-lg shadow-black/20'
-                            : 'bg-transparent border-cream/10 hover:border-cream/35 hover:bg-cream/[0.015]'
-                        }`}
+                        className={`p-4 text-start border rounded-[3px] transition-all duration-300 cursor-pointer ${item.id === activeItem3D
+                          ? 'bg-cream/[0.035] border-wood text-cream-bright shadow-lg shadow-black/20'
+                          : 'bg-transparent border-cream/10 hover:border-cream/35 hover:bg-cream/[0.015]'
+                          }`}
                       >
                         <h3 className="font-serif font-semibold text-lg leading-tight">
                           {locale === 'ar' ? item.nameAr : item.nameEn}
@@ -586,11 +591,10 @@ ${quoteNotes}`;
                       <button
                         key={timber.id}
                         onClick={() => setActiveTimber3D(timber.id)}
-                        className={`flex items-center gap-2.5 px-4 py-2.5 border rounded-[2px] text-xs font-semibold tracking-[0.03em] transition-all duration-200 cursor-pointer ${
-                          timber.id === activeTimber3D
-                            ? 'bg-cream/[0.045] border-wood text-cream'
-                            : 'border-cream/10 hover:border-cream/30 text-cream/70'
-                        }`}
+                        className={`flex items-center gap-2.5 px-4 py-2.5 border rounded-[2px] text-xs font-semibold tracking-[0.03em] transition-all duration-200 cursor-pointer ${timber.id === activeTimber3D
+                          ? 'bg-cream/[0.045] border-wood text-cream'
+                          : 'border-cream/10 hover:border-cream/30 text-cream/70'
+                          }`}
                       >
                         <span
                           className="w-3.5 h-3.5 rounded-full border border-black/15 shadow-inner"
@@ -650,16 +654,16 @@ ${quoteNotes}`;
       {activeTab === 'visualizer' && (
         <main className="max-w-[1280px] mx-auto px-6 md:px-12 lg:px-[72px] pb-24">
           <div className="grid grid-cols-1 xl:grid-cols-[1.1fr_2.1fr] gap-8 md:gap-12 items-start">
-            
+
             {/* PLANNER SIDEBAR CONTROLS */}
             <div className="space-y-6 text-start">
-              
+
               {/* 1. SELECT ROOM BACKGROUND */}
               <div className="border border-cream/10 bg-cream/[0.01] p-5 rounded-[3px] space-y-4">
                 <span className="text-[11px] font-bold tracking-[0.15em] text-wood uppercase block">
                   {tVis('selectRoom')}
                 </span>
-                
+
                 {/* Sample Rooms Grid */}
                 <div className="grid grid-cols-2 gap-2">
                   {sampleRooms.map((room) => (
@@ -669,11 +673,10 @@ ${quoteNotes}`;
                         setCustomRoomBg(null);
                         setActiveRoomBg(room.url);
                       }}
-                      className={`relative aspect-[3/2] rounded-[2px] overflow-hidden border cursor-pointer group transition-all duration-300 ${
-                        activeRoomBg === room.url && !customRoomBg
-                          ? 'border-wood shadow-md shadow-wood/10'
-                          : 'border-cream/10 opacity-70 hover:opacity-100 hover:border-cream/30'
-                      }`}
+                      className={`relative aspect-[3/2] rounded-[2px] overflow-hidden border cursor-pointer group transition-all duration-300 ${activeRoomBg === room.url && !customRoomBg
+                        ? 'border-wood shadow-md shadow-wood/10'
+                        : 'border-cream/10 opacity-70 hover:opacity-100 hover:border-cream/30'
+                        }`}
                     >
                       <img src={room.url} alt={room.nameEn} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/45 flex items-center justify-center p-1.5 text-center">
@@ -716,11 +719,10 @@ ${quoteNotes}`;
                     <button
                       key={opt.id}
                       onClick={() => setVisActiveItem(opt.id)}
-                      className={`w-full flex items-center gap-3.5 p-2.5 rounded-[2px] border text-start transition-all cursor-pointer ${
-                        visActiveItem === opt.id
-                          ? 'border-wood bg-wood/[0.04]'
-                          : 'border-cream/10 bg-transparent hover:border-cream/30'
-                      }`}
+                      className={`w-full flex items-center gap-3.5 p-2.5 rounded-[2px] border text-start transition-all cursor-pointer ${visActiveItem === opt.id
+                        ? 'border-wood bg-wood/[0.04]'
+                        : 'border-cream/10 bg-transparent hover:border-cream/30'
+                        }`}
                     >
                       <img src={opt.imageUrl} alt={opt.nameEn} className="w-[52px] h-[52px] object-cover bg-white p-0.5 rounded border border-cream/10 shrink-0" />
                       <div className="leading-tight">
@@ -745,11 +747,10 @@ ${quoteNotes}`;
                       <button
                         key={t.id}
                         onClick={() => setVisActiveTimber(t.id)}
-                        className={`flex items-center gap-1.5 px-2.5 py-1.5 border rounded-[2px] text-[10px] font-semibold transition-all cursor-pointer ${
-                          visActiveTimber === t.id
-                            ? 'border-wood bg-cream/[0.04] text-cream'
-                            : 'border-cream/10 text-cream/70 hover:border-cream/30'
-                        }`}
+                        className={`flex items-center gap-1.5 px-2.5 py-1.5 border rounded-[2px] text-[10px] font-semibold transition-all cursor-pointer ${visActiveTimber === t.id
+                          ? 'border-wood bg-cream/[0.04] text-cream'
+                          : 'border-cream/10 text-cream/70 hover:border-cream/30'
+                          }`}
                       >
                         <span
                           className="w-2.5 h-2.5 rounded-full border border-black/15"
@@ -774,7 +775,7 @@ ${quoteNotes}`;
 
             {/* INTERACTIVE WORKSPACE CANVAS */}
             <div className="space-y-6 text-start">
-              
+
               {/* Canvas Header Controls */}
               <div className="flex flex-wrap items-center justify-between gap-4">
                 <div>
@@ -785,7 +786,7 @@ ${quoteNotes}`;
                     {tVis('dragHelp')}
                   </span>
                 </div>
-                
+
                 <div className="flex items-center gap-2">
                   {/* Reset canvas */}
                   <button
@@ -918,7 +919,7 @@ ${quoteNotes}`;
 
                   {/* Visual controls range inputs */}
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4">
-                    
+
                     {/* Scale */}
                     <div className="space-y-1.5">
                       <div className="flex justify-between text-[11px] font-semibold text-cream">
@@ -993,15 +994,14 @@ ${quoteNotes}`;
                   <div className="flex items-center gap-3 pt-1">
                     <button
                       onClick={() => updateActiveItem('isFlipped', !activeItem.isFlipped)}
-                      className={`px-4 py-2 border rounded-[2px] text-xs font-semibold tracking-wider uppercase transition-colors cursor-pointer ${
-                        activeItem.isFlipped
-                          ? 'border-wood bg-wood/[0.08] text-cream-bright font-bold'
-                          : 'border-cream/10 bg-transparent text-cream hover:border-cream/30'
-                      }`}
+                      className={`px-4 py-2 border rounded-[2px] text-xs font-semibold tracking-wider uppercase transition-colors cursor-pointer ${activeItem.isFlipped
+                        ? 'border-wood bg-wood/[0.08] text-cream-bright font-bold'
+                        : 'border-cream/10 bg-transparent text-cream hover:border-cream/30'
+                        }`}
                     >
                       {tVis('flip')}
                     </button>
-                    
+
                     {/* Item Timber selector switch */}
                     <div className="flex items-center gap-2">
                       <span className="text-[10px] text-muted font-semibold uppercase">{tVis('timberColor')}:</span>
@@ -1029,12 +1029,12 @@ ${quoteNotes}`;
                       {locale === 'ar' ? 'اطلب عرض سعر لتصميم غرفتك' : 'Love this room layout?'}
                     </h4>
                     <p className="text-xs text-cream/70 leading-relaxed font-light max-w-[480px]">
-                      {locale === 'ar' 
+                      {locale === 'ar'
                         ? 'أرسل مواصفات الأثاث وتفاصيل التصميم إلى الورشة. سنقوم بتقدير التكاليف وحساب الخصم للمجموعة الكاملة.'
                         : 'Submit your custom furniture selections to our workshop. We will review your sizes, wood specifications, and reply with a bundle price estimate.'}
                     </p>
                   </div>
-                  
+
                   <button
                     onClick={() => {
                       setQuoteErrorMsg('');
@@ -1060,7 +1060,7 @@ ${quoteNotes}`;
       {isQuoteModalOpen && (
         <div className="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 backdrop-blur-sm animate-pc-fade">
           <div className="bg-bg border border-cream/15 max-w-[620px] w-full p-6 md:p-8 rounded-[4px] text-start space-y-6 max-h-[90vh] overflow-y-auto relative">
-            
+
             {/* Close button */}
             <button
               onClick={() => setIsQuoteModalOpen(false)}
@@ -1111,7 +1111,7 @@ ${quoteNotes}`;
 
                 {/* Form fields */}
                 <div className="space-y-4">
-                  
+
                   {/* Placed Items List (Read-only review) */}
                   <div className="bg-cream/[0.02] border border-cream/8 p-4 rounded-[2px] space-y-2">
                     <span className="text-[10.5px] font-bold tracking-wider text-muted uppercase block">
@@ -1120,8 +1120,8 @@ ${quoteNotes}`;
                     <ul className="text-xs space-y-1.5 text-cream/85 font-mono">
                       {placedItems.map((item, idx) => (
                         <li key={item.id} className="flex justify-between border-b border-line/20 pb-1 last:border-0 last:pb-0">
-                          <span>{idx+1}. {locale === 'ar' ? item.nameAr : item.nameEn}</span>
-                          <span className="text-wood">({locale === 'ar' ? timbers.find(t=>t.id===item.timberId)?.nameAr : timbers.find(t=>t.id===item.timberId)?.nameEn})</span>
+                          <span>{idx + 1}. {locale === 'ar' ? item.nameAr : item.nameEn}</span>
+                          <span className="text-wood">({locale === 'ar' ? timbers.find(t => t.id === item.timberId)?.nameAr : timbers.find(t => t.id === item.timberId)?.nameEn})</span>
                         </li>
                       ))}
                     </ul>
@@ -1195,8 +1195,8 @@ ${quoteNotes}`;
                   disabled={isSubmittingQuote}
                   className="w-full bg-wood hover:bg-woodSoft text-bg py-4 text-xs font-bold tracking-wider uppercase rounded-[2px] cursor-pointer transition-colors"
                 >
-                  {isSubmittingQuote 
-                    ? (locale === 'ar' ? 'جاري رفع التصميم وإرساله...' : 'Uploading snapshot & sending...') 
+                  {isSubmittingQuote
+                    ? (locale === 'ar' ? 'جاري رفع التصميم وإرساله...' : 'Uploading snapshot & sending...')
                     : tVis('submitQuote')}
                 </button>
               </form>
