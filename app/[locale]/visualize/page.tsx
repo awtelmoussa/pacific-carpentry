@@ -5,6 +5,17 @@ import Script from 'next/script';
 import { useLocale, useTranslations } from 'next-intl';
 import { submitBespokeRequestAction } from '@/app/actions/storefrontActions';
 import { uploadImageAction } from '@/app/actions/adminActions';
+import dynamic from 'next/dynamic';
+
+const Configurator3D = dynamic(() => import('@/components/Configurator3D'), {
+  ssr: false,
+  loading: () => (
+    <div className="w-full h-full flex flex-col items-center justify-center bg-cream/[0.015] text-cream/40 aspect-[4/3] md:aspect-[16/10]">
+      <div className="w-8 h-8 border border-wood border-t-transparent rounded-full animate-spin mb-3" />
+      <span className="text-[10px] uppercase tracking-widest font-mono font-semibold">Initializing 3D Studio...</span>
+    </div>
+  ),
+});
 
 // Define model-viewer JSX typings for TypeScript compilation safety
 declare global {
@@ -75,6 +86,29 @@ export default function VisualizePage() {
   // -------------------------------------------------------------
   const [activeItem3D, setActiveItem3D] = useState('dining-table');
   const [activeTimber3D, setActiveTimber3D] = useState('oak');
+
+  // 3D Configurator Scale States
+  const [scaleX, setScaleX] = useState(1.0);
+  const [scaleY, setScaleY] = useState(1.0);
+  const [scaleZ, setScaleZ] = useState(1.0);
+  const [showGrid3D, setShowGrid3D] = useState(true);
+
+  // WebAR and QR Code State
+  const [isMobile, setIsMobile] = useState(false);
+  const [showQrModal, setShowQrModal] = useState(false);
+
+  useEffect(() => {
+    if (typeof window !== 'undefined') {
+      setIsMobile(/Mobi|Android|iPhone/i.test(navigator.userAgent));
+    }
+  }, []);
+
+  // Reset scale vectors when switching furniture designs
+  useEffect(() => {
+    setScaleX(1.0);
+    setScaleY(1.0);
+    setScaleZ(1.0);
+  }, [activeItem3D]);
 
   // Set page URL for QR code generator
   useEffect(() => {
@@ -518,7 +552,7 @@ ${quoteNotes}`;
         src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
         strategy="lazyOnload"
       />
-      {/* Google's web components script for 3D model-viewer */}
+      {/* Google's web components script for 3D model-viewer AR activation */}
       <Script
         type="module"
         src="https://ajax.googleapis.com/ajax/libs/model-viewer/4.0.0/model-viewer.min.js"
@@ -613,6 +647,90 @@ ${quoteNotes}`;
                     ))}
                   </div>
                 </div>
+
+                {/* 3D Configurator Dimensions */}
+                <div className="space-y-4 pt-5 border-t border-cream/10">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[11px] font-bold tracking-[0.15em] text-wood uppercase block text-start">
+                      {locale === 'ar' ? 'تعديل الأبعاد' : 'Adjust Dimensions'}
+                    </span>
+                    <button 
+                      onClick={() => setShowGrid3D(!showGrid3D)}
+                      className={`text-[9px] uppercase font-bold tracking-wider px-2.5 py-1 rounded-[2px] transition-colors border cursor-pointer ${
+                        showGrid3D 
+                          ? 'bg-wood text-bg border-wood' 
+                          : 'border-cream/10 text-cream/60 hover:text-cream hover:border-cream/30'
+                      }`}
+                    >
+                      {showGrid3D 
+                        ? (locale === 'ar' ? 'إخفاء الشبكة' : 'Hide Grid') 
+                        : (locale === 'ar' ? 'إظهار الشبكة' : 'Show Grid')}
+                    </button>
+                  </div>
+                  
+                  {/* Scale X (Length) */}
+                  <div className="space-y-1.5 text-start">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-cream/80">{locale === 'ar' ? 'الطول' : 'Length'}</span>
+                      <span className="text-wood font-mono font-semibold">x{scaleX.toFixed(2)}</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="0.5" 
+                      max="1.5" 
+                      step="0.05"
+                      value={scaleX} 
+                      onChange={(e) => setScaleX(parseFloat(e.target.value))}
+                      className="w-full accent-wood bg-cream/10 h-1 rounded-lg cursor-pointer"
+                    />
+                  </div>
+
+                  {/* Scale Y (Height) */}
+                  <div className="space-y-1.5 text-start">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-cream/80">{locale === 'ar' ? 'الارتفاع' : 'Height'}</span>
+                      <span className="text-wood font-mono font-semibold">x{scaleY.toFixed(2)}</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="0.5" 
+                      max="1.5" 
+                      step="0.05"
+                      value={scaleY} 
+                      onChange={(e) => setScaleY(parseFloat(e.target.value))}
+                      className="w-full accent-wood bg-cream/10 h-1 rounded-lg cursor-pointer"
+                    />
+                  </div>
+
+                  {/* Scale Z (Width/Depth) */}
+                  <div className="space-y-1.5 text-start">
+                    <div className="flex justify-between text-xs">
+                      <span className="text-cream/80">{locale === 'ar' ? 'العرض / العمق' : 'Depth / Width'}</span>
+                      <span className="text-wood font-mono font-semibold">x{scaleZ.toFixed(2)}</span>
+                    </div>
+                    <input 
+                      type="range" 
+                      min="0.5" 
+                      max="1.5" 
+                      step="0.05"
+                      value={scaleZ} 
+                      onChange={(e) => setScaleZ(parseFloat(e.target.value))}
+                      className="w-full accent-wood bg-cream/10 h-1 rounded-lg cursor-pointer"
+                    />
+                  </div>
+                  
+                  {/* Reset Button */}
+                  <button
+                    onClick={() => {
+                      setScaleX(1.0);
+                      setScaleY(1.0);
+                      setScaleZ(1.0);
+                    }}
+                    className="w-full py-2 border border-cream/15 hover:border-cream/35 text-cream/70 hover:text-cream text-[10px] font-bold uppercase tracking-wider rounded-[2px] transition-all cursor-pointer"
+                  >
+                    {locale === 'ar' ? 'إعادة ضبط الأبعاد الافتراضية' : 'Reset to Default Scale'}
+                  </button>
+                </div>
               </div>
 
               {/* Desktop Mobile AR Handoff Widget */}
@@ -635,21 +753,63 @@ ${quoteNotes}`;
               )}
             </div>
 
-            {/* Interactive 3D Model Viewer */}
-            <div className="relative w-full aspect-[4/3] md:aspect-[16/10] bg-cream/[0.015] border border-cream/10 rounded-[3px] shadow-2xl shadow-black/10 overflow-hidden flex items-center justify-center">
-              <model-viewer
-                src={selectedItem3D.modelUrl}
-                ar
-                ar-modes="webxr scene-viewer quick-look"
-                camera-controls
-                touch-action="pan-y"
-                shadow-intensity="1.2"
-                shadow-softness="0.9"
-                alt="Interactive 3D Furniture Model"
-                style={{ width: '100%', height: '100%', outline: 'none' }}
-              />
-              <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-bg/85 backdrop-blur-sm px-4 py-2 border border-cream/5 rounded-[2px] text-[10px] font-bold tracking-[0.1em] text-cream/65 uppercase select-none pointer-events-none">
-                Drag to Rotate · Scroll to Zoom
+            {/* Interactive 3D Model Viewer Container */}
+            <div className="space-y-4">
+              <div className="relative w-full aspect-[4/3] md:aspect-[16/10] bg-cream/[0.015] border border-cream/10 rounded-[3px] shadow-2xl shadow-black/10 overflow-hidden flex items-center justify-center">
+                <Configurator3D
+                  modelUrl={selectedItem3D.modelUrl}
+                  timberId={activeTimber3D}
+                  scaleX={scaleX}
+                  scaleY={scaleY}
+                  scaleZ={scaleZ}
+                  showGrid={showGrid3D}
+                />
+                <div className="absolute bottom-4 left-1/2 -translate-x-1/2 bg-bg/85 backdrop-blur-sm px-4 py-2 border border-cream/5 rounded-[2px] text-[10px] font-bold tracking-[0.1em] text-cream/65 uppercase select-none pointer-events-none z-10">
+                  Drag to Rotate · Scroll to Zoom
+                </div>
+              </div>
+
+              {/* AR Camera Button */}
+              <div className="w-full">
+                <button
+                  onClick={() => {
+                    if (isMobile) {
+                      // Trigger hidden model-viewer AR
+                      const arBtn = document.getElementById('hidden-ar-button');
+                      if (arBtn) {
+                        arBtn.click();
+                      } else {
+                        alert(locale === 'ar' ? 'عذراً، لا يدعم جهازك الواقع المعزز.' : 'AR is not supported on this device.');
+                      }
+                    } else {
+                      setShowQrModal(true);
+                    }
+                  }}
+                  className="w-full py-4 bg-wood hover:bg-wood/90 text-bg font-bold rounded-[3px] text-xs uppercase tracking-[0.15em] flex items-center justify-center gap-2.5 transition-all shadow-lg hover:shadow-wood/10 cursor-pointer"
+                >
+                  <svg className="w-4 h-4 text-bg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  {locale === 'ar' ? 'عرض في غرفتك بالكامل (كاميرا AR)' : 'View in Your Room (AR Camera)'}
+                </button>
+
+                {/* Hidden model-viewer for mobile AR launch */}
+                <div className="hidden">
+                  <model-viewer
+                    id="hidden-viewer"
+                    src={selectedItem3D.modelUrl}
+                    ar
+                    ar-modes="webxr scene-viewer quick-look"
+                    alt="AR Model Launcher"
+                    style={{ width: '1px', height: '1px' }}
+                  >
+                    <button 
+                      slot="ar-button" 
+                      id="hidden-ar-button" 
+                    />
+                  </model-viewer>
+                </div>
               </div>
             </div>
           </div>
@@ -1210,6 +1370,43 @@ ${quoteNotes}`;
               </form>
             )}
 
+          </div>
+        </div>
+      )}
+
+      {/* QR Code Modal for Desktop AR Launch */}
+      {showQrModal && (
+        <div className="fixed inset-0 bg-black/80 backdrop-blur-sm flex items-center justify-center z-50 p-4">
+          <div className="bg-bg border border-cream/15 p-6 rounded-[3px] max-w-[400px] w-full text-center space-y-5 relative shadow-2xl">
+            <button 
+              onClick={() => setShowQrModal(false)}
+              className="absolute top-3 right-3 text-cream/60 hover:text-cream cursor-pointer text-lg font-bold"
+            >
+              ✕
+            </button>
+            <h3 className="font-serif font-semibold text-lg text-cream-bright">
+              {locale === 'ar' ? 'عرض في غرفتك (AR)' : 'Visualize in AR'}
+            </h3>
+            <p className="text-xs text-cream/70 leading-relaxed font-light">
+              {locale === 'ar' 
+                ? 'امسح رمز الاستجابة السريعة (QR) بكاميرا هاتفك لتشغيل الواقع المعزز ووضع هذه القطعة في غرفتك بمقاسها الحقيقي.' 
+                : 'Scan this QR code with your mobile phone camera to launch WebAR. You will be able to place this furniture item at 1:1 scale directly on your floor.'}
+            </p>
+            {qrCodeUrl && (
+              <div className="flex justify-center pt-2">
+                <img
+                  src={qrCodeUrl}
+                  alt="Scan to Visualize in AR"
+                  className="w-[180px] h-[180px] object-contain rounded-[2px] bg-white p-2 border border-cream/20 shadow-md"
+                />
+              </div>
+            )}
+            <button
+              onClick={() => setShowQrModal(false)}
+              className="w-full py-2.5 bg-wood text-bg font-bold text-xs uppercase tracking-wider rounded-[2px] hover:bg-wood/90 transition-colors cursor-pointer"
+            >
+              {locale === 'ar' ? 'إغلاق' : 'Close'}
+            </button>
           </div>
         </div>
       )}
