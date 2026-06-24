@@ -1,6 +1,7 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import SectionHeader from '@/components/SectionHeader';
+import Image from 'next/image';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -99,12 +100,15 @@ export default async function MaterialsPage({ params }: PageProps) {
             >
               {/* Image Column */}
               <div className="relative aspect-[4/3] rounded-[3px] overflow-hidden border border-cream/10 bg-bg2 group w-full">
-                <img
+                <Image
                   src={w.image}
                   alt={w.title}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 50vw"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
+                  priority={false}
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-bg/60 to-transparent"></div>
+                <div className="absolute inset-0 bg-gradient-to-t from-bg/60 to-transparent z-10"></div>
               </div>
 
               {/* Specs Details Column */}

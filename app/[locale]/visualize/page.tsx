@@ -846,7 +846,7 @@ ${quoteNotes}`;
                         : 'border-cream/10 opacity-70 hover:opacity-100 hover:border-cream/30'
                         }`}
                     >
-                      <img src={room.url} alt={room.nameEn} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <img src={room.url.replace('w=1200', 'w=250').replace('q=80', 'q=60')} alt={room.nameEn} className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       <div className="absolute inset-0 bg-black/45 flex items-center justify-center p-1.5 text-center">
                         <span className="text-[10px] font-semibold text-cream leading-tight">
                           {locale === 'ar' ? room.nameAr : room.nameEn}
@@ -892,7 +892,7 @@ ${quoteNotes}`;
                         : 'border-cream/10 bg-transparent hover:border-cream/30'
                         }`}
                     >
-                      <img src={opt.imageUrl} alt={opt.nameEn} className="w-[52px] h-[52px] object-cover bg-white p-0.5 rounded border border-cream/10 shrink-0" />
+                      <img src={opt.imageUrl.replace('w=600', 'w=100').replace('q=80', 'q=50')} alt={opt.nameEn} className="w-[52px] h-[52px] object-cover bg-white p-0.5 rounded border border-cream/10 shrink-0" />
                       <div className="leading-tight">
                         <h4 className="font-serif font-semibold text-[14px] text-cream-bright">
                           {locale === 'ar' ? opt.nameAr : opt.nameEn}

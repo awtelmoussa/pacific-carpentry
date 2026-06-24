@@ -5,6 +5,8 @@ import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 import { Project } from '@/lib/data';
 
+import Image from 'next/image';
+
 interface WorkMasonryProps {
   locale: string;
   initialProjects: Project[];
@@ -73,10 +75,13 @@ export default function WorkMasonry({ locale, initialProjects }: WorkMasonryProp
               >
                 <div className={`${ratioClass} relative overflow-hidden bg-cover bg-center`}>
                   {p.images && p.images.length > 0 ? (
-                    <img
+                    <Image
                       src={p.images[0]}
                       alt={p[locale as 'en' | 'ar']}
-                      className="absolute inset-0 w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+                      fill
+                      sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                      className="object-cover transition-transform duration-700 ease-out group-hover:scale-[1.05]"
+                      priority={false}
                     />
                   ) : (
                     <>

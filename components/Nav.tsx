@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import { Link, usePathname, useRouter } from '@/i18n/routing';
 import { useCartStore } from '@/lib/cart';
+import Image from 'next/image';
 
 interface NavProps {
   locale: string;
@@ -102,10 +103,13 @@ export default function Nav({ locale }: NavProps) {
       >
         {/* Logo Monogram & Wordmark */}
         <Link href="/" className="flex items-center gap-2 sm:gap-3 shrink-0 group">
-          <img
+          <Image
             src="/logo.jpg"
             alt="Pacific Carpentry Logo"
-            className="w-[46px] h-[46px] object-contain transition-all duration-200 logo-img-theme"
+            width={46}
+            height={46}
+            className="object-contain transition-all duration-200 logo-img-theme"
+            priority={true}
           />
           <span className="hidden sm:flex flex-col leading-none">
             <span className="text-cream font-semibold text-[15px] tracking-[0.16em]">

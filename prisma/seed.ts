@@ -83,7 +83,7 @@ async function main() {
         catEn: proj.cat.en,
         catAr: proj.cat.ar,
         year: proj.year,
-        images: [],
+        images: proj.images || [],
       },
     });
     console.log(`Created project: ${project.titleEn}`);

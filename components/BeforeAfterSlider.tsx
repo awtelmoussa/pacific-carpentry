@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
+import Image from 'next/image';
 
 interface BeforeAfterSliderProps {
   beforeImage: string;
@@ -68,23 +69,29 @@ export default function BeforeAfterSlider({
       onTouchStart={() => setIsDragging(true)}
     >
       {/* After Image (Completed Photo) - Takes base background layer */}
-      <img
+      <Image
         src={afterImage}
         alt="After"
-        className="absolute inset-0 w-full h-full object-cover"
+        fill
+        sizes="(max-width: 768px) 100vw, 50vw"
+        className="object-cover"
         draggable={false}
+        priority={false}
       />
       <div className="absolute top-4 right-4 bg-wood px-3 py-1.5 rounded-[2px] text-[10px] font-bold tracking-[0.1em] uppercase text-bg select-none z-20">
         {afterLabel}
       </div>
 
       {/* Before Image (CAD) - Clipped via CSS clipPath inset */}
-      <img
+      <Image
         src={beforeImage}
         alt="Before"
         style={{ clipPath: `inset(0 ${100 - sliderPosition}% 0 0)` }}
-        className="absolute inset-0 w-full h-full object-cover z-10"
+        fill
+        sizes="(max-width: 768px) 100vw, 50vw"
+        className="object-cover z-10"
         draggable={false}
+        priority={false}
       />
       <div className="absolute top-4 left-4 bg-bg/80 backdrop-blur-sm px-3 py-1.5 rounded-[2px] text-[10px] font-bold tracking-[0.1em] uppercase text-cream/70 select-none z-20 border border-cream/5">
         {beforeLabel}

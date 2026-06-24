@@ -2,6 +2,7 @@ import { setRequestLocale, getTranslations } from 'next-intl/server';
 import { Link } from '@/i18n/routing';
 import SectionHeader from '@/components/SectionHeader';
 import { prisma, mapDbProjectToProject } from '@/lib/prisma';
+import Image from 'next/image';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -122,10 +123,13 @@ export default async function HomePage({ params }: PageProps) {
               className="relative block aspect-[4/5] overflow-hidden rounded-[3px] border border-cream/[0.08] group cursor-pointer"
             >
               {w.images && w.images.length > 0 ? (
-                <img
+                <Image
                   src={w.images[0]}
                   alt={w.name}
-                  className="absolute inset-0 w-full h-full object-cover transition-transform duration-600 ease-out group-hover:scale-[1.06]"
+                  fill
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                  className="object-cover transition-transform duration-600 ease-out group-hover:scale-[1.06]"
+                  priority={false}
                 />
               ) : (
                 <>

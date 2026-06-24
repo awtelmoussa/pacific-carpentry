@@ -207,12 +207,12 @@ export const PRODUCTS: Product[] = [
 ];
 
 export const PROJECTS: Project[] = [
-  { id: "villa-kitchen", en: "Al Barari Villa Kitchen", ar: "مطبخ فيلا البراري", cat: { en: "Residential", ar: "سكني" }, year: "2024" },
-  { id: "boutique-hotel", en: "Boutique Hotel Lobby", ar: "ردهة فندق بوتيك", cat: { en: "Hospitality", ar: "ضيافة" }, year: "2024" },
-  { id: "office-fitout", en: "DIFC Office Fit-out", ar: "تجهيز مكتب مركز دبي المالي", cat: { en: "Commercial", ar: "تجاري" }, year: "2023" },
-  { id: "library-walls", en: "Private Library Walls", ar: "جدران مكتبة خاصة", cat: { en: "Residential", ar: "سكني" }, year: "2023" },
-  { id: "restaurant-bar", en: "Restaurant Bar & Millwork", ar: "بار ونجارة مطعم", cat: { en: "Hospitality", ar: "ضيافة" }, year: "2023" },
-  { id: "staircase", en: "Floating Oak Staircase", ar: "درج بلوط طافٍ", cat: { en: "Residential", ar: "سكني" }, year: "2022" },
+  { id: "villa-kitchen", en: "Al Barari Villa Kitchen", ar: "مطبخ فيلا البراري", cat: { en: "Residential", ar: "سكني" }, year: "2024", images: ["/ourwork/IMG-20260624-WA0026.jpg"] },
+  { id: "boutique-hotel", en: "Boutique Hotel Lobby", ar: "ردهة فندق بوتيك", cat: { en: "Hospitality", ar: "ضيافة" }, year: "2024", images: ["/ourwork/IMG-20260624-WA0027.jpg"] },
+  { id: "office-fitout", en: "DIFC Office Fit-out", ar: "تجهيز مكتب مركز دبي المالي", cat: { en: "Commercial", ar: "تجاري" }, year: "2023", images: ["/ourwork/IMG-20260624-WA0028.jpg"] },
+  { id: "library-walls", en: "Private Library Walls", ar: "جدران مكتبة خاصة", cat: { en: "Residential", ar: "سكني" }, year: "2023", images: ["/ourwork/IMG-20260624-WA0029.jpg"] },
+  { id: "restaurant-bar", en: "Restaurant Bar & Millwork", ar: "بار ونجارة مطعم", cat: { en: "Hospitality", ar: "ضيافة" }, year: "2023", images: ["/ourwork/IMG-20260624-WA0030.jpg"] },
+  { id: "staircase", en: "Floating Oak Staircase", ar: "درج بلوط طافٍ", cat: { en: "Residential", ar: "سكني" }, year: "2022", images: ["/ourwork/IMG-20260624-WA0031.jpg"] },
 ];
 
 export function productBySlug(slug: string): Product | undefined {

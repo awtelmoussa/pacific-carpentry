@@ -5,6 +5,8 @@ import { fmt } from '@/lib/format';
 import { useTranslations } from 'next-intl';
 import { Link } from '@/i18n/routing';
 
+import Image from 'next/image';
+
 interface ProductCardProps {
   product: Product;
   locale: string;
@@ -34,7 +36,14 @@ export default function ProductCard({ product, locale }: ProductCardProps) {
         className="relative aspect-[4/5] overflow-hidden border border-cream/[0.08] bg-cover bg-center"
       >
         {product.images && product.images.length > 0 ? (
-          <img src={product.images[0]} alt={product.name[locale as 'en' | 'ar']} className="w-full h-full object-cover" />
+          <Image
+            src={product.images[0]}
+            alt={product.name[locale as 'en' | 'ar']}
+            fill
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            className="object-cover"
+            priority={false}
+          />
         ) : (
           <>
             {/* Grain overlay */}
