@@ -18,8 +18,8 @@ export default function BeforeAfterSlideshow({ locale }: BeforeAfterSlideshowPro
       titleAr: 'طاولة طعام أوكلاين',
       descEn: 'A 3-meter solid oak dining table. Proportioned, structural joinery aligned, and hand-rubbed with matte oil for Al Barari residential dining room.',
       descAr: 'طاولة طعام من البلوط الصلب بطول ٣ أمتار. نسب متناسقة وتعشيق إنشائي متين بتشطيب زيتي لغرفة طعام في فيلا البراري.',
-      beforeImage: 'https://images.unsplash.com/photo-1503387762-592dec58ef4e?auto=format&fit=crop&w=1200&q=80',
-      afterImage: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80',
+      beforeImage: '/slideshow/table_cad.png',
+      afterImage: '/slideshow/table_real.png',
     },
     {
       id: 'pivot-door',
@@ -27,8 +27,8 @@ export default function BeforeAfterSlideshow({ locale }: BeforeAfterSlideshowPro
       titleAr: 'باب هاربور المحوري',
       descEn: 'Concealed pivot hinge blueprints vs the final oversized Burmese Teak entrance door installed in Emirates Hills.',
       descAr: 'مخططات نظام المفصلات المحورية المخفية مقارنة بالباب الضخم النهائي المنفذ من خشب التيك البورمي في تلال الإمارات.',
-      beforeImage: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1200&q=80',
-      afterImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+      beforeImage: '/slideshow/door_cad.png',
+      afterImage: '/slideshow/door_real.png',
     },
     {
       id: 'sideboard',
@@ -36,8 +36,8 @@ export default function BeforeAfterSlideshow({ locale }: BeforeAfterSlideshowPro
       titleAr: 'خزانة مونتيري الجانبية',
       descEn: 'Dovetailed drawer joinery details and grain-matched front boards, engineered in CAD and built in solid American Walnut.',
       descAr: 'تفاصيل تعشيق الأدراج الغنفرية وتناسق عروق الخشب للواجهة، مصممة هندسياً ومنفذة بالكامل من خشب الجوز الأمريكي الصلب.',
-      beforeImage: 'https://images.unsplash.com/photo-1522204523234-e7251e77af70?auto=format&fit=crop&w=1200&q=80',
-      afterImage: 'https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=1200&q=80',
+      beforeImage: '/slideshow/cabinet_cad.png',
+      afterImage: '/slideshow/cabinet_real.png',
     },
     {
       id: 'villa-kitchen',
@@ -45,8 +45,8 @@ export default function BeforeAfterSlideshow({ locale }: BeforeAfterSlideshowPro
       titleAr: 'مطبخ فيلا البراري',
       descEn: 'Premium custom cabinetry and hardwood central island layout, draft-planned and crafted for Al Barari residence.',
       descAr: 'خزائن مخصصة فاخرة وتصميم جزيرة وسطية من الخشب الصلب، تم تخطيطها وصنعها لفيلا سكنية في البراري.',
-      beforeImage: 'https://images.unsplash.com/photo-1503387762-592dec58ef4e?auto=format&fit=crop&w=1200&q=80',
-      afterImage: 'https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=1200&q=80',
+      beforeImage: '/slideshow/kitchen_cad.png',
+      afterImage: '/slideshow/kitchen_real.png',
     },
     {
       id: 'staircase',
@@ -54,8 +54,8 @@ export default function BeforeAfterSlideshow({ locale }: BeforeAfterSlideshowPro
       titleAr: 'درج بلوط طافٍ',
       descEn: 'Engineered floating wood treads with concealed steel reinforcement, designed and custom-installed in Jumeirah.',
       descAr: 'درجات خشبية طائرة مصممة هندسياً مع تدعيم فولاذي مخفي، تم تصميمها وتركيبها خصيصاً في جميرا.',
-      beforeImage: 'https://images.unsplash.com/photo-1581094794329-c8112a89af12?auto=format&fit=crop&w=1200&q=80',
-      afterImage: 'https://images.unsplash.com/photo-1600585154340-be6161a56a0c?auto=format&fit=crop&w=1200&q=80',
+      beforeImage: '/slideshow/stairs_cad.png',
+      afterImage: '/slideshow/stairs_real.png',
     },
     {
       id: 'library-walls',
@@ -63,8 +63,8 @@ export default function BeforeAfterSlideshow({ locale }: BeforeAfterSlideshowPro
       titleAr: 'جدران مكتبة خاصة',
       descEn: 'Floor-to-ceiling solid Walnut bookshelf unit featuring integrated ambient LED lighting and hidden joinery.',
       descAr: 'وحدة مكتبة من خشب الجوز الصلب من الأرض إلى السقف تتميز بإضاءة LED مدمجة ووصلات خشبية مخفية.',
-      beforeImage: 'https://images.unsplash.com/photo-1522204523234-e7251e77af70?auto=format&fit=crop&w=1200&q=80',
-      afterImage: 'https://images.unsplash.com/photo-1600121848594-d8644e57abab?auto=format&fit=crop&w=1200&q=80',
+      beforeImage: '/slideshow/library_cad.png',
+      afterImage: '/slideshow/library_real.png',
     },
   ];
 
