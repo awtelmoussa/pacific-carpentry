@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { RequestStatus, OrderStatus } from '@prisma/client';
 import {
@@ -39,6 +39,11 @@ export default function AdminRequestsClient({ initialRequests }: AdminRequestsCl
   );
   const [isUpdating, setIsUpdating] = useState(false);
   const [activeImage, setActiveImage] = useState<string | null>(null);
+  const [origin, setOrigin] = useState('');
+
+  useEffect(() => {
+    setOrigin(window.location.origin);
+  }, []);
 
   const selectedRequest = initialRequests.find((r) => r.id === selectedId);
 
@@ -480,7 +485,7 @@ export default function AdminRequestsClient({ initialRequests }: AdminRequestsCl
                   href={`mailto:${selectedRequest.email}?subject=Regarding your Bespoke Commission Request ${
                     selectedRequest.referenceNo
                   }&body=${encodeURIComponent(
-                    `Hi ${selectedRequest.fullName},\n\nWe have priced your bespoke commission request (${selectedRequest.referenceNo}).\n\nQuoted Price: ${selectedRequest.quotePrice || priceInput || '0'} AED\nPayment Link: ${selectedRequest.ziinaPaymentUrl || ziinaInput || 'Awaiting link'}\n\nBest regards,\nPacific Carpentry`
+                    `Hi ${selectedRequest.fullName},\n\nWe have priced your bespoke commission request (${selectedRequest.referenceNo}).\n\nQuoted Price: ${selectedRequest.quotePrice || priceInput || '0'} AED\n\nYou can review your design specifications and pay securely with Card or Apple Pay using this link:\n${origin}/requests/${selectedRequest.referenceNo}\n\nBest regards,\nPacific Carpentry`
                   )}`}
                   className="bg-[#9A6E3A] hover:bg-[#85602F] text-white text-xs font-bold tracking-[0.06em] uppercase px-5 py-3.5 rounded-lg transition-colors cursor-pointer"
                 >
@@ -489,7 +494,7 @@ export default function AdminRequestsClient({ initialRequests }: AdminRequestsCl
                 
                 <a
                   href={`https://wa.me/${selectedRequest.phone.replace(/[\s+-]+/g, '')}?text=${encodeURIComponent(
-                    `Hello ${selectedRequest.fullName}, this is Pacific Carpentry regarding your request ${selectedRequest.referenceNo}. The quoted price is ${selectedRequest.quotePrice || priceInput || '0'} AED. You can complete the payment here: ${selectedRequest.ziinaPaymentUrl || ziinaInput || ''}`
+                    `Hello ${selectedRequest.fullName}, this is Pacific Carpentry regarding your request ${selectedRequest.referenceNo}. The quoted price is ${selectedRequest.quotePrice || priceInput || '0'} AED. You can review your design and pay with Card / Apple Pay here: ${origin}/requests/${selectedRequest.referenceNo}`
                   )}`}
                   target="_blank"
                   rel="noopener noreferrer"

@@ -21,7 +21,7 @@ export default async function RequestStatusPage({ params }: PageProps) {
   const t = await getTranslations('bespokeStatus');
 
   const request = await prisma.bespokeRequest.findUnique({
-    where: { referenceNo },
+    where: { referenceNo: referenceNo.toUpperCase() },
   });
 
   if (!request) {
