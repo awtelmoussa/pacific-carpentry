@@ -222,6 +222,19 @@ function ConfiguratorContent({ locale }: ConfiguratorProps) {
     }
   };
 
+  const handleWhatsAppForward = () => {
+    const managerPhone = process.env.NEXT_PUBLIC_MANAGER_WHATSAPP || '+971501234567';
+    const msg = `Hello Pacific Carpentry, I have submitted a bespoke request:
+Reference No: ${referenceNo}
+Customer Name: ${fullName}
+Category: ${getSelectedCategoryLabel()}
+Timber: ${getSelectedTimberLabel()}
+Dimensions: ${getCompiledDimensions()}
+Notes: ${notes || 'None'}`;
+    const url = `https://wa.me/${managerPhone.replace(/[\s+-]+/g, '')}?text=${encodeURIComponent(msg)}`;
+    window.open(url, '_blank');
+  };
+
   // Styling helper tokens
   const labelClass = "text-xs font-semibold tracking-[0.08em] uppercase text-muted text-start mb-2.5 block";
   const inputClass = "w-full bg-cream/[0.04] border border-cream/16 text-cream text-[15px] p-4 rounded-[3px] outline-none focus:border-wood/70 transition-colors disabled:opacity-50";
@@ -251,6 +264,24 @@ function ConfiguratorContent({ locale }: ConfiguratorProps) {
           <span className="font-serif text-xl font-bold tracking-[0.08em] text-wood">
             {referenceNo}
           </span>
+        </div>
+
+        <div className="flex flex-col sm:flex-row gap-3 w-full max-w-[440px] mt-4">
+          <button
+            onClick={handleWhatsAppForward}
+            className="flex-1 bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold uppercase py-3.5 px-4 rounded-[2px] transition-colors cursor-pointer flex items-center justify-center gap-2 border-none"
+          >
+            <svg className="w-4 h-4 shrink-0" fill="currentColor" viewBox="0 0 24 24">
+              <path d="M.057 24l1.687-6.163c-1.041-1.804-1.588-3.849-1.587-5.946C.06 5.348 5.397.01 12.008.01c3.202.001 6.212 1.246 8.477 3.514 2.266 2.268 3.507 5.28 3.505 8.484-.004 6.657-5.34 11.997-11.953 11.997-2.005-.001-3.973-.503-5.714-1.46L0 24zm10.158-4.22c1.723.239 3.584-.03 5.109-.858l.366-.216 3.792.993-.999-3.693.235-.374c1.077-1.717 1.644-3.729 1.643-5.802.003-5.698-4.595-10.334-10.252-10.334-5.656 0-10.252 4.636-10.252 10.334-.002 2.155.657 4.254 1.897 6.035l.261.378-1.258 4.594 4.708-1.23.385.228c1.611.955 3.486 1.348 5.216 1.134z" />
+            </svg>
+            {locale === 'ar' ? 'إرسال عبر واتساب' : 'Share via WhatsApp'}
+          </button>
+          <a
+            href={`/${locale}/requests/${referenceNo}`}
+            className="flex-1 bg-wood hover:bg-woodSoft text-bg text-xs font-bold uppercase py-3.5 px-4 rounded-[2px] transition-colors cursor-pointer flex items-center justify-center text-center font-semibold"
+          >
+            {locale === 'ar' ? 'تتبع حالة الطلب والدفع' : 'Track & Pay Online'}
+          </a>
         </div>
       </div>
     );

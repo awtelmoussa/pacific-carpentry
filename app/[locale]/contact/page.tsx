@@ -1,6 +1,7 @@
 import { setRequestLocale, getTranslations } from 'next-intl/server';
 import BespokeConfigurator from '@/components/BespokeConfigurator';
 import FaqAccordion from '@/components/FaqAccordion';
+import { Link } from '@/i18n/routing';
 
 interface PageProps {
   params: Promise<{ locale: string }>;
@@ -63,7 +64,10 @@ export default async function ContactPage({ params }: PageProps) {
           {tContact('title')}
         </h1>
         <p className="margin-0 text-faint text-base max-w-[640px] leading-relaxed font-light">
-          {tContact('sub')}
+          {tContact('sub')}{' '}
+          <Link href="/requests" className="text-wood hover:underline font-normal">
+            {locale === 'ar' ? 'تتبع طلبك المخصص هنا.' : 'Track your custom commission here.'}
+          </Link>
         </p>
       </header>
 

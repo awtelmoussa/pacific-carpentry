@@ -249,5 +249,26 @@
     "submitQuote": "Send Visualisation to Workshop",
     "quoteSent": "Your visual design has been successfully submitted! Our workshop team will contact you within 24 hours.",
     "dragHelp": "Drag items to position · Tap an item to adjust dimensions and lighting"
+  },
+  "bespokeStatus": {
+    "title": "Commission Status",
+    "sub": "Track the progress of your heirloom build in our Dubai workshop.",
+    "specifications": "Design Specifications",
+    "notes": "Design Notes & Instructions",
+    "status": "Order Status",
+    "payment": "Payment Details",
+    "price": "Quoted Price",
+    "paymentStatus": "Payment Status",
+    "payButton": "Pay with Ziina (Apple Pay / Card)",
+    "sendWhatsApp": "Share Specs via WhatsApp",
+    "trackStatus": "Track Status & Pay Online",
+    "paidSuccess": "Payment Received successfully! We have put your order into production.",
+    "pendingPayment": "Awaiting payment to begin production.",
+    "underReview": "Our head joiner is checking timber availability and layout measurements.",
+    "details": "Details",
+    "category": "Piece Category",
+    "timber": "Timber Selection",
+    "dimensions": "Sizing & Dimensions",
+    "reference": "Reference Number"
   }
 }

@@ -146,17 +146,20 @@ enum RequestStatus {
 }
 
 model BespokeRequest {
-  id          String        @id @default(cuid())
-  referenceNo String        @unique
-  status      RequestStatus @default(PENDING)
-  fullName    String
-  email       String
-  phone       String
-  category    String
-  timber      String
-  dimensions  String
-  notes       String?
-  images      String[]
-  createdAt   DateTime      @default(now())
+  id              String        @id @default(cuid())
+  referenceNo     String        @unique
+  status          RequestStatus @default(PENDING)
+  fullName        String
+  email           String
+  phone           String
+  category        String
+  timber          String
+  dimensions      String
+  notes           String?
+  images          String[]
+  quotePrice      Int?
+  ziinaPaymentUrl String?
+  paymentStatus   OrderStatus   @default(PENDING)
+  createdAt       DateTime      @default(now())
 }
 

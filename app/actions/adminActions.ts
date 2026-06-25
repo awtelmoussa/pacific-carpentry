@@ -521,3 +521,52 @@ export async function deleteRequestAction(id: string) {
     return { success: false, error: 'Failed to delete request' };
   }
 }
+
+export async function quoteBespokeRequestAction(
+  id: string,
+  quotePrice: number,
+  ziinaPaymentUrl: string
+) {
+  try {
+    await prisma.bespokeRequest.update({
+      where: { id },
+      data: {
+        quotePrice,
+        ziinaPaymentUrl,
+        status: 'QUOTED' as PrismaRequestStatus,
+      },
+    });
+
+    revalidatePath('/admin');
+    revalidatePath('/admin/requests');
+    return { success: true };
+  } catch (error) {
+    console.error('[quoteBespokeRequestAction] Error:', error);
+    return { success: false, error: 'Failed to quote request' };
+  }
+}
+
+export async function updateBespokeRequestPaymentStatusAction(
+  id: string,
+  paymentStatus: PrismaOrderStatus
+) {
+  try {
+    const statusUpdate = paymentStatus === 'PAID' ? { status: 'IN_PRODUCTION' as PrismaRequestStatus } : {};
+
+    await prisma.bespokeRequest.update({
+      where: { id },
+      data: {
+        paymentStatus,
+        ...statusUpdate,
+      },
+    });
+
+    revalidatePath('/admin');
+    revalidatePath('/admin/requests');
+    return { success: true };
+  } catch (error) {
+    console.error('[updateBespokeRequestPaymentStatusAction] Error:', error);
+    return { success: false, error: 'Failed to update request payment status' };
+  }
+}
+

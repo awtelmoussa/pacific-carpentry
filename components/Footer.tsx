@@ -46,6 +46,12 @@ export default function Footer({ locale }: FooterProps) {
               {tNav('contact')}
             </Link>
             <Link
+              href="/requests"
+              className="text-sm text-faint hover:text-cream transition-colors duration-200"
+            >
+              {locale === 'ar' ? 'تتبع الطلبات والدفع' : 'Track Commission'}
+            </Link>
+            <Link
               href="/materials"
               className="text-sm text-faint hover:text-cream transition-colors duration-200"
             >

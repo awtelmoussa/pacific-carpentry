@@ -2,8 +2,13 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { RequestStatus } from '@prisma/client';
-import { updateRequestStatusAction, deleteRequestAction } from '@/app/actions/adminActions';
+import { RequestStatus, OrderStatus } from '@prisma/client';
+import {
+  updateRequestStatusAction,
+  deleteRequestAction,
+  quoteBespokeRequestAction,
+  updateBespokeRequestPaymentStatusAction
+} from '@/app/actions/adminActions';
 
 interface DBRequest {
   id: string;
@@ -17,6 +22,9 @@ interface DBRequest {
   dimensions: string;
   notes: string | null;
   images: string[];
+  quotePrice: number | null;
+  ziinaPaymentUrl: string | null;
+  paymentStatus: OrderStatus;
   createdAt: Date;
 }
 
@@ -34,9 +42,21 @@ export default function AdminRequestsClient({ initialRequests }: AdminRequestsCl
 
   const selectedRequest = initialRequests.find((r) => r.id === selectedId);
 
+  const [priceInput, setPriceInput] = useState<string>(
+    selectedRequest?.quotePrice ? selectedRequest.quotePrice.toString() : ''
+  );
+  const [ziinaInput, setZiinaInput] = useState<string>(
+    selectedRequest?.ziinaPaymentUrl || ''
+  );
+
   const handleSelectRequest = (id: string) => {
     setSelectedId(id);
     setActiveImage(null);
+    const req = initialRequests.find((r) => r.id === id);
+    if (req) {
+      setPriceInput(req.quotePrice ? req.quotePrice.toString() : '');
+      setZiinaInput(req.ziinaPaymentUrl || '');
+    }
   };
 
   const handleStatusChange = async (id: string, status: RequestStatus) => {
@@ -70,6 +90,60 @@ export default function AdminRequestsClient({ initialRequests }: AdminRequestsCl
         router.refresh();
       } else {
         alert(res.error || 'Failed to delete request.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('An unexpected error occurred.');
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handlePriceChange = (val: string) => {
+    setPriceInput(val);
+    const ziinaUser = process.env.NEXT_PUBLIC_ZIINA_USERNAME || 'pacificcarpentry';
+    if (val && !isNaN(Number(val))) {
+      setZiinaInput(`https://pay.ziina.com/${ziinaUser}/${val}`);
+    } else {
+      setZiinaInput('');
+    }
+  };
+
+  const handleSaveQuote = async () => {
+    if (!selectedId) return;
+    const priceNum = Number(priceInput);
+    if (isNaN(priceNum) || priceNum <= 0) {
+      alert('Please enter a valid quote price.');
+      return;
+    }
+    if (!ziinaInput) {
+      alert('Please enter a valid Ziina payment URL.');
+      return;
+    }
+    setIsUpdating(true);
+    try {
+      const res = await quoteBespokeRequestAction(selectedId, priceNum, ziinaInput);
+      if (res.success) {
+        router.refresh();
+      } else {
+        alert(res.error || 'Failed to save quote details.');
+      }
+    } catch (err) {
+      console.error(err);
+      alert('An unexpected error occurred.');
+    } finally {
+      setIsUpdating(false);
+    }
+  };
+
+  const handlePaymentStatusChange = async (id: string, paymentStatus: OrderStatus) => {
+    setIsUpdating(true);
+    try {
+      const res = await updateBespokeRequestPaymentStatusAction(id, paymentStatus);
+      if (res.success) {
+        router.refresh();
+      } else {
+        alert(res.error || 'Failed to update payment status.');
       }
     } catch (err) {
       console.error(err);
@@ -335,17 +409,95 @@ export default function AdminRequestsClient({ initialRequests }: AdminRequestsCl
                     </div>
                   </div>
                 )}
+
+                {/* Quoting & Payment Section */}
+                <div className="bg-[#FBF9F5] border border-[#EAE3D5] p-6 rounded-lg space-y-5 mt-6">
+                  <div className="border-b border-[#EAE3D5] pb-2 text-start">
+                    <h3 className="text-xs font-bold uppercase tracking-[0.08em] text-[#8A7E6B] flex items-center gap-1.5">
+                      <span>Quoting & Payments (Ziina)</span>
+                      {selectedRequest.paymentStatus === 'PAID' && (
+                        <span className="bg-emerald-100 text-emerald-800 text-[10px] font-bold px-2 py-0.5 rounded border border-emerald-200">
+                          PAID
+                        </span>
+                      )}
+                    </h3>
+                  </div>
+                  
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="space-y-1.5 text-start">
+                      <label className="text-[10px] font-semibold uppercase tracking-wider text-muted">Quote Price (AED)</label>
+                      <input
+                        type="number"
+                        placeholder="e.g. 5400"
+                        value={priceInput}
+                        onChange={(e) => handlePriceChange(e.target.value)}
+                        className="w-full bg-white border border-[#EAE3D5] text-[#241C13] text-sm p-3 rounded outline-none focus:border-[#C2965B] transition-colors"
+                      />
+                    </div>
+                    <div className="space-y-1.5 text-start">
+                      <label className="text-[10px] font-semibold uppercase tracking-wider text-muted">Ziina Pay Link</label>
+                      <input
+                        type="text"
+                        placeholder="https://pay.ziina.com/username/amount"
+                        value={ziinaInput}
+                        onChange={(e) => setZiinaInput(e.target.value)}
+                        className="w-full bg-white border border-[#EAE3D5] text-[#241C13] text-sm p-3 rounded outline-none focus:border-[#C2965B] transition-colors"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center justify-between gap-4 pt-2 border-t border-[#EAE3D5]/50">
+                    <button
+                      onClick={handleSaveQuote}
+                      disabled={isUpdating}
+                      className="bg-[#C2965B] hover:bg-[#A87E47] text-white text-xs font-bold uppercase py-3 px-5 rounded transition-colors cursor-pointer border-none"
+                    >
+                      Save Quote Details
+                    </button>
+                    
+                    <div className="flex items-center gap-2 border border-[#EAE3D5] bg-white px-3 py-1.5 rounded">
+                      <span className="text-[10px] font-semibold uppercase tracking-wider text-muted">Payment:</span>
+                      <select
+                        disabled={isUpdating}
+                        value={selectedRequest.paymentStatus}
+                        onChange={(e) => handlePaymentStatusChange(selectedRequest.id, e.target.value as any)}
+                        className="bg-transparent border-none text-[#241C13] text-xs font-semibold outline-none cursor-pointer focus:border-[#C2965B] transition-colors"
+                      >
+                        <option value="PENDING">Pending</option>
+                        <option value="PAID">Paid</option>
+                        <option value="CANCELLED">Cancelled</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
 
             {/* Bottom Actions footer */}
-            <div className="p-6 border-t border-[#EAE3D5] bg-white flex justify-between items-center">
-              <a
-                href={`mailto:${selectedRequest.email}?subject=Regarding your Bespoke Commission Request ${selectedRequest.referenceNo}`}
-                className="bg-[#9A6E3A] hover:bg-[#85602F] text-white text-xs font-bold tracking-[0.06em] uppercase px-5 py-3.5 rounded-lg transition-colors cursor-pointer"
-              >
-                Send Quote Email
-              </a>
+            <div className="p-6 border-t border-[#EAE3D5] bg-white flex flex-wrap justify-between items-center gap-4">
+              <div className="flex flex-wrap gap-2.5">
+                <a
+                  href={`mailto:${selectedRequest.email}?subject=Regarding your Bespoke Commission Request ${
+                    selectedRequest.referenceNo
+                  }&body=${encodeURIComponent(
+                    `Hi ${selectedRequest.fullName},\n\nWe have priced your bespoke commission request (${selectedRequest.referenceNo}).\n\nQuoted Price: ${selectedRequest.quotePrice || priceInput || '0'} AED\nPayment Link: ${selectedRequest.ziinaPaymentUrl || ziinaInput || 'Awaiting link'}\n\nBest regards,\nPacific Carpentry`
+                  )}`}
+                  className="bg-[#9A6E3A] hover:bg-[#85602F] text-white text-xs font-bold tracking-[0.06em] uppercase px-5 py-3.5 rounded-lg transition-colors cursor-pointer"
+                >
+                  Send Quote Email
+                </a>
+                
+                <a
+                  href={`https://wa.me/${selectedRequest.phone.replace(/[\s+-]+/g, '')}?text=${encodeURIComponent(
+                    `Hello ${selectedRequest.fullName}, this is Pacific Carpentry regarding your request ${selectedRequest.referenceNo}. The quoted price is ${selectedRequest.quotePrice || priceInput || '0'} AED. You can complete the payment here: ${selectedRequest.ziinaPaymentUrl || ziinaInput || ''}`
+                  )}`}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="bg-[#25D366] hover:bg-[#20ba5a] text-white text-xs font-bold tracking-[0.06em] uppercase px-5 py-3.5 rounded-lg transition-colors cursor-pointer flex items-center gap-1.5"
+                >
+                  Share Quote via WhatsApp
+                </a>
+              </div>
 
               <button
                 disabled={isUpdating}

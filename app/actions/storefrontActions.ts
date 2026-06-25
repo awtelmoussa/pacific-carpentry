@@ -2,6 +2,7 @@
 
 import { prisma } from '@/lib/prisma';
 import { revalidatePath } from 'next/cache';
+import { sendMail } from '@/lib/mail';
 
 export async function createOrderAction(orderData: {
   fullName: string;
@@ -114,6 +115,34 @@ export async function submitBespokeRequestAction(data: {
         notes: data.notes || null,
         images: data.images || [],
       },
+    });
+
+    // Forward request details to the manager
+    const managerEmail = process.env.MANAGER_EMAIL || 'manager@pacificcarpentry.ae';
+    const emailSubject = `[Bespoke Commission Request] Ref: ${referenceNo} - ${data.fullName}`;
+    const emailText = `A new bespoke commission request has been submitted on the website.
+
+Reference No: ${referenceNo}
+Customer Name: ${data.fullName}
+Customer Email: ${data.email}
+Customer Phone: ${data.phone}
+
+Piece Category: ${data.category}
+Timber Selection: ${data.timber}
+Approx. Dimensions: ${data.dimensions}
+
+Design Notes:
+${data.notes || 'None provided'}
+
+Images attached: ${data.images && data.images.length > 0 ? data.images.join(', ') : 'None'}
+
+Please log in to the admin panel to price this request and generate the Ziina payment link.
+Admin Dashboard: ${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/admin/requests`;
+
+    await sendMail({
+      to: managerEmail,
+      subject: emailSubject,
+      text: emailText,
     });
 
     revalidatePath('/admin');
