@@ -108,7 +108,8 @@ export default function AdminRequestsClient({ initialRequests }: AdminRequestsCl
     setPriceInput(val);
     const ziinaUser = process.env.NEXT_PUBLIC_ZIINA_USERNAME || 'pacificcarpentry';
     if (val && !isNaN(Number(val))) {
-      setZiinaInput(`https://pay.ziina.com/${ziinaUser}/${val}`);
+      const note = selectedRequest ? `Payment for ${selectedRequest.referenceNo}` : 'Pacific Carpentry';
+      setZiinaInput(`https://pay.ziina.com/${ziinaUser}?amount=${val}&note=${encodeURIComponent(note)}`);
     } else {
       setZiinaInput('');
     }
@@ -443,7 +444,7 @@ export default function AdminRequestsClient({ initialRequests }: AdminRequestsCl
                       <label className="text-[10px] font-semibold uppercase tracking-wider text-muted">Ziina Pay Link</label>
                       <input
                         type="text"
-                        placeholder="https://pay.ziina.com/username/amount"
+                        placeholder="https://pay.ziina.com/username?amount=value"
                         value={ziinaInput}
                         onChange={(e) => setZiinaInput(e.target.value)}
                         className="w-full bg-white border border-[#EAE3D5] text-[#241C13] text-sm p-3 rounded outline-none focus:border-[#C2965B] transition-colors"

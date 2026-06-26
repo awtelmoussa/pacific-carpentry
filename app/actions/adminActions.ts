@@ -528,7 +528,7 @@ export async function quoteBespokeRequestAction(
   ziinaPaymentUrl: string
 ) {
   try {
-    await prisma.bespokeRequest.update({
+    const updated = await prisma.bespokeRequest.update({
       where: { id },
       data: {
         quotePrice,
@@ -539,6 +539,8 @@ export async function quoteBespokeRequestAction(
 
     revalidatePath('/admin');
     revalidatePath('/admin/requests');
+    revalidatePath(`/en/requests/${updated.referenceNo}`);
+    revalidatePath(`/ar/requests/${updated.referenceNo}`);
     return { success: true };
   } catch (error) {
     console.error('[quoteBespokeRequestAction] Error:', error);
@@ -553,7 +555,7 @@ export async function updateBespokeRequestPaymentStatusAction(
   try {
     const statusUpdate = paymentStatus === 'PAID' ? { status: 'IN_PRODUCTION' as PrismaRequestStatus } : {};
 
-    await prisma.bespokeRequest.update({
+    const updated = await prisma.bespokeRequest.update({
       where: { id },
       data: {
         paymentStatus,
@@ -563,6 +565,8 @@ export async function updateBespokeRequestPaymentStatusAction(
 
     revalidatePath('/admin');
     revalidatePath('/admin/requests');
+    revalidatePath(`/en/requests/${updated.referenceNo}`);
+    revalidatePath(`/ar/requests/${updated.referenceNo}`);
     return { success: true };
   } catch (error) {
     console.error('[updateBespokeRequestPaymentStatusAction] Error:', error);

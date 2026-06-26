@@ -174,7 +174,7 @@ export default async function RequestStatusPage({ params }: PageProps) {
         )}
 
         {/* Pricing / Payment Action Block */}
-        {request.status === 'QUOTED' && (
+        {request.quotePrice !== null && request.status !== 'CANCELLED' && (
           <div className="border border-wood/30 bg-wood/[0.04] p-6 md:p-8 rounded-[4px] space-y-5 text-start">
             <h3 className="text-xs font-bold uppercase tracking-[0.08em] text-wood border-b border-wood/20 pb-2.5">
               {t('payment')}
