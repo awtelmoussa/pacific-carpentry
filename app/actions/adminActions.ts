@@ -3,6 +3,7 @@
 import { prisma } from '@/lib/prisma';
 import { cookies } from 'next/headers';
 import { revalidatePath } from 'next/cache';
+import { sendMail } from '@/lib/mail';
 import { Category as PrismaCategory, OrderStatus as PrismaOrderStatus, RequestStatus as PrismaRequestStatus } from '@prisma/client';
 import bcrypt from 'bcryptjs';
 
@@ -537,6 +538,37 @@ export async function quoteBespokeRequestAction(
       },
     });
 
+    // Send automated quoting email to the customer
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const customerSubject = `Your custom commission quote is ready! Ref: ${updated.referenceNo}`;
+    const customerText = `Dear ${updated.fullName},
+
+Great news! We have reviewed your bespoke carpentry request (${updated.referenceNo}) and prepared a custom price quote for your piece.
+
+Quoted Details:
+- Quoted Price: ${quotePrice} AED
+- Timber Material: ${updated.timber}
+- Dimensions: ${updated.dimensions}
+
+To proceed with this commission, you can complete the payment securely via Card or Apple Pay using this Ziina link:
+${ziinaPaymentUrl}
+
+You can also review the full design details and track the workshop crafting progress on your private tracking portal page here:
+${appUrl}/requests/${updated.referenceNo}
+
+Once your payment is completed, we will immediately initiate the joinery process in our Dubai workshop!
+
+Best regards,
+The Pacific Carpentry Team
+Dubai, UAE
+www.pacificcarpentry.ae`;
+
+    await sendMail({
+      to: updated.email,
+      subject: customerSubject,
+      text: customerText,
+    });
+
     revalidatePath('/admin');
     revalidatePath('/admin/requests');
     revalidatePath(`/en/requests/${updated.referenceNo}`);
@@ -573,4 +605,129 @@ export async function updateBespokeRequestPaymentStatusAction(
     return { success: false, error: 'Failed to update request payment status' };
   }
 }
+
+export async function uploadGlbAction(formData: FormData) {
+  try {
+    const file = formData.get('file') as File;
+    if (!file) {
+      return { success: false, error: 'No file provided' };
+    }
+
+    if (!file.name.toLowerCase().endsWith('.glb')) {
+      return { success: false, error: 'Only .glb files are allowed.' };
+    }
+
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+
+    if (!supabaseUrl || !serviceRoleKey) {
+      console.error('[uploadGlbAction] Missing Supabase config env vars');
+      return { success: false, error: 'Storage is not configured on the server.' };
+    }
+
+    const arrayBuffer = await file.arrayBuffer();
+    const buffer = Buffer.from(arrayBuffer);
+    
+    const cleanName = file.name.replace(/[^a-zA-Z0-9._-]/g, '');
+    const fileName = `${Date.now()}-${cleanName}`;
+
+    const response = await fetch(
+      `${supabaseUrl}/storage/v1/object/products/${fileName}`,
+      {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${serviceRoleKey}`,
+          'Content-Type': 'model/gltf-binary',
+        },
+        body: buffer,
+      }
+    );
+
+    if (!response.ok) {
+      const errorText = await response.text();
+      console.error('[uploadGlbAction] Supabase upload failed:', errorText);
+      return { success: false, error: 'Failed to upload GLB to storage.' };
+    }
+
+    const publicUrl = `${supabaseUrl}/storage/v1/object/public/products/${fileName}`;
+    return { success: true, url: publicUrl };
+  } catch (error: any) {
+    console.error('[uploadGlbAction] Error:', error);
+    return { success: false, error: `Internal server error: ${error?.message || error}` };
+  }
+}
+
+export async function addShowroomItemAction(data: {
+  nameEn: string;
+  nameAr: string;
+  descEn: string;
+  descAr: string;
+  modelUrl: string;
+}) {
+  try {
+    await prisma.showroomItem.create({
+      data: {
+        nameEn: data.nameEn,
+        nameAr: data.nameAr,
+        descEn: data.descEn,
+        descAr: data.descAr,
+        modelUrl: data.modelUrl,
+      },
+    });
+
+    revalidatePath('/admin/showroom');
+    revalidatePath('/[locale]/visualize', 'page');
+    return { success: true };
+  } catch (error) {
+    console.error('[addShowroomItemAction] Error:', error);
+    return { success: false, error: 'Failed to add showroom item' };
+  }
+}
+
+export async function updateShowroomItemAction(
+  id: string,
+  data: {
+    nameEn: string;
+    nameAr: string;
+    descEn: string;
+    descAr: string;
+    modelUrl: string;
+  }
+) {
+  try {
+    await prisma.showroomItem.update({
+      where: { id },
+      data: {
+        nameEn: data.nameEn,
+        nameAr: data.nameAr,
+        descEn: data.descEn,
+        descAr: data.descAr,
+        modelUrl: data.modelUrl,
+      },
+    });
+
+    revalidatePath('/admin/showroom');
+    revalidatePath('/[locale]/visualize', 'page');
+    return { success: true };
+  } catch (error) {
+    console.error('[updateShowroomItemAction] Error:', error);
+    return { success: false, error: 'Failed to update showroom item' };
+  }
+}
+
+export async function deleteShowroomItemAction(id: string) {
+  try {
+    await prisma.showroomItem.delete({
+      where: { id },
+    });
+
+    revalidatePath('/admin/showroom');
+    revalidatePath('/[locale]/visualize', 'page');
+    return { success: true };
+  } catch (error) {
+    console.error('[deleteShowroomItemAction] Error:', error);
+    return { success: false, error: 'Failed to delete showroom item' };
+  }
+}
+
 

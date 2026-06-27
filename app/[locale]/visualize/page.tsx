@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import Script from 'next/script';
 import { useLocale, useTranslations } from 'next-intl';
-import { submitBespokeRequestAction } from '@/app/actions/storefrontActions';
+import { submitBespokeRequestAction, getShowroomItemsAction } from '@/app/actions/storefrontActions';
 import { uploadImageAction } from '@/app/actions/adminActions';
 import dynamic from 'next/dynamic';
 
@@ -117,7 +117,7 @@ export default function VisualizePage() {
     }
   }, []);
 
-  const items3D = [
+  const DEFAULT_ITEMS_3D = [
     {
       id: 'dining-table',
       nameEn: 'Oakline Dining Table',
@@ -159,6 +159,24 @@ export default function VisualizePage() {
       modelUrl: '/models/chair.glb',
     },
   ];
+
+  const [items3D, setItems3D] = useState<any[]>(DEFAULT_ITEMS_3D);
+
+  useEffect(() => {
+    async function fetchShowroomItems() {
+      const res = await getShowroomItemsAction();
+      if (res.success && res.items && res.items.length > 0) {
+        setItems3D(res.items);
+        setActiveItem3D((current) => {
+          if (!res.items.some((item: any) => item.id === current)) {
+            return res.items[0].id;
+          }
+          return current;
+        });
+      }
+    }
+    fetchShowroomItems();
+  }, []);
 
   const timbers3D = [
     { id: 'oak', nameEn: 'Natural Oak', nameAr: 'بلوط طبيعي', hex: '#C99A63' },

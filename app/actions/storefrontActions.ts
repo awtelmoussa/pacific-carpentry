@@ -145,6 +145,36 @@ Admin Dashboard: ${process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000'}/a
       text: emailText,
     });
 
+    // Send automated email receipt to the customer
+    const appUrl = process.env.NEXT_PUBLIC_APP_URL || 'http://localhost:3000';
+    const customerSubject = `We have received your custom carpentry request! Ref: ${referenceNo}`;
+    const customerText = `Dear ${data.fullName},
+
+Thank you for requesting a bespoke commission with Pacific Carpentry. We are excited about the opportunity to craft your furniture.
+
+Here are the specifications we received:
+- Reference Number: ${referenceNo}
+- Piece Category: ${data.category}
+- Timber Choice: ${data.timber}
+- Dimensions: ${data.dimensions}
+${data.notes ? `- Special Notes: ${data.notes}` : ''}
+
+Our workshop manager will review your request shortly to prepare a detailed quote and custom payment link.
+
+You can track the status of your commission and complete the payment once quoted by visiting your private status page here:
+${appUrl}/requests/${referenceNo}
+
+Best regards,
+The Pacific Carpentry Team
+Dubai, UAE
+www.pacificcarpentry.ae`;
+
+    await sendMail({
+      to: data.email,
+      subject: customerSubject,
+      text: customerText,
+    });
+
     revalidatePath('/admin');
     revalidatePath('/admin/requests');
     return { success: true, referenceNo };
@@ -215,5 +245,17 @@ export async function getSimilarReferenceImageAction(category: string) {
   } catch (error) {
     console.error('[getSimilarReferenceImageAction] Error finding similar image:', error);
     return { success: false, error: 'Failed to find similar image reference.' };
+  }
+}
+
+export async function getShowroomItemsAction() {
+  try {
+    const items = await prisma.showroomItem.findMany({
+      orderBy: { createdAt: 'asc' },
+    });
+    return { success: true, items };
+  } catch (error) {
+    console.error('[getShowroomItemsAction] Error fetching showroom items:', error);
+    return { success: false, error: 'Failed to fetch showroom items.' };
   }
 }

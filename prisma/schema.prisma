@@ -163,3 +163,13 @@ model BespokeRequest {
   createdAt       DateTime      @default(now())
 }
 
+model ShowroomItem {
+  id        String   @id @default(cuid())
+  nameEn    String
+  nameAr    String
+  descEn    String
+  descAr    String
+  modelUrl  String
+  createdAt DateTime @default(now())
+}
+
