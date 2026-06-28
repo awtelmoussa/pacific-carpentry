@@ -133,7 +133,7 @@ export default function Configurator3D({
   return (
     <div className="w-full h-full relative min-h-[400px]">
       <Canvas
-        shadows
+        shadows="percentage"
         camera={{ position: [3, 2.5, 4], fov: 45 }}
         gl={{ antialias: true, preserveDrawingBuffer: true }} // preserveDrawingBuffer enables taking screenshots of the canvas
         className="w-full h-full bg-cream/[0.005]"

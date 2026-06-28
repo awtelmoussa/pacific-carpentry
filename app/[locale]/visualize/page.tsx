@@ -470,6 +470,108 @@ export default function VisualizePage() {
     });
   };
 
+  const handleExportPDF = async () => {
+    if (!canvasRef.current || typeof window === 'undefined') return;
+
+    setIsSavingDesign(true);
+
+    const html2canvas = (window as any).html2canvas;
+    const jspdf = (window as any).jspdf;
+
+    if (!html2canvas || !jspdf) {
+      alert(locale === 'ar' ? 'جاري تحميل ملفات التصدير، يرجى المحاولة مرة أخرى.' : 'Loading PDF library, please try again.');
+      setIsSavingDesign(false);
+      return;
+    }
+
+    try {
+      const canvas = await html2canvas(canvasRef.current, {
+        useCORS: true,
+        allowTaint: true,
+        backgroundColor: null,
+        logging: false
+      });
+      const imgData = canvas.toDataURL('image/jpeg', 0.95);
+
+      const { jsPDF } = jspdf;
+      const doc = new jsPDF({
+        orientation: 'p',
+        unit: 'mm',
+        format: 'a4'
+      });
+
+      // 3. Branded Header Block
+      doc.setFillColor(24, 19, 16); // Brand dark Hex #181310
+      doc.rect(0, 0, 210, 35, 'F');
+
+      doc.setTextColor(237, 230, 216); // Cream Hex #EDE6D8
+      doc.setFont('times', 'bold');
+      doc.setFontSize(18);
+      doc.text('PACIFIC CARPENTRY', 15, 18);
+      
+      doc.setFont('times', 'normal');
+      doc.setFontSize(8);
+      doc.setTextColor(154, 139, 115); // Muted Hex #9A8B73
+      doc.text('HEIRLOOM FURNITURE · DUBAI, UAE', 15, 23);
+
+      doc.setTextColor(237, 230, 216);
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.text(`DATE: ${new Date().toLocaleDateString()}`, 155, 18);
+      doc.text(`EXPORT ID: PLAN-${Math.floor(1000 + Math.random() * 9000)}`, 155, 23);
+
+      // 4. Capture screenshot
+      const canvasWidth = 180;
+      const canvasHeight = (canvas.height * canvasWidth) / canvas.width;
+      
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12);
+      doc.setTextColor(36, 28, 19);
+      doc.text('Your Custom Room Layout:', 15, 50);
+
+      doc.setDrawColor(234, 227, 213);
+      doc.rect(14.5, 54.5, canvasWidth + 1, canvasHeight + 1);
+      doc.addImage(imgData, 'JPEG', 15, 55, canvasWidth, canvasHeight);
+
+      // 5. Placed Items
+      let currentY = 55 + canvasHeight + 15;
+      
+      doc.setFont('helvetica', 'bold');
+      doc.setFontSize(12);
+      doc.setTextColor(36, 28, 19);
+      doc.text('Selected Timber Items:', 15, currentY);
+      currentY += 8;
+
+      doc.setFont('helvetica', 'normal');
+      doc.setFontSize(10);
+      doc.setTextColor(90, 80, 67);
+
+      placedItems.forEach((item, i) => {
+        const timber = timbers.find(t => t.id === item.timberId);
+        const timberName = timber?.nameEn || item.timberId;
+        doc.text(`${i + 1}. ${item.nameEn} — Finish: ${timberName}`, 20, currentY);
+        currentY += 6;
+      });
+
+      // 6. Footer note
+      doc.setDrawColor(234, 227, 213);
+      doc.line(15, 275, 195, 275);
+      
+      doc.setFont('helvetica', 'italic');
+      doc.setFontSize(8);
+      doc.setTextColor(170, 155, 133);
+      doc.text('Show this room plan to our team to obtain a final custom price quote.', 15, 281);
+      doc.text('Pacific Carpentry Workshop — Dubai Al Quoz Industrial Area, UAE', 120, 281);
+
+      doc.save(`pacific-carpentry-layout-${Date.now()}.pdf`);
+      setIsSavingDesign(false);
+    } catch (err) {
+      console.error(err);
+      alert('Failed to generate PDF layout.');
+      setIsSavingDesign(false);
+    }
+  };
+
   // -------------------------------------------------------------
   // QUOTE REQUEST MODAL & ACTION
   // -------------------------------------------------------------
@@ -584,6 +686,11 @@ Notes: ${quoteNotes || 'None'}`;
       {/* CDN html2canvas library */}
       <Script
         src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"
+        strategy="lazyOnload"
+      />
+      {/* CDN jsPDF library */}
+      <Script
+        src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"
         strategy="lazyOnload"
       />
       {/* Google's web components script for 3D model-viewer AR activation */}
@@ -1008,7 +1115,16 @@ Notes: ${quoteNotes || 'None'}`;
                     disabled={placedItems.length === 0 || isSavingDesign}
                     className="bg-cream/[0.03] hover:bg-cream/[0.06] border border-cream/15 text-cream text-[10px] font-bold uppercase tracking-wider px-3.5 py-2 rounded-[2px] transition-colors cursor-pointer disabled:opacity-30 disabled:pointer-events-none flex items-center gap-1.5"
                   >
-                    {isSavingDesign ? '...' : (locale === 'ar' ? 'تحميل التصميم' : tVis('download'))}
+                    {isSavingDesign ? '...' : (locale === 'ar' ? 'تحميل الصورة' : 'Download JPG')}
+                  </button>
+
+                  {/* Export PDF */}
+                  <button
+                    onClick={handleExportPDF}
+                    disabled={placedItems.length === 0 || isSavingDesign}
+                    className="bg-[#9A6E3A] hover:bg-[#85602F] border border-none text-white text-[10px] font-bold uppercase tracking-wider px-3.5 py-2 rounded-[2px] transition-colors cursor-pointer disabled:opacity-30 disabled:pointer-events-none flex items-center gap-1.5"
+                  >
+                    {isSavingDesign ? '...' : (locale === 'ar' ? 'تصدير PDF' : 'Export PDF')}
                   </button>
                 </div>
               </div>
