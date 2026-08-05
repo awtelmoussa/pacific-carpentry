@@ -5,6 +5,7 @@ import { routing } from '@/i18n/routing';
 import Nav from '@/components/Nav';
 import Footer from '@/components/Footer';
 import ContactWidget from '@/components/ContactWidget';
+import type { Metadata } from 'next';
 
 export function generateStaticParams() {
   return routing.locales.map((locale) => ({ locale }));
@@ -13,6 +14,19 @@ export function generateStaticParams() {
 interface LayoutProps {
   children: React.ReactNode;
   params: Promise<{ locale: string }>;
+}
+
+export async function generateMetadata({ params }: LayoutProps): Promise<Metadata> {
+  const { locale } = await params;
+  return {
+    title: {
+      default: locale === 'ar' ? 'باسيفيك كاربنتري' : 'Pacific Carpentry',
+      template: locale === 'ar' ? '%s | باسيفيك كاربنتري' : '%s | Pacific Carpentry',
+    },
+    description: locale === 'ar'
+      ? 'تصمم باسيفيك كاربنتري وتصنع أثاثاً وأعمالاً خشبية معمارية بمستوى التحف.'
+      : 'Pacific Carpentry designs and builds heirloom-grade furniture and architectural woodwork.',
+  };
 }
 
 export default async function LocaleLayout({ children, params }: LayoutProps) {

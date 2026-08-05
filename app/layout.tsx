@@ -1,6 +1,17 @@
 import { getLocale } from 'next-intl/server';
 import { Cormorant_Garamond, Manrope, Amiri, Tajawal } from 'next/font/google';
 import './globals.css';
+import type { Metadata } from 'next';
+
+export const metadata: Metadata = {
+  icons: {
+    icon: [
+      { url: '/logo.jpg', type: 'image/jpeg' }
+    ],
+    shortcut: '/logo.jpg',
+    apple: '/logo.jpg',
+  },
+};
 
 const cormorant = Cormorant_Garamond({
   subsets: ['latin'],

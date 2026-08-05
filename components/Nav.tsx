@@ -71,7 +71,10 @@ export default function Nav({ locale }: NavProps) {
   const toggleLang = () => {
     const nextLocale = locale === 'ar' ? 'en' : 'ar';
     const targetPath = pathname || '/';
-    router.replace(targetPath, { locale: nextLocale });
+    // Force a full browser reload to properly re-render the HTML root element with the correct direction attribute (LTR/RTL)
+    if (typeof window !== 'undefined') {
+      window.location.href = `/${nextLocale}${targetPath}${window.location.search}`;
+    }
   };
 
   const navLinks = [
