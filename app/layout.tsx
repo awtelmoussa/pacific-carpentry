@@ -2,6 +2,7 @@ import { getLocale } from 'next-intl/server';
 import { Cormorant_Garamond, Manrope, Amiri, Tajawal } from 'next/font/google';
 import './globals.css';
 import type { Metadata } from 'next';
+import CustomCursor from '@/components/CustomCursor';
 
 export const metadata: Metadata = {
   icons: {
@@ -63,11 +64,11 @@ export default async function RootLayout({
                 try {
                   var theme = localStorage.getItem('theme') || 'dark';
                   if (theme === 'light') {
-                    document.documentElement.classList.add('light');
-                    document.documentElement.classList.remove('dark');
+                     document.documentElement.classList.add('light');
+                     document.documentElement.classList.remove('dark');
                   } else {
-                    document.documentElement.classList.add('dark');
-                    document.documentElement.classList.remove('light');
+                     document.documentElement.classList.add('dark');
+                     document.documentElement.classList.remove('light');
                   }
                 } catch (e) {}
               })();
@@ -76,6 +77,7 @@ export default async function RootLayout({
         />
       </head>
       <body className="min-h-screen">
+        <CustomCursor />
         {children}
       </body>
     </html>
