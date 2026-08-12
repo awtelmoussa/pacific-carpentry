@@ -9,11 +9,13 @@ export default function CustomCursor() {
   const [isHovering, setIsHovering] = useState(false);
   const [isStriking, setIsStriking] = useState(false);
   const [sparkKey, setSparkKey] = useState(0); // Used to re-trigger spark animations on subsequent clicks
+  const [mobileSparks, setMobileSparks] = useState<{ id: number; x: number; y: number }[]>([]);
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
+  // Effect for desktop mouse cursor follow & strike animations
   useEffect(() => {
     if (!mounted) return;
 
@@ -118,6 +120,45 @@ export default function CustomCursor() {
     };
   }, [mounted]);
 
+  // Effect for mobile/touch sparks & tactile vibration feedback
+  useEffect(() => {
+    if (!mounted) return;
+
+    const isTouchDevice = window.matchMedia('(pointer: coarse)').matches;
+
+    const handleGlobalClick = (e: MouseEvent) => {
+      if (!isTouchDevice) return;
+
+      const id = Date.now() + Math.random();
+      const x = e.clientX;
+      const y = e.clientY;
+
+      setMobileSparks(prev => [...prev, { id, x, y }]);
+
+      // Trigger short haptic feedback vibration if supported by device/browser (e.g. Android Chrome)
+      if (typeof navigator !== 'undefined' && navigator.vibrate) {
+        const target = e.target as HTMLElement | null;
+        if (target) {
+          const interactive = target.closest('a, button, [role="button"], input[type="submit"], input[type="button"], select, .clickable');
+          if (interactive) {
+            navigator.vibrate(12); // subtle crisp tactile thud
+          }
+        }
+      }
+
+      // Cleanup sparks after animation runs
+      setTimeout(() => {
+        setMobileSparks(prev => prev.filter(spark => spark.id !== id));
+      }, 350);
+    };
+
+    window.addEventListener('click', handleGlobalClick);
+
+    return () => {
+      window.removeEventListener('click', handleGlobalClick);
+    };
+  }, [mounted]);
+
   if (!mounted) return null;
 
   // Determine dynamic hammer rotation angle
@@ -185,6 +226,61 @@ export default function CustomCursor() {
         @keyframes spark-out-3 {
           0% { transform: translate(0, 0) scale(1); opacity: 1; }
           100% { transform: translate(8px, -10px) scale(0.2); opacity: 0; }
+        }
+
+        /* Mobile tap specific sparks and ripple */
+        .mobile-ripple {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          border: 1.5px solid #C2965B;
+          position: absolute;
+          transform: translate(-50%, -50%);
+          animation: m-ripple-out 0.3s cubic-bezier(0.1, 0.8, 0.3, 1) forwards;
+        }
+
+        .mobile-spark {
+          position: absolute;
+          width: 3px;
+          height: 3px;
+          border-radius: 50%;
+          background-color: #E5C185;
+          animation-duration: 0.3s;
+          animation-timing-function: cubic-bezier(0.1, 0.8, 0.2, 1);
+          animation-fill-mode: forwards;
+        }
+
+        .m-spark-1 { animation-name: m-spark-out-1; }
+        .m-spark-2 { animation-name: m-spark-out-2; }
+        .m-spark-3 { animation-name: m-spark-out-3; }
+        .m-spark-4 { animation-name: m-spark-out-4; }
+
+        @keyframes m-ripple-out {
+          0% {
+            transform: translate(-50%, -50%) scale(0.5);
+            opacity: 0.9;
+          }
+          100% {
+            transform: translate(-50%, -50%) scale(4);
+            opacity: 0;
+          }
+        }
+
+        @keyframes m-spark-out-1 {
+          0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+          100% { transform: translate(-16px, -16px) scale(0.2); opacity: 0; }
+        }
+        @keyframes m-spark-out-2 {
+          0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+          100% { transform: translate(16px, -16px) scale(0.2); opacity: 0; }
+        }
+        @keyframes m-spark-out-3 {
+          0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+          100% { transform: translate(-16px, 16px) scale(0.2); opacity: 0; }
+        }
+        @keyframes m-spark-out-4 {
+          0% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+          100% { transform: translate(16px, 16px) scale(0.2); opacity: 0; }
         }
       `}} />
 
@@ -261,6 +357,24 @@ export default function CustomCursor() {
           </div>
         )}
       </div>
+
+      {/* Mobile Touch Sparks */}
+      {mobileSparks.map(spark => (
+        <div
+          key={spark.id}
+          className="fixed pointer-events-none z-[999999]"
+          style={{
+            left: `${spark.x}px`,
+            top: `${spark.y}px`,
+          }}
+        >
+          <div className="mobile-ripple" />
+          <div className="mobile-spark m-spark-1" />
+          <div className="mobile-spark m-spark-2" />
+          <div className="mobile-spark m-spark-3" />
+          <div className="mobile-spark m-spark-4" />
+        </div>
+      ))}
     </>
   );
 }
